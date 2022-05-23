@@ -1,0 +1,7 @@
+target/
+Mason.lock
+.vscode/configurationCache.log
+.vscode/dryrun.log
+.gitignore
+.vscode/targets.log
+.vscode/settings.json

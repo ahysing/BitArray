@@ -1,0 +1,191 @@
+.. default-domain:: chpl
+
+.. module:: BitArray
+   :synopsis: BitArray is a library for effective storage of boolean values in arrays. 
+
+BitArray
+========
+**Usage**
+
+.. code-block:: chapel
+
+   use BitArray;
+
+
+or
+
+.. code-block:: chapel
+
+   import BitArray;
+
+BitArray is a library for effective storage of boolean values in arrays. 
+
+.. class:: ArrayRangeError : IllegalArgumentError
+
+   Exception thrown when indexing the bit arrays outside the range of values the bit array 
+
+
+   .. method:: proc init()
+
+.. class:: BitArray1D
+
+   BitArray1D is an array of boolean values stored packed together. All boolean values are mapped one to one with a bit value in memory. 
+
+
+   .. method:: proc init(size: uint(32))
+
+      Create a bit array of a given size.
+      
+      :size: The size of the bit array
+      
+
+   .. method:: proc all()
+
+      Tests all the values.
+      Returns true if all the bytes are true.
+      
+      :return: boolean value.
+      
+
+   .. method:: proc any()
+
+      Tests all the bits.
+      Result is true if any the values are true.
+      
+      :return: boolean value.
+      
+
+   .. method:: proc at(idx: uint(32)): bool throws
+
+      Looks up bit at `idx`.
+      
+      :arg idx: The index in the bitarray to look up.
+      
+      :throws ArrayRangeError: If `idx` is outside the range [1..size).
+      
+      :return: boolean value.
+      
+
+   .. method:: proc equals(rhs: borrowed BitArray1D)
+
+      Compares two bit arrays by values.
+      
+      :returns: true if the two bit arrays has identical values.
+      
+
+   .. method:: proc fill()
+
+      Set all the values to true.
+      
+
+   .. method:: proc popcount()
+
+      Count the number of values set to true.
+      
+      :returns: The count.
+      
+
+   .. method:: proc rotr(shift: int)
+
+      rotate all the values to the right. Let values falling out on one side reappear on the rhs side.
+      
+      
+
+   .. method:: proc reverse()
+
+   .. method:: proc rotl(shift: int)
+
+      rotate all the values to the left. Let values falling out on one side reappear on the rhs side.
+      
+      
+
+   .. method:: proc set(idx: uint(32), value: bool) throws
+
+      Set the value at a given index.
+      
+      :idx: The index of the value to mutate.
+      
+      :value: The value to set.
+      
+      :throws ArrayRangeError: if the idx value is outside the range [0, size).
+      
+
+   .. method:: proc size()
+
+      Get the number of values.
+      
+
+   .. itermethod:: iter these()
+
+      Iterate over all the values.
+      
+
+   .. method:: proc unfill()
+
+      Set all the values to false.
+      
+
+   .. method:: proc type ==(lhs: borrowed BitArray1D, rhs: borrowed BitArray1D)
+
+      Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] == Y[i] where X and Y are the to bit arrays to compare.
+      
+      :returns: A new BitArray1D with the result values.
+      
+
+   .. method:: proc type !=(lhs: borrowed BitArray1D, rhs: borrowed BitArray1D)
+
+      Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] != Y[i] where X and Y are the to bit arrays to compare.
+      
+      :returns: A new BitArray1D with the result values.
+      
+
+   .. method:: proc type =(rhs: borrowed BitArray1D)
+
+      Copies the values from an rhs bit array.
+      
+      :arg rhs: The bit array to copy.
+      
+
+   .. method:: proc type ~(arg: borrowed BitArray1D)
+
+      Negate the values.
+      
+
+   .. method:: proc type <<(shift: int)
+
+      Shift all the values to the right. Left values are padded with false values.
+      
+      :shift: the number of values to shift.
+      
+
+   .. method:: proc type >>(shift: int)
+
+      Shift all the values to the right. Left values are padded with false values.
+      
+      :shift: the number of values to shift.
+      
+
+   .. method:: proc type ^(lhs: borrowed BitArray1D, rhs: borrowed BitArray1D)
+
+      Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.
+      If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
+      
+      :rhs: bit array to perform xor with
+      
+
+   .. method:: proc type &(lhs: borrowed BitArray1D, rhs: borrowed BitArray1D)
+
+      Perform the and operation on the values in this bit array with the values in anrhs bit array.
+      If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
+      
+      :rhs: bit array to perform and with
+      
+
+   .. method:: proc type |(lhs: borrowed BitArray1D, rhs: borrowed BitArray1D)
+
+      Perform the or operation on the values in this bit array with the values in anrhs bit array.
+      If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
+      
+      :rhs: bit array to perform or with
+      
+
