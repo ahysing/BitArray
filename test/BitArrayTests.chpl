@@ -1,10 +1,38 @@
 use UnitTest;
 use BitArray;
+use BitOps;
 
 proc BitArray__createReminderMask(test: borrowed Test) throws {
   var bitarray = new BitArray1D(1 : uint(32));
   var reminderMask = bitarray._createReminderMask();
   test.assertEqual(reminderMask, 1);
+}
+
+proc bitReverse (bits : uint(32)) {
+  var result : uint(32) = 0;
+  var value = bits;
+  while value > 0 {
+    var trailingZero = BitOps.ctz(value);
+    result |= (1 << (32 - trailingZero)) : uint(32);
+    value = value ^ (1 << trailingZero) : uint(32);
+  }
+
+  return result;
+}
+
+proc BitArray__reverse_inputIs_1(test: borrowed Test) throws {
+  var bitArray = new BitArray1D(32);
+  test.assertEqual(bitArray._reverse(1 : uint(32)), 0b10000000000000000000000000000000 : uint(32));
+}
+
+proc BitArray__reverse_inputIs_2(test: borrowed Test) throws {
+  var bitArray = new BitArray1D(32);
+  test.assertEqual(bitArray._reverse(2 : uint(32)), 0b01000000000000000000000000000000 : uint(32));
+}
+
+proc BitArray__reverse_inputIs_3(test: borrowed Test) throws {
+  var bitArray = new BitArray1D(32);
+  test.assertEqual(bitArray._reverse(3 : uint(32)), 0b11000000000000000000000000000000 : uint(32));
 }
 
 proc BitArray__createReminderMask_sizeIsTwo(test: borrowed Test) throws {
