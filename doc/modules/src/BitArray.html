@@ -108,24 +108,28 @@
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArray.BitArray1D.all">
-<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArray.BitArray1D.all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tests all the values.
-Returns true if all the bytes are true.</p>
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="pre">:</span> <span class="pre">bool</span><a class="headerlink" href="#BitArray.BitArray1D.all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests all the values with and.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>boolean value.</p>
+<dd class="field-odd"><p><cite>true</cite> if all the values are true</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>boolean value</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArray.BitArray1D.any">
-<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">any</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArray.BitArray1D.any" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tests all the bits.
-Result is true if any the values are true.</p>
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">any</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="pre">:</span> <span class="pre">bool</span><a class="headerlink" href="#BitArray.BitArray1D.any" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests all the values with or.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>boolean value.</p>
+<dd class="field-odd"><p><cite>true</cite> if any of the values are true</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -133,7 +137,7 @@ Result is true if any the values are true.</p>
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArray.BitArray1D.at">
 <em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">idx:</span> <span class="pre">uint(32)</span></em><span class="sig-paren">)</span><span class="pre">:</span> <span class="pre">bool</span> <span class="pre">throws</span><a class="headerlink" href="#BitArray.BitArray1D.at" title="Permalink to this definition">¶</a></dt>
-<dd><p>Looks up bit at <cite>idx</cite>.</p>
+<dd><p>Looks up value at <cite>idx</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments</dt>
 <dd class="field-odd"><p><strong>idx</strong> – The index in the bitarray to look up.</p>
@@ -142,7 +146,10 @@ Result is true if any the values are true.</p>
 <dd class="field-even"><p><strong>ArrayRangeError</strong> – If <cite>idx</cite> is outside the range [1..size).</p>
 </dd>
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>boolean value.</p>
+<dd class="field-odd"><p>value at <cite>idx</cite></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -153,7 +160,7 @@ Result is true if any the values are true.</p>
 <dd><p>Compares two bit arrays by values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>true if the two bit arrays has identical values.</p>
+<dd class="field-odd"><p><cite>true</cite> if the two bit arrays has identical values.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -161,7 +168,7 @@ Result is true if any the values are true.</p>
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArray.BitArray1D.fill">
 <em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">fill</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArray.BitArray1D.fill" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set all the values to true.</p>
+<dd><p>Set all the values to <cite>true</cite>.</p>
 </dd></dl>
 
 <dl class="chpl method">
@@ -178,17 +185,18 @@ Result is true if any the values are true.</p>
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArray.BitArray1D.rotr">
 <em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">rotr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift:</span> <span class="pre">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArray.BitArray1D.rotr" title="Permalink to this definition">¶</a></dt>
-<dd><p>rotate all the values to the right. Let values falling out on one side reappear on the rhs side.</p>
+<dd><p>Rotate all the values to the right. Let values falling out on one side reappear on the rhs side.</p>
 </dd></dl>
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArray.BitArray1D.reverse">
 <em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">reverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArray.BitArray1D.reverse" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Reverse the ordering of the values. The last value becomes the first value. The second last value becomes the second first value. And so on.</p>
+</dd></dl>
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArray.BitArray1D.rotl">
-<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">rotl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift:</span> <span class="pre">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArray.BitArray1D.rotl" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">rotl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArray.BitArray1D.rotl" title="Permalink to this definition">¶</a></dt>
 <dd><p>rotate all the values to the left. Let values falling out on one side reappear on the rhs side.</p>
 </dd></dl>
 
@@ -197,14 +205,14 @@ Result is true if any the values are true.</p>
 <em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">idx:</span> <span class="pre">uint(32)</span></em>, <em class="sig-param"><span class="pre">value:</span> <span class="pre">bool</span></em><span class="sig-paren">)</span> <span class="pre">throws</span><a class="headerlink" href="#BitArray.BitArray1D.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the value at a given index.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Idx</dt>
-<dd class="field-odd"><p>The index of the value to mutate.</p>
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>idx</strong> – The index of the value to mutate.</p></li>
+<li><p><strong>value</strong> – The value to set at <cite>idx</cite>.</p></li>
+</ul>
 </dd>
-<dt class="field-even">Value</dt>
-<dd class="field-even"><p>The value to set.</p>
-</dd>
-<dt class="field-odd">Throws</dt>
-<dd class="field-odd"><p><strong>ArrayRangeError</strong> – if the idx value is outside the range [0, size).</p>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>ArrayRangeError</strong> – if the idx value is outside the range [0, size).</p>
 </dd>
 </dl>
 </dd></dl>
@@ -213,18 +221,34 @@ Result is true if any the values are true.</p>
 <dt class="sig sig-object chpl" id="BitArray.BitArray1D.size">
 <em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArray.BitArray1D.size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the number of values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bit vector size.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>uint(32)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="chpl itermethod">
 <dt class="sig sig-object chpl" id="BitArray.BitArray1D.these">
 <em class="property"><span class="pre">iter</span> </em><span class="sig-name descname"><span class="pre">these</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArray.BitArray1D.these" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate over all the values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>All the values. yelds one value at a time</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArray.BitArray1D.unfill">
 <em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">unfill</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArray.BitArray1D.unfill" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set all the values to false.</p>
+<dd><p>Set all the values to <cite>false</cite>.</p>
 </dd></dl>
 
 <dl class="chpl method">
@@ -233,7 +257,10 @@ Result is true if any the values are true.</p>
 <dd><p>Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] == Y[i] where X and Y are the to bit arrays to compare.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A new BitArray1D with the result values.</p>
+<dd class="field-odd"><p>The result values</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>BitArray1D</p>
 </dd>
 </dl>
 </dd></dl>
@@ -244,7 +271,10 @@ Result is true if any the values are true.</p>
 <dd><p>Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] != Y[i] where X and Y are the to bit arrays to compare.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A new BitArray1D with the result values.</p>
+<dd class="field-odd"><p>The result values</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>BitArray1D</p>
 </dd>
 </dl>
 </dd></dl>
@@ -255,7 +285,7 @@ Result is true if any the values are true.</p>
 <dd><p>Copies the values from an rhs bit array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments</dt>
-<dd class="field-odd"><p><strong>rhs</strong> – The bit array to copy.</p>
+<dd class="field-odd"><p><strong>rhs</strong> – The bit array to copy</p>
 </dd>
 </dl>
 </dd></dl>
@@ -271,8 +301,8 @@ Result is true if any the values are true.</p>
 <em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">&lt;&lt;</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift:</span> <span class="pre">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArray.BitArray1D.<<" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shift all the values to the right. Left values are padded with false values.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Shift</dt>
-<dd class="field-odd"><p>the number of values to shift.</p>
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><p><strong>shift</strong> – the number of values to shift.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -282,8 +312,8 @@ Result is true if any the values are true.</p>
 <em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">&gt;&gt;</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift:</span> <span class="pre">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArray.BitArray1D.>>" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shift all the values to the right. Left values are padded with false values.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Shift</dt>
-<dd class="field-odd"><p>the number of values to shift.</p>
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><p><strong>shift</strong> – the number of values to shift.</p>
 </dd>
 </dl>
 </dd></dl>

@@ -5,6 +5,13 @@ module BitArray {
 
   pragma "no doc"
   const packSize : uint(32) = 32;
+
+  pragma "no doc"
+  const pack : uint(32);
+
+  pragma "no doc"
+  const allOnes : uint(32) = 0b11111111111111111111111111111111;
+
   pragma "no doc"
   const one : uint(32) = 1;
 
@@ -74,266 +81,6 @@ module BitArray {
         0x07: uint(32), 0x87: uint(32), 0x47: uint(32), 0xC7: uint(32), 0x27: uint(32), 0xA7: uint(32), 0x67: uint(32), 0xE7: uint(32), 0x17: uint(32), 0x97: uint(32), 0x57: uint(32), 0xD7: uint(32), 0x37: uint(32), 0xB7: uint(32), 0x77: uint(32), 0xF7: uint(32), 
         0x0F: uint(32), 0x8F: uint(32), 0x4F: uint(32), 0xCF: uint(32), 0x2F: uint(32), 0xAF: uint(32), 0x6F: uint(32), 0xEF: uint(32), 0x1F: uint(32), 0x9F: uint(32), 0x5F: uint(32), 0xDF: uint(32), 0x3F: uint(32), 0xBF: uint(32), 0x7F: uint(32), 0xFF: uint(32)
       ];
-      /*
-      const eightBitReversed : [0..255] uint(32) = [
-        0b00000000 : uint(32),
-        0b10000000 : uint(32),
-        0b01000000 : uint(32),
-        0b11000000 : uint(32),
-        0b00100000 : uint(32),
-        0b10100000 : uint(32),
-        0b01100000 : uint(32),
-        0b11100000 : uint(32),
-        0b00010000 : uint(32),
-        0b10010000 : uint(32),
-        0b01010000 : uint(32),
-        0b11010000 : uint(32),
-        0b00110000 : uint(32),
-        0b10110000 : uint(32),
-        0b01110000 : uint(32),
-        0b11110000 : uint(32),
-        0b00001000 : uint(32),
-        0b10001000 : uint(32),
-        0b01001000 : uint(32),
-        0b11001000 : uint(32),
-        0b00101000 : uint(32),
-        0b10101000 : uint(32),
-        0b01101000 : uint(32),
-        0b11101000 : uint(32),
-        0b00011000 : uint(32),
-        0b10011000 : uint(32),
-        0b01011000 : uint(32),
-        0b11011000 : uint(32),
-        0b00111000 : uint(32),
-        0b10111000 : uint(32),
-        0b01111000 : uint(32),
-        0b11111000 : uint(32),
-        0b00000100 : uint(32),
-        0b10000100 : uint(32),
-        0b01000100 : uint(32),
-        0b11000100 : uint(32),
-        0b00100100 : uint(32),
-        0b10100100 : uint(32),
-        0b01100100 : uint(32),
-        0b11100100 : uint(32),
-        0b00010100 : uint(32),
-        0b10010100 : uint(32),
-        0b01010100 : uint(32),
-        0b11010100 : uint(32),
-        0b00110100 : uint(32),
-        0b10110100 : uint(32),
-        0b01110100 : uint(32),
-        0b11110100 : uint(32),
-        0b00001100 : uint(32),
-        0b10001100 : uint(32),
-        0b01001100 : uint(32),
-        0b11001100 : uint(32),
-        0b00101100 : uint(32),
-        0b10101100 : uint(32),
-        0b01101100 : uint(32),
-        0b11101100 : uint(32),
-        0b00011100 : uint(32),
-        0b10011100 : uint(32),
-        0b01011100 : uint(32),
-        0b11011100 : uint(32),
-        0b00111100 : uint(32),
-        0b10111100 : uint(32),
-        0b01111100 : uint(32),
-        0b11111100 : uint(32),
-        0b00000010 : uint(32),
-        0b10000010 : uint(32),
-        0b01000010 : uint(32),
-        0b11000010 : uint(32),
-        0b00100010 : uint(32),
-        0b10100010 : uint(32),
-        0b01100010 : uint(32),
-        0b11100010 : uint(32),
-        0b00010010 : uint(32),
-        0b10010010 : uint(32),
-        0b01010010 : uint(32),
-        0b11010010 : uint(32),
-        0b00110010 : uint(32),
-        0b10110010 : uint(32),
-        0b01110010 : uint(32),
-        0b11110010 : uint(32),
-        0b00001010 : uint(32),
-        0b10001010 : uint(32),
-        0b01001010 : uint(32),
-        0b11001010 : uint(32),
-        0b00101010 : uint(32),
-        0b10101010 : uint(32),
-        0b01101010 : uint(32),
-        0b11101010 : uint(32),
-        0b00011010 : uint(32),
-        0b10011010 : uint(32),
-        0b01011010 : uint(32),
-        0b11011010 : uint(32),
-        0b00111010 : uint(32),
-        0b10111010 : uint(32),
-        0b01111010 : uint(32),
-        0b11111010 : uint(32),
-        0b00000110 : uint(32),
-        0b10000110 : uint(32),
-        0b01000110 : uint(32),
-        0b11000110 : uint(32),
-        0b00100110 : uint(32),
-        0b10100110 : uint(32),
-        0b01100110 : uint(32),
-        0b11100110 : uint(32),
-        0b00010110 : uint(32),
-        0b10010110 : uint(32),
-        0b01010110 : uint(32),
-        0b11010110 : uint(32),
-        0b00110110 : uint(32),
-        0b10110110 : uint(32),
-        0b01110110 : uint(32),
-        0b11110110 : uint(32),
-        0b00001110 : uint(32),
-        0b10001110 : uint(32),
-        0b01001110 : uint(32),
-        0b11001110 : uint(32),
-        0b00101110 : uint(32),
-        0b10101110 : uint(32),
-        0b01101110 : uint(32),
-        0b11101110 : uint(32),
-        0b00011110 : uint(32),
-        0b10011110 : uint(32),
-        0b01011110 : uint(32),
-        0b11011110 : uint(32),
-        0b00111110 : uint(32),
-        0b10111110 : uint(32),
-        0b01111110 : uint(32),
-        0b11111110 : uint(32),
-        0b00000001 : uint(32),
-        0b10000001 : uint(32),
-        0b01000001 : uint(32),
-        0b11000001 : uint(32),
-        0b00100001 : uint(32),
-        0b10100001 : uint(32),
-        0b01100001 : uint(32),
-        0b11100001 : uint(32),
-        0b00010001 : uint(32),
-        0b10010001 : uint(32),
-        0b01010001 : uint(32),
-        0b11010001 : uint(32),
-        0b00110001 : uint(32),
-        0b10110001 : uint(32),
-        0b01110001 : uint(32),
-        0b11110001 : uint(32),
-        0b00001001 : uint(32),
-        0b10001001 : uint(32),
-        0b01001001 : uint(32),
-        0b11001001 : uint(32),
-        0b00101001 : uint(32),
-        0b10101001 : uint(32),
-        0b01101001 : uint(32),
-        0b11101001 : uint(32),
-        0b00011001 : uint(32),
-        0b10011001 : uint(32),
-        0b01011001 : uint(32),
-        0b11011001 : uint(32),
-        0b00111001 : uint(32),
-        0b10111001 : uint(32),
-        0b01111001 : uint(32),
-        0b11111001 : uint(32),
-        0b00000101 : uint(32),
-        0b10000101 : uint(32),
-        0b01000101 : uint(32),
-        0b11000101 : uint(32),
-        0b00100101 : uint(32),
-        0b10100101 : uint(32),
-        0b01100101 : uint(32),
-        0b11100101 : uint(32),
-        0b00010101 : uint(32),
-        0b10010101 : uint(32),
-        0b01010101 : uint(32),
-        0b11010101 : uint(32),
-        0b00110101 : uint(32),
-        0b10110101 : uint(32),
-        0b01110101 : uint(32),
-        0b11110101 : uint(32),
-        0b00001101 : uint(32),
-        0b10001101 : uint(32),
-        0b01001101 : uint(32),
-        0b11001101 : uint(32),
-        0b00101101 : uint(32),
-        0b10101101 : uint(32),
-        0b01101101 : uint(32),
-        0b11101101 : uint(32),
-        0b00011101 : uint(32),
-        0b10011101 : uint(32),
-        0b01011101 : uint(32),
-        0b11011101 : uint(32),
-        0b00111101 : uint(32),
-        0b10111101 : uint(32),
-        0b01111101 : uint(32),
-        0b11111101 : uint(32),
-        0b00000011 : uint(32),
-        0b10000011 : uint(32),
-        0b01000011 : uint(32),
-        0b11000011 : uint(32),
-        0b00100011 : uint(32),
-        0b10100011 : uint(32),
-        0b01100011 : uint(32),
-        0b11100011 : uint(32),
-        0b00010011 : uint(32),
-        0b10010011 : uint(32),
-        0b01010011 : uint(32),
-        0b11010011 : uint(32),
-        0b00110011 : uint(32),
-        0b10110011 : uint(32),
-        0b01110011 : uint(32),
-        0b11110011 : uint(32),
-        0b00001011 : uint(32),
-        0b10001011 : uint(32),
-        0b01001011 : uint(32),
-        0b11001011 : uint(32),
-        0b00101011 : uint(32),
-        0b10101011 : uint(32),
-        0b01101011 : uint(32),
-        0b11101011 : uint(32),
-        0b00011011 : uint(32),
-        0b10011011 : uint(32),
-        0b01011011 : uint(32),
-        0b11011011 : uint(32),
-        0b00111011 : uint(32),
-        0b10111011 : uint(32),
-        0b01111011 : uint(32),
-        0b11111011 : uint(32),
-        0b00000111 : uint(32),
-        0b10000111 : uint(32),
-        0b01000111 : uint(32),
-        0b11000111 : uint(32),
-        0b00100111 : uint(32),
-        0b10100111 : uint(32),
-        0b01100111 : uint(32),
-        0b11100111 : uint(32),
-        0b00010111 : uint(32),
-        0b10010111 : uint(32),
-        0b01010111 : uint(32),
-        0b11010111 : uint(32),
-        0b00110111 : uint(32),
-        0b10110111 : uint(32),
-        0b01110111 : uint(32),
-        0b11110111 : uint(32),
-        0b00001111 : uint(32),
-        0b10001111 : uint(32),
-        0b01001111 : uint(32),
-        0b11001111 : uint(32),
-        0b00101111 : uint(32),
-        0b10101111 : uint(32),
-        0b01101111 : uint(32),
-        0b11101111 : uint(32),
-        0b00011111 : uint(32),
-        0b10011111 : uint(32),
-        0b01011111 : uint(32),
-        0b11011111 : uint(32),
-        0b00111111 : uint(32),
-        0b10111111 : uint(32),
-        0b01111111 : uint(32),
-        0b11111111 : uint(32),
-      ];
-      */
 
       var result : uint(32) = 0;
       var idx : uint(32);
@@ -408,17 +155,17 @@ module BitArray {
     }
 
     pragma "no doc"
-    proc _createReminderMask() {
-      if this.bitSize % packSize == 0 then
-        return 0b11111111111111111111111111111111 : uint(32);
-      var result = (1 << (this.bitSize % packSize)) : uint(32);
-      return result - one;
+    proc _createReminderMask() : pack.type {
+      if this.hasRemaining then
+        return (1 << (this.bitSize % packSize)) : pack.type - one;
+      else
+        return allOnes;
     }
 
-    /* Tests all the values.
-       Returns true if all the bytes are true.
+    /* Tests all the values with and.
 
-       :return: boolean value.
+       :returns: `true` if all the values are true
+       :rtype: boolean value
      */
     proc all() : bool {
       if this.hasRemaining then {
@@ -441,11 +188,12 @@ module BitArray {
       }
     }
 
-    /* Tests all the bits.
-       Result is true if any the values are true.
+    /* Tests all the values with or.
 
-       :return: boolean value.
-     */
+
+      :returns: `true` if any of the values are true
+      :rtype: bool
+    */
     proc any() : bool {
       var result = true;
       forall i in this.values.domain do
@@ -454,13 +202,14 @@ module BitArray {
     }
 
 
-    /* Looks up bit at `idx`.
+    /* Looks up value at `idx`.
 
        :arg idx: The index in the bitarray to look up.
 
        :throws ArrayRangeError: If `idx` is outside the range [1..size).
 
-       :return: boolean value.
+       :return: value at `idx`
+       :rtype: bool
     */
     proc at(idx : uint(32)) : bool throws {
       if idx >= this.size() then
@@ -476,17 +225,17 @@ module BitArray {
 
     /* Compares two bit arrays by values.
 
-       :returns: true if the two bit arrays has identical values.
+       :returns: `true` if the two bit arrays has identical values.
      */
     proc equals(rhs : borrowed BitArray1D) {
       return this.values.equals(rhs.values);
     }
 
-     /* Set all the values to true.
+     /* Set all the values to `true`.
      */
     proc fill() {
       for i in this.values.domain do
-        this.values[i] = 0b11111111111111111111111111111111;
+        this.values[i] = allOnes;
       var reminderMask = this._createReminderMask();
       this.values[this.values.domain.last] = this.values[this.values.domain.last] & reminderMask;
     }
@@ -502,13 +251,13 @@ module BitArray {
       return count.read();
     }
 
-    /* rotate all the values to the right. Let values falling out on one side reappear on the rhs side.
-
+    /* Rotate all the values to the right. Let values falling out on one side reappear on the rhs side.
     */
     proc rotr(shift : int) {
-
     }
 
+    /* Reverse the ordering of the values. The last value becomes the first value. The second last value becomes the second first value. And so on.
+     */
     proc reverse() {
       this.values.reverse();
       forall i in this.values.domain do
@@ -519,23 +268,23 @@ module BitArray {
     }
 
     /* rotate all the values to the left. Let values falling out on one side reappear on the rhs side.
-
     */
-    proc rotl(shift : uint) {
-      if shift < 0 then
-        throw new ArrayRangeError();
-      else if shift > packSize then {
+    proc rotl(shift) {
+      if shift < 1 then
+        return;
+      else if shift >= packSize then {
         this.rotl(packSize);
         this.rotl(shift - packSize);
       } else {
-        var reminderMask = 0b11111111111111111111111111111111 - ((1 << shift) - 1);
-        var mainMask = ((1 << shift) - 1);
+        var mainMask = ((1 << shift) - 1) : uint(32);
+        var reminderMask = allOnes - mainMask;
 
-        var first = BitOps.rotl(this.values[this.values.domain.first]);
+        var firstValue = this.values[this.values.domain.first];
+        var first = BitOps.rotl(firstValue, shift);
         var D = this.values.domain[this.values.domain.first + 1..];
         var DBefore = this.values.domain[..this.values.domain.last - 1];
         forall (i, j) in zip(D, DBefore) do {
-          this.values[i] = BitOps.rotl(this.values[i]);
+          this.values[i] = BitOps.rotl(this.values[i], shift);
           allLocalesBarrier.barrier();
           var reminder = this.values[j];
           var value = this.values[i];
@@ -549,9 +298,8 @@ module BitArray {
 
     /* Set the value at a given index.
 
-       :idx: The index of the value to mutate.
-
-       :value: The value to set.
+       :arg idx: The index of the value to mutate.
+       :arg value: The value to set at `idx`.
 
        :throws ArrayRangeError: if the idx value is outside the range [0, size).
      */
@@ -570,12 +318,18 @@ module BitArray {
     }
 
     /* Get the number of values.
+
+       :returns: bit vector size.
+       :rtype: uint(32)
      */
     proc size() {
       return this.bitSize;
     }
 
     /* Iterate over all the values.
+
+       :returns: All the values. yelds one value at a time
+       :rtype: bool
      */
     iter these() {
       var packSizeMinusOne = packSize - 1;
@@ -605,7 +359,7 @@ module BitArray {
       }
     }
 
-    /* Set all the values to false.
+    /* Set all the values to `false`.
      */
     proc unfill() {
       this.values = 0;
@@ -613,7 +367,8 @@ module BitArray {
 
     /* Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] == Y[i] where X and Y are the to bit arrays to compare.
 
-       :returns: A new BitArray1D with the result values.
+       :returns: The result values
+       :rtype: BitArray1D
      */
     operator ==(lhs : borrowed BitArray1D, rhs : borrowed BitArray1D) {
       var bitarray = new BitArray1D(lhs.size());
@@ -623,7 +378,8 @@ module BitArray {
 
     /* Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] != Y[i] where X and Y are the to bit arrays to compare.
 
-       :returns: A new BitArray1D with the result values.
+       :returns: The result values
+       :rtype: BitArray1D
      */
     operator !=(lhs : borrowed BitArray1D, rhs : borrowed BitArray1D) {
       var bitarray = new BitArray1D(lhs.size());
@@ -633,7 +389,7 @@ module BitArray {
 
     /* Copies the values from an rhs bit array.
 
-       :arg rhs: The bit array to copy.
+       :arg rhs: The bit array to copy
     */
     operator =(rhs : borrowed BitArray1D) {
       var values : [this.values.domain] uint(32);
@@ -653,9 +409,10 @@ module BitArray {
       var mask = this._createReminderMask();
       arg.values[arg.values.domain.last] &= mask;
     }
+
     /* Shift all the values to the right. Left values are padded with false values.
 
-       :shift: the number of values to shift.
+       :arg shift: the number of values to shift.
      */
     operator <<(shift : int) {
       this._bitshift(shift);
@@ -664,7 +421,7 @@ module BitArray {
 
     /* Shift all the values to the right. Left values are padded with false values.
 
-       :shift: the number of values to shift.
+       :arg shift: the number of values to shift.
      */
     operator >>(shift : int) {
       this._bitshiftReverse(shift);

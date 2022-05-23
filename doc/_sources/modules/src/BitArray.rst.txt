@@ -39,43 +39,45 @@ BitArray is a library for effective storage of boolean values in arrays.
       :size: The size of the bit array
       
 
-   .. method:: proc all()
+   .. method:: proc all(): bool
 
-      Tests all the values.
-      Returns true if all the bytes are true.
+      Tests all the values with and.
       
-      :return: boolean value.
+      :returns: `true` if all the values are true
+      :rtype: boolean value
       
 
-   .. method:: proc any()
+   .. method:: proc any(): bool
 
-      Tests all the bits.
-      Result is true if any the values are true.
+      Tests all the values with or.
       
-      :return: boolean value.
+      
+      :returns: `true` if any of the values are true
+      :rtype: bool
       
 
    .. method:: proc at(idx: uint(32)): bool throws
 
-      Looks up bit at `idx`.
+      Looks up value at `idx`.
       
       :arg idx: The index in the bitarray to look up.
       
       :throws ArrayRangeError: If `idx` is outside the range [1..size).
       
-      :return: boolean value.
+      :return: value at `idx`
+      :rtype: bool
       
 
    .. method:: proc equals(rhs: borrowed BitArray1D)
 
       Compares two bit arrays by values.
       
-      :returns: true if the two bit arrays has identical values.
+      :returns: `true` if the two bit arrays has identical values.
       
 
    .. method:: proc fill()
 
-      Set all the values to true.
+      Set all the values to `true`.
       
 
    .. method:: proc popcount()
@@ -87,25 +89,25 @@ BitArray is a library for effective storage of boolean values in arrays.
 
    .. method:: proc rotr(shift: int)
 
-      rotate all the values to the right. Let values falling out on one side reappear on the rhs side.
-      
+      Rotate all the values to the right. Let values falling out on one side reappear on the rhs side.
       
 
    .. method:: proc reverse()
 
-   .. method:: proc rotl(shift: int)
+      Reverse the ordering of the values. The last value becomes the first value. The second last value becomes the second first value. And so on.
+      
+
+   .. method:: proc rotl(shift)
 
       rotate all the values to the left. Let values falling out on one side reappear on the rhs side.
-      
       
 
    .. method:: proc set(idx: uint(32), value: bool) throws
 
       Set the value at a given index.
       
-      :idx: The index of the value to mutate.
-      
-      :value: The value to set.
+      :arg idx: The index of the value to mutate.
+      :arg value: The value to set at `idx`.
       
       :throws ArrayRangeError: if the idx value is outside the range [0, size).
       
@@ -114,36 +116,44 @@ BitArray is a library for effective storage of boolean values in arrays.
 
       Get the number of values.
       
+      :returns: bit vector size.
+      :rtype: uint(32)
+      
 
    .. itermethod:: iter these()
 
       Iterate over all the values.
       
+      :returns: All the values. yelds one value at a time
+      :rtype: bool
+      
 
    .. method:: proc unfill()
 
-      Set all the values to false.
+      Set all the values to `false`.
       
 
    .. method:: proc type ==(lhs: borrowed BitArray1D, rhs: borrowed BitArray1D)
 
       Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] == Y[i] where X and Y are the to bit arrays to compare.
       
-      :returns: A new BitArray1D with the result values.
+      :returns: The result values
+      :rtype: BitArray1D
       
 
    .. method:: proc type !=(lhs: borrowed BitArray1D, rhs: borrowed BitArray1D)
 
       Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] != Y[i] where X and Y are the to bit arrays to compare.
       
-      :returns: A new BitArray1D with the result values.
+      :returns: The result values
+      :rtype: BitArray1D
       
 
    .. method:: proc type =(rhs: borrowed BitArray1D)
 
       Copies the values from an rhs bit array.
       
-      :arg rhs: The bit array to copy.
+      :arg rhs: The bit array to copy
       
 
    .. method:: proc type ~(arg: borrowed BitArray1D)
@@ -155,14 +165,14 @@ BitArray is a library for effective storage of boolean values in arrays.
 
       Shift all the values to the right. Left values are padded with false values.
       
-      :shift: the number of values to shift.
+      :arg shift: the number of values to shift.
       
 
    .. method:: proc type >>(shift: int)
 
       Shift all the values to the right. Left values are padded with false values.
       
-      :shift: the number of values to shift.
+      :arg shift: the number of values to shift.
       
 
    .. method:: proc type ^(lhs: borrowed BitArray1D, rhs: borrowed BitArray1D)
