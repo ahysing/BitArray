@@ -24,7 +24,8 @@ jobs:
           export CHPL_VERSION=1.26.0
           export CHPL_HOME=/opt/chapel/$CHPL_VERSION
           export CHPL_GMP=system
-
+          export CHPL_LLVM=system
+          
           mkdir -p $CHPL_HOME
           curl -L https://github.com/chapel-lang/chapel/releases/download/$CHPL_VERSION/chapel-$CHPL_VERSION.tar.gz | tar -xzC /opt/chapel --transform 's/chapel-//'
           make -j 16 -C $CHPL_HOME
