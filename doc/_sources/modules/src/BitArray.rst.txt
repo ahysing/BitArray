@@ -39,6 +39,8 @@ BitArray is a library for effective storage of boolean values in arrays.
       :size: The size of the bit array
       
 
+   .. attribute:: const eightBitReversed: [0..255] uint(32) = chpl__buildArrayExpr(0: uint(32), 128: uint(32), 64: uint(32), 192: uint(32), 32: uint(32), 160: uint(32), 96: uint(32), 224: uint(32), 16: uint(32), 144: uint(32), 80: uint(32), 208: uint(32), 48: uint(32), 176: uint(32), 112: uint(32), 240: uint(32), 8: uint(32), 136: uint(32), 72: uint(32), 200: uint(32), 40: uint(32), 168: uint(32), 104: uint(32), 232: uint(32), 24: uint(32), 152: uint(32), 88: uint(32), 216: uint(32), 56: uint(32), 184: uint(32), 120: uint(32), 248: uint(32), 4: uint(32), 132: uint(32), 68: uint(32), 196: uint(32), 36: uint(32), 164: uint(32), 100: uint(32), 228: uint(32), 20: uint(32), 148: uint(32), 84: uint(32), 212: uint(32), 52: uint(32), 180: uint(32), 116: uint(32), 244: uint(32), 12: uint(32), 140: uint(32), 76: uint(32), 204: uint(32), 44: uint(32), 172: uint(32), 108: uint(32), 236: uint(32), 28: uint(32), 156: uint(32), 92: uint(32), 220: uint(32), 60: uint(32), 188: uint(32), 124: uint(32), 252: uint(32), 2: uint(32), 130: uint(32), 66: uint(32), 194: uint(32), 34: uint(32), 162: uint(32), 98: uint(32), 226: uint(32), 18: uint(32), 146: uint(32), 82: uint(32), 210: uint(32), 50: uint(32), 178: uint(32), 114: uint(32), 242: uint(32), 10: uint(32), 138: uint(32), 74: uint(32), 202: uint(32), 42: uint(32), 170: uint(32), 106: uint(32), 234: uint(32), 26: uint(32), 154: uint(32), 90: uint(32), 218: uint(32), 58: uint(32), 186: uint(32), 122: uint(32), 250: uint(32), 6: uint(32), 134: uint(32), 70: uint(32), 198: uint(32), 38: uint(32), 166: uint(32), 102: uint(32), 230: uint(32), 22: uint(32), 150: uint(32), 86: uint(32), 214: uint(32), 54: uint(32), 182: uint(32), 118: uint(32), 246: uint(32), 14: uint(32), 142: uint(32), 78: uint(32), 206: uint(32), 46: uint(32), 174: uint(32), 110: uint(32), 238: uint(32), 30: uint(32), 158: uint(32), 94: uint(32), 222: uint(32), 62: uint(32), 190: uint(32), 126: uint(32), 254: uint(32), 1: uint(32), 129: uint(32), 65: uint(32), 193: uint(32), 33: uint(32), 161: uint(32), 97: uint(32), 225: uint(32), 17: uint(32), 145: uint(32), 81: uint(32), 209: uint(32), 49: uint(32), 177: uint(32), 113: uint(32), 241: uint(32), 9: uint(32), 137: uint(32), 73: uint(32), 201: uint(32), 41: uint(32), 169: uint(32), 105: uint(32), 233: uint(32), 25: uint(32), 153: uint(32), 89: uint(32), 217: uint(32), 57: uint(32), 185: uint(32), 121: uint(32), 249: uint(32), 5: uint(32), 133: uint(32), 69: uint(32), 197: uint(32), 37: uint(32), 165: uint(32), 101: uint(32), 229: uint(32), 21: uint(32), 149: uint(32), 85: uint(32), 213: uint(32), 53: uint(32), 181: uint(32), 117: uint(32), 245: uint(32), 13: uint(32), 141: uint(32), 77: uint(32), 205: uint(32), 45: uint(32), 173: uint(32), 109: uint(32), 237: uint(32), 29: uint(32), 157: uint(32), 93: uint(32), 221: uint(32), 61: uint(32), 189: uint(32), 125: uint(32), 253: uint(32), 3: uint(32), 131: uint(32), 67: uint(32), 195: uint(32), 35: uint(32), 163: uint(32), 99: uint(32), 227: uint(32), 19: uint(32), 147: uint(32), 83: uint(32), 211: uint(32), 51: uint(32), 179: uint(32), 115: uint(32), 243: uint(32), 11: uint(32), 139: uint(32), 75: uint(32), 203: uint(32), 43: uint(32), 171: uint(32), 107: uint(32), 235: uint(32), 27: uint(32), 155: uint(32), 91: uint(32), 219: uint(32), 59: uint(32), 187: uint(32), 123: uint(32), 251: uint(32), 7: uint(32), 135: uint(32), 71: uint(32), 199: uint(32), 39: uint(32), 167: uint(32), 103: uint(32), 231: uint(32), 23: uint(32), 151: uint(32), 87: uint(32), 215: uint(32), 55: uint(32), 183: uint(32), 119: uint(32), 247: uint(32), 15: uint(32), 143: uint(32), 79: uint(32), 207: uint(32), 47: uint(32), 175: uint(32), 111: uint(32), 239: uint(32), 31: uint(32), 159: uint(32), 95: uint(32), 223: uint(32), 63: uint(32), 191: uint(32), 127: uint(32), 255: uint(32))
+
    .. method:: proc all(): bool
 
       Tests all the values with and.
@@ -87,7 +89,7 @@ BitArray is a library for effective storage of boolean values in arrays.
       :returns: The count.
       
 
-   .. method:: proc rotr(shift: int)
+   .. method:: proc rotr(shift)
 
       Rotate all the values to the right. Let values falling out on one side reappear on the rhs side.
       
@@ -97,9 +99,11 @@ BitArray is a library for effective storage of boolean values in arrays.
       Reverse the ordering of the values. The last value becomes the first value. The second last value becomes the second first value. And so on.
       
 
-   .. method:: proc rotl(shift)
+   .. method:: proc rotateLeft(shift: uint)
 
-      rotate all the values to the left. Let values falling out on one side reappear on the rhs side.
+      Rotate all the values to the left. Let values falling out on one side reappear on the rhs side.
+      
+      :arg shift: number of bits to rotate
       
 
    .. method:: proc set(idx: uint(32), value: bool) throws
@@ -161,14 +165,14 @@ BitArray is a library for effective storage of boolean values in arrays.
       Negate the values.
       
 
-   .. method:: proc type <<(shift: int)
+   .. method:: proc type <<(shift: uint)
 
       Shift all the values to the right. Left values are padded with false values.
       
       :arg shift: the number of values to shift.
       
 
-   .. method:: proc type >>(shift: int)
+   .. method:: proc type >>(shift: uint)
 
       Shift all the values to the right. Left values are padded with false values.
       
@@ -194,7 +198,6 @@ BitArray is a library for effective storage of boolean values in arrays.
    .. method:: proc type |(lhs: borrowed BitArray1D, rhs: borrowed BitArray1D)
 
       Perform the or operation on the values in this bit array with the values in anrhs bit array.
-      If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
       
       :rhs: bit array to perform or with
       

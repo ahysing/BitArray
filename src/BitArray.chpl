@@ -61,32 +61,64 @@ module BitArray {
       return sizeAsInt;
     }
 
-    pragma "no doc"
-    proc _reverse(value : uint(32)) {
-      const eightBitReversed : [0..255]uint(32) = [
-        0x00: uint(32), 0x80: uint(32), 0x40: uint(32), 0xC0: uint(32), 0x20: uint(32), 0xA0: uint(32), 0x60: uint(32), 0xE0: uint(32), 0x10: uint(32), 0x90: uint(32), 0x50: uint(32), 0xD0: uint(32), 0x30: uint(32), 0xB0: uint(32), 0x70: uint(32), 0xF0: uint(32), 
-        0x08: uint(32), 0x88: uint(32), 0x48: uint(32), 0xC8: uint(32), 0x28: uint(32), 0xA8: uint(32), 0x68: uint(32), 0xE8: uint(32), 0x18: uint(32), 0x98: uint(32), 0x58: uint(32), 0xD8: uint(32), 0x38: uint(32), 0xB8: uint(32), 0x78: uint(32), 0xF8: uint(32), 
-        0x04: uint(32), 0x84: uint(32), 0x44: uint(32), 0xC4: uint(32), 0x24: uint(32), 0xA4: uint(32), 0x64: uint(32), 0xE4: uint(32), 0x14: uint(32), 0x94: uint(32), 0x54: uint(32), 0xD4: uint(32), 0x34: uint(32), 0xB4: uint(32), 0x74: uint(32), 0xF4: uint(32), 
-        0x0C: uint(32), 0x8C: uint(32), 0x4C: uint(32), 0xCC: uint(32), 0x2C: uint(32), 0xAC: uint(32), 0x6C: uint(32), 0xEC: uint(32), 0x1C: uint(32), 0x9C: uint(32), 0x5C: uint(32), 0xDC: uint(32), 0x3C: uint(32), 0xBC: uint(32), 0x7C: uint(32), 0xFC: uint(32), 
-        0x02: uint(32), 0x82: uint(32), 0x42: uint(32), 0xC2: uint(32), 0x22: uint(32), 0xA2: uint(32), 0x62: uint(32), 0xE2: uint(32), 0x12: uint(32), 0x92: uint(32), 0x52: uint(32), 0xD2: uint(32), 0x32: uint(32), 0xB2: uint(32), 0x72: uint(32), 0xF2: uint(32), 
+    const eightBitReversed : [0..255]uint(32) = [
+        0x00: uint(32), 0x80: uint(32), 0x40: uint(32), 0xC0: uint(32), 0x20: uint(32), 0xA0: uint(32), 0x60: uint(32), 0xE0: uint(32), 0x10: uint(32), 0x90: uint(32), 0x50: uint(32), 0xD0: uint(32), 0x30: uint(32), 0xB0: uint(32), 0x70: uint(32), 0xF0: uint(32),
+        0x08: uint(32), 0x88: uint(32), 0x48: uint(32), 0xC8: uint(32), 0x28: uint(32), 0xA8: uint(32), 0x68: uint(32), 0xE8: uint(32), 0x18: uint(32), 0x98: uint(32), 0x58: uint(32), 0xD8: uint(32), 0x38: uint(32), 0xB8: uint(32), 0x78: uint(32), 0xF8: uint(32),
+        0x04: uint(32), 0x84: uint(32), 0x44: uint(32), 0xC4: uint(32), 0x24: uint(32), 0xA4: uint(32), 0x64: uint(32), 0xE4: uint(32), 0x14: uint(32), 0x94: uint(32), 0x54: uint(32), 0xD4: uint(32), 0x34: uint(32), 0xB4: uint(32), 0x74: uint(32), 0xF4: uint(32),
+        0x0C: uint(32), 0x8C: uint(32), 0x4C: uint(32), 0xCC: uint(32), 0x2C: uint(32), 0xAC: uint(32), 0x6C: uint(32), 0xEC: uint(32), 0x1C: uint(32), 0x9C: uint(32), 0x5C: uint(32), 0xDC: uint(32), 0x3C: uint(32), 0xBC: uint(32), 0x7C: uint(32), 0xFC: uint(32),
+        0x02: uint(32), 0x82: uint(32), 0x42: uint(32), 0xC2: uint(32), 0x22: uint(32), 0xA2: uint(32), 0x62: uint(32), 0xE2: uint(32), 0x12: uint(32), 0x92: uint(32), 0x52: uint(32), 0xD2: uint(32), 0x32: uint(32), 0xB2: uint(32), 0x72: uint(32), 0xF2: uint(32),
         0x0A: uint(32), 0x8A: uint(32), 0x4A: uint(32), 0xCA: uint(32), 0x2A: uint(32), 0xAA: uint(32), 0x6A: uint(32), 0xEA: uint(32), 0x1A: uint(32), 0x9A: uint(32), 0x5A: uint(32), 0xDA: uint(32), 0x3A: uint(32), 0xBA: uint(32), 0x7A: uint(32), 0xFA: uint(32),
-        0x06: uint(32), 0x86: uint(32), 0x46: uint(32), 0xC6: uint(32), 0x26: uint(32), 0xA6: uint(32), 0x66: uint(32), 0xE6: uint(32), 0x16: uint(32), 0x96: uint(32), 0x56: uint(32), 0xD6: uint(32), 0x36: uint(32), 0xB6: uint(32), 0x76: uint(32), 0xF6: uint(32), 
+        0x06: uint(32), 0x86: uint(32), 0x46: uint(32), 0xC6: uint(32), 0x26: uint(32), 0xA6: uint(32), 0x66: uint(32), 0xE6: uint(32), 0x16: uint(32), 0x96: uint(32), 0x56: uint(32), 0xD6: uint(32), 0x36: uint(32), 0xB6: uint(32), 0x76: uint(32), 0xF6: uint(32),
         0x0E: uint(32), 0x8E: uint(32), 0x4E: uint(32), 0xCE: uint(32), 0x2E: uint(32), 0xAE: uint(32), 0x6E: uint(32), 0xEE: uint(32), 0x1E: uint(32), 0x9E: uint(32), 0x5E: uint(32), 0xDE: uint(32), 0x3E: uint(32), 0xBE: uint(32), 0x7E: uint(32), 0xFE: uint(32),
         0x01: uint(32), 0x81: uint(32), 0x41: uint(32), 0xC1: uint(32), 0x21: uint(32), 0xA1: uint(32), 0x61: uint(32), 0xE1: uint(32), 0x11: uint(32), 0x91: uint(32), 0x51: uint(32), 0xD1: uint(32), 0x31: uint(32), 0xB1: uint(32), 0x71: uint(32), 0xF1: uint(32),
-        0x09: uint(32), 0x89: uint(32), 0x49: uint(32), 0xC9: uint(32), 0x29: uint(32), 0xA9: uint(32), 0x69: uint(32), 0xE9: uint(32), 0x19: uint(32), 0x99: uint(32), 0x59: uint(32), 0xD9: uint(32), 0x39: uint(32), 0xB9: uint(32), 0x79: uint(32), 0xF9: uint(32), 
+        0x09: uint(32), 0x89: uint(32), 0x49: uint(32), 0xC9: uint(32), 0x29: uint(32), 0xA9: uint(32), 0x69: uint(32), 0xE9: uint(32), 0x19: uint(32), 0x99: uint(32), 0x59: uint(32), 0xD9: uint(32), 0x39: uint(32), 0xB9: uint(32), 0x79: uint(32), 0xF9: uint(32),
         0x05: uint(32), 0x85: uint(32), 0x45: uint(32), 0xC5: uint(32), 0x25: uint(32), 0xA5: uint(32), 0x65: uint(32), 0xE5: uint(32), 0x15: uint(32), 0x95: uint(32), 0x55: uint(32), 0xD5: uint(32), 0x35: uint(32), 0xB5: uint(32), 0x75: uint(32), 0xF5: uint(32),
         0x0D: uint(32), 0x8D: uint(32), 0x4D: uint(32), 0xCD: uint(32), 0x2D: uint(32), 0xAD: uint(32), 0x6D: uint(32), 0xED: uint(32), 0x1D: uint(32), 0x9D: uint(32), 0x5D: uint(32), 0xDD: uint(32), 0x3D: uint(32), 0xBD: uint(32), 0x7D: uint(32), 0xFD: uint(32),
-        0x03: uint(32), 0x83: uint(32), 0x43: uint(32), 0xC3: uint(32), 0x23: uint(32), 0xA3: uint(32), 0x63: uint(32), 0xE3: uint(32), 0x13: uint(32), 0x93: uint(32), 0x53: uint(32), 0xD3: uint(32), 0x33: uint(32), 0xB3: uint(32), 0x73: uint(32), 0xF3: uint(32), 
+        0x03: uint(32), 0x83: uint(32), 0x43: uint(32), 0xC3: uint(32), 0x23: uint(32), 0xA3: uint(32), 0x63: uint(32), 0xE3: uint(32), 0x13: uint(32), 0x93: uint(32), 0x53: uint(32), 0xD3: uint(32), 0x33: uint(32), 0xB3: uint(32), 0x73: uint(32), 0xF3: uint(32),
         0x0B: uint(32), 0x8B: uint(32), 0x4B: uint(32), 0xCB: uint(32), 0x2B: uint(32), 0xAB: uint(32), 0x6B: uint(32), 0xEB: uint(32), 0x1B: uint(32), 0x9B: uint(32), 0x5B: uint(32), 0xDB: uint(32), 0x3B: uint(32), 0xBB: uint(32), 0x7B: uint(32), 0xFB: uint(32),
-        0x07: uint(32), 0x87: uint(32), 0x47: uint(32), 0xC7: uint(32), 0x27: uint(32), 0xA7: uint(32), 0x67: uint(32), 0xE7: uint(32), 0x17: uint(32), 0x97: uint(32), 0x57: uint(32), 0xD7: uint(32), 0x37: uint(32), 0xB7: uint(32), 0x77: uint(32), 0xF7: uint(32), 
+        0x07: uint(32), 0x87: uint(32), 0x47: uint(32), 0xC7: uint(32), 0x27: uint(32), 0xA7: uint(32), 0x67: uint(32), 0xE7: uint(32), 0x17: uint(32), 0x97: uint(32), 0x57: uint(32), 0xD7: uint(32), 0x37: uint(32), 0xB7: uint(32), 0x77: uint(32), 0xF7: uint(32),
         0x0F: uint(32), 0x8F: uint(32), 0x4F: uint(32), 0xCF: uint(32), 0x2F: uint(32), 0xAF: uint(32), 0x6F: uint(32), 0xEF: uint(32), 0x1F: uint(32), 0x9F: uint(32), 0x5F: uint(32), 0xDF: uint(32), 0x3F: uint(32), 0xBF: uint(32), 0x7F: uint(32), 0xFF: uint(32)
-      ];
+    ];
 
+    pragma "no doc"
+    inline proc _reverse64(value : uint(64)) {
+      var result : uint(64) = 0;
+      var idx : uint(64);
+
+      idx = value & 0xff;
+      result = (eightBitReversed[idx]) << 56;
+
+      idx = (value >> 8) & 0xff;
+      result |= (eightBitReversed[idx]) << 48;
+
+      idx = (value >> 16) & 0xff;
+      result |= (eightBitReversed[idx]) << 40;
+
+      idx = (value >> 24) & 0xff;
+      result |= (eightBitReversed[idx]) << 32;
+
+      idx = (value >> 32) & 0xff;
+      result |= (eightBitReversed[idx]) << 24;
+
+      idx = (value >> 40) & 0xff;
+      result |= (eightBitReversed[idx]) << 16;
+
+      idx = (value >> 48) & 0xff;
+      result |= (eightBitReversed[idx]) << 8;
+
+      idx = (value >> 56) & 0xff;
+      result |= (eightBitReversed[idx]);
+
+      return result;
+    }
+
+    pragma "no doc"
+    inline proc _reverse32(value : uint(32)) {
       var result : uint(32) = 0;
       var idx : uint(32);
 
       idx = value & 0xff;
-      result |= (eightBitReversed[idx]) << 24;
+      result = (eightBitReversed[idx]) << 24;
 
       idx = (value >> 8) & 0xff;
       result |= (eightBitReversed[idx]) << 16;
@@ -101,7 +133,42 @@ module BitArray {
     }
 
     pragma "no doc"
-    proc _bitshift(shift : int) {
+    inline proc _reverse16(value :uint(16)) {
+      var result : uint(16) = 0;
+      var idx : uint(32);
+
+      idx = value & 0xff;
+      result = (eightBitReversed[idx]) << 8;
+
+      idx = (value >> 8) & 0xff;
+      result |= (eightBitReversed[idx]);
+
+      return result;
+    }
+
+    pragma "no doc"
+    inline proc _reverse8(value :uint(8)) {
+      return eightBitReversed[value] : uint(8);
+    }
+
+    pragma "no doc"
+    proc _reverse(value : uint(?bits)) {
+      select bits {
+        when 64 do
+          this._reverse64(value);
+        when 32 do
+          return this._reverse32(value);
+        when 16 do
+          return this._reverse16(value);
+        when 8 do
+          return this._reverse8(value);
+        otherwise
+          compilerError("_reverse is not supported for that bit width.");
+      }
+    }
+
+    pragma "no doc"
+    proc _bitshift(shift : uint) {
       if shift < packSize && shift > 0 {
         var mask = one << (shift + 1) - 1;
         var topMask = ~mask;
@@ -123,12 +190,13 @@ module BitArray {
         this.values[this.values.domain.last] = lastValue;
       } else if shift > 0 {
         this._bitshift(packSize);
-        this._bitshift(shift - packSize);
+        shift -= packSize;
+        this._bitshift(shift);
       }
     }
 
     pragma "no doc"
-    proc _bitshiftReverse(shift : int) {
+    proc _bitshiftReverse(shift : uint) {
       if shift < packSize && shift > 0 {
         var mask = one >> (shift + 1) - 1;
         var topMask = ~mask;
@@ -155,7 +223,7 @@ module BitArray {
     }
 
     pragma "no doc"
-    proc _createReminderMask() : pack.type {
+    proc _createReminderMask() {
       if this.hasRemaining then
         return (1 << (this.bitSize % packSize)) : pack.type - one;
       else
@@ -170,11 +238,10 @@ module BitArray {
     proc all() : bool {
       if this.hasRemaining then {
         var last = this.values.domain.dim(1) - 1;
-        var dom : subdomain(this.values.domain);
-            dom = this.values.domain[..last];
+        var dom : subdomain(this.values.domain) = this.values.domain[..last];
 
         var result = true;
-        forall i in dom do
+        foreach i in dom do
           result &= BitOps.popcount(this.values[i]) == packSize;
 
         var lastValues = this.values[this.values.domain.laset()];
@@ -182,7 +249,7 @@ module BitArray {
         return result;
       } else {
         var result = true;
-        forall i in this.values.domain do
+        foreach i in this.values.domain do
           result &= BitOps.popcount(this.values[i]) == packSize;
         return result;
       }
@@ -253,7 +320,7 @@ module BitArray {
 
     /* Rotate all the values to the right. Let values falling out on one side reappear on the rhs side.
     */
-    proc rotr(shift : int) {
+    proc rotr(shift) {
     }
 
     /* Reverse the ordering of the values. The last value becomes the first value. The second last value becomes the second first value. And so on.
@@ -267,15 +334,12 @@ module BitArray {
         this._bitshift(this.bitSize % packSize);
     }
 
-    /* rotate all the values to the left. Let values falling out on one side reappear on the rhs side.
+    /* Rotate all the values to the left. Let values falling out on one side reappear on the rhs side.
+
+       :arg shift: number of bits to rotate
     */
-    proc rotl(shift) {
-      if shift < 1 then
-        return;
-      else if shift >= packSize then {
-        this.rotl(packSize);
-        this.rotl(shift - packSize);
-      } else {
+    proc rotateLeft(shift : uint) {
+      if shift != 0 {
         var mainMask = ((1 << shift) - 1) : uint(32);
         var reminderMask = allOnes - mainMask;
 
@@ -292,7 +356,6 @@ module BitArray {
           value |= reminder & reminderMask;
           this.values[i] |= value;
         }
-        // TODO: first and last
       }
     }
 
@@ -332,30 +395,58 @@ module BitArray {
        :rtype: bool
      */
     iter these() {
-      var packSizeMinusOne = packSize - 1;
-      var it : uint(32) = 0;
-      if this.hasRemaining {
-        for i in this.values {
-          var block = this.values[i];
-          for j in {0..packSizeMinusOne} {
-            if it < this.bitSize {
-              var mask : uint(32) = one << j : uint(32);
-              var bit = block & mask;
-              yield bit != 0;
+      const mask32 = [
+        0b00000000000000000000000000000001 : uint(32),
+        0b00000000000000000000000000000010 : uint(32),
+        0b00000000000000000000000000000100 : uint(32),
+        0b00000000000000000000000000001000 : uint(32),
+        0b00000000000000000000000000010000 : uint(32),
+        0b00000000000000000000000000100000 : uint(32),
+        0b00000000000000000000000001000000 : uint(32),
+        0b00000000000000000000000010000000 : uint(32),
+        0b00000000000000000000000100000000 : uint(32),
+        0b00000000000000000000001000000000 : uint(32),
+        0b00000000000000000000010000000000 : uint(32),
+        0b00000000000000000000100000000000 : uint(32),
+        0b00000000000000000001000000000000 : uint(32),
+        0b00000000000000000010000000000000 : uint(32),
+        0b00000000000000000100000000000000 : uint(32),
+        0b00000000000000001000000000000000 : uint(32),
+        0b00000000000000010000000000000000 : uint(32),
+        0b00000000000000100000000000000000 : uint(32),
+        0b00000000000001000000000000000000 : uint(32),
+        0b00000000000010000000000000000000 : uint(32),
+        0b00000000000100000000000000000000 : uint(32),
+        0b00000000001000000000000000000000 : uint(32),
+        0b00000000010000000000000000000000 : uint(32),
+        0b00000000100000000000000000000000 : uint(32),
+        0b00000001000000000000000000000000 : uint(32),
+        0b00000010000000000000000000000000 : uint(32),
+        0b00000100000000000000000000000000 : uint(32),
+        0b00001000000000000000000000000000 : uint(32),
+        0b00010000000000000000000000000000 : uint(32),
+        0b00100000000000000000000000000000 : uint(32),
+        0b01000000000000000000000000000000 : uint(32),
+        0b10000000000000000000000000000000 : uint(32)
+      ];
 
-              it += 1;
-            }
-          }
-        }
+      const packSizeMinusOne = packSize - 1;
+      if this.hasRemaining {
+        var last = this.values.domain.last;
+        var lastMinusOne = last - 2;
+        var wholeBlocksDomain : subdomain(this.values.domain) = this.values.domain[..lastMinusOne];
+        for i in wholeBlocksDomain do
+          foreach j in {0..packSizeMinusOne} do
+            yield this.values[i] & mask32[j] != 0;
+
+        var lastBlock = this.values[last];
+        var reminderSize = this.bitSize % packSize;
+        foreach j in {0..reminderSize} do
+          yield lastBlock & mask32[j] != 0;
       } else {
-        for i in this.values do {
-          var block = this.values[i];
-          for j in {0..packSizeMinusOne} {
-            var mask : uint(32) = one << j : uint(32);
-            var bit = block & mask;
-            yield bit != 0;
-          }
-        }
+        for block in this.values do
+          foreach j in {0..packSizeMinusOne} do
+            yield block & mask32[j] != 0;
       }
     }
 
@@ -392,8 +483,9 @@ module BitArray {
        :arg rhs: The bit array to copy
     */
     operator =(rhs : borrowed BitArray1D) {
-      var values : [this.values.domain] uint(32);
-      for i in rhs.bitDomain do
+      var D = this.values.domain;
+      var values : [D] uint(32);
+      forall i in rhs.values.domain do
         values[i] = rhs.values[i];
 
       this.bitDomain = rhs.bitDomain;
@@ -406,15 +498,14 @@ module BitArray {
     */
     operator ~(arg : borrowed BitArray1D) {
       arg.values = ~arg.values;
-      var mask = this._createReminderMask();
-      arg.values[arg.values.domain.last] &= mask;
+      arg.values[arg.values.domain.last] &= this._createReminderMask();
     }
 
     /* Shift all the values to the right. Left values are padded with false values.
 
        :arg shift: the number of values to shift.
      */
-    operator <<(shift : int) {
+    operator <<(shift : uint) {
       this._bitshift(shift);
     }
 
@@ -423,7 +514,7 @@ module BitArray {
 
        :arg shift: the number of values to shift.
      */
-    operator >>(shift : int) {
+    operator >>(shift : uint) {
       this._bitshiftReverse(shift);
     }
 
@@ -434,8 +525,8 @@ module BitArray {
      */
     operator ^(lhs : borrowed BitArray1D, rhs : borrowed BitArray1D) {
       lhs.values = lhs.values ^ rhs.values;
-      var mask = this._createReminderMask();
-      lhs.values[lhs.values.domain.last] &= mask;
+      if this.hasRemaining then
+        lhs.values[lhs.values.domain.last] &= this._createReminderMask();
     }
 
     /* Perform the and operation on the values in this bit array with the values in anrhs bit array.
@@ -445,19 +536,18 @@ module BitArray {
      */
     operator &(lhs : borrowed BitArray1D, rhs : borrowed BitArray1D) {
       lhs.values = lhs.values & rhs.values;
-      var mask = this._createReminderMask();
-      lhs.values[lhs.values.domain.last] &= mask;
+      if this.hasRemaining then
+        lhs.values[lhs.values.domain.last] &= this._createReminderMask();
     }
 
     /* Perform the or operation on the values in this bit array with the values in anrhs bit array.
-       If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
 
        :rhs: bit array to perform or with
      */
     operator |(lhs : borrowed BitArray1D, rhs : borrowed BitArray1D) {
       lhs.values = lhs.values || rhs.values;
-      var mask = this._createReminderMask();
-      lhs.values[lhs.values.domain.last] &= mask;
+      if this.hasRemaining then
+        lhs.values[lhs.values.domain.last] &= this._createReminderMask();
     }
   }
 }

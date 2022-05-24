@@ -28,17 +28,17 @@ proc BitArray__reverse_inputIs_100(test: borrowed Test) throws {
   test.assertEqual(bitArray._reverse(100 : uint(32)), 0b00100110000000000000000000000000 : uint(32));
 }
 
-proc BitArray_rotl_inputIs1(test: borrowed Test) throws {
+proc BitArray_rotateLeft_inputIs1(test: borrowed Test) throws {
   var bitArray = new BitArray1D(32);
   bitArray.values[bitArray.values.domain.first] = 1;
-  bitArray.rotl(1);
+  bitArray.rotateLeft(1);
   test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b00000000000000000000000000000010);
 }
 
-proc BitArray_rotl_inputIs31(test: borrowed Test) throws {
+proc BitArray_rotateLeft_inputIs31(test: borrowed Test) throws {
   var bitArray = new BitArray1D(32);
   bitArray.values[bitArray.values.domain.first] = 1;
-  bitArray.rotl(31);
+  bitArray.rotateLeft(31);
   test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b10000000000000000000000000000000);
 }
 
