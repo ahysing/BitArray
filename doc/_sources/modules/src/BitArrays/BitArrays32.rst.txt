@@ -1,0 +1,212 @@
+.. default-domain:: chpl
+
+.. module:: BitArrays32
+
+BitArrays32
+===========
+**Usage**
+
+.. code-block:: chapel
+
+   use BitArrays.BitArrays32;
+
+
+or
+
+.. code-block:: chapel
+
+   import BitArrays.BitArrays32;
+
+.. class:: ArrayRangeError : IllegalArgumentError
+
+   Exception thrown when indexing the bit arrays outside the range of values the bit array 
+
+
+   .. method:: proc init()
+
+.. class:: BitArray32
+
+   BitArray32 is an array of boolean values stored packed together as 32 bit words. All boolean values are mapped one to one with a bit value in memory. 
+
+
+   .. method:: proc init(size: uint(32), locales = Locales)
+
+      Create a bit array of a given size.
+      
+      :arg size: The size of the bit array
+      :arg locales: What nodes to distibute the values over
+      
+
+   .. method:: proc all(): bool
+
+      Tests all the values with and.
+      
+      :returns: `true` if all the values are true
+      :rtype: boolean value
+      
+
+   .. method:: proc any(): bool
+
+      Tests all the values with or.
+      
+      :returns: `true` if any of the values are true
+      :rtype: bool
+      
+
+   .. method:: proc at(idx: uint(32)): bool throws
+
+      Looks up value at `idx`.
+      
+      :arg idx: The index in the bitarray to look up.
+      
+      :throws ArrayRangeError: If `idx` is outside the range [1..size).
+      
+      :return: value at `idx`
+      :rtype: bool
+      
+
+   .. method:: proc equals(rhs: borrowed BitArray32)
+
+      Compares two bit arrays by values.
+      
+      :returns: `true` if the two bit arrays has identical values.
+      
+
+   .. method:: proc fill()
+
+      Set all the values to `true`.
+      
+
+   .. method:: proc popcount()
+
+      Count the number of values set to true.
+      
+      :returns: The count.
+      
+
+   .. method:: proc rotr(shift)
+
+      Rotate all the values to the right. Let values falling out on one side reappear on the rhs side.
+      
+
+   .. method:: proc reverse()
+
+      Reverse the ordering of the values. The last value becomes the first value. The second last value becomes the second first value. And so on.
+      
+
+   .. method:: proc rotateLeft(shift: uint)
+
+      Rotate all the values to the left. Let values falling out on one side reappear on the rhs side.
+      
+      :arg shift: number of bits to rotate
+      
+
+   .. method:: proc set(idx: uint(32), value: bool) throws
+
+      Set the value at a given index.
+      
+      :arg idx: The index of the value to mutate.
+      :arg value: The value to set at `idx`.
+      
+      :throws ArrayRangeError: if the idx value is outside the range [0, size).
+      
+
+   .. method:: proc size()
+
+      Get the number of values.
+      
+      :returns: bit vector size.
+      :rtype: uint(32)
+      
+
+   .. itermethod:: iter these()
+
+      Iterate over all the values.
+      
+      :returns: All the values. yelds one value at a time
+      :rtype: bool
+      
+
+   .. method:: proc unfill()
+
+      Set all the values to `false`.
+      
+
+   .. method:: proc type ==(lhs: borrowed BitArray32, rhs: borrowed BitArray32)
+
+      Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] == Y[i] where X and Y are the to bit arrays to compare.
+      
+      :returns: The result values
+      :rtype: BitArray32
+      
+
+   .. method:: proc type !=(lhs: borrowed BitArray32, rhs: borrowed BitArray32)
+
+      Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] != Y[i] where X and Y are the to bit arrays to compare.
+      
+      :returns: The result values
+      :rtype: BitArray32
+      
+
+   .. method:: proc type =(ref lhs: BitArray32, rhs: borrowed BitArray32)
+
+      Copies the values from an rhs bit array.
+      :arg lhs: the operator to assign
+      :arg rhs: The bit array to copy
+      
+
+   .. method:: proc type ~(arg: borrowed BitArray32)
+
+      Negate the values.
+      
+
+   .. method:: proc type <<(shift: uint)
+
+      
+      :arg shift: the number of values to shift.
+      
+
+   .. method:: proc type <<=(shift: uint)
+
+      Shift all the values to the right. Left values are padded with false values.
+      
+      :arg shift: the number of values to shift.
+      
+
+   .. method:: proc type >>(shift: uint)
+
+      Shift all the values to the right. Left values are padded with false values.
+      
+      :arg shift: the number of values to shift.
+      
+
+   .. method:: proc type >>=(shift: uint)
+
+      Shift all the values to the right. Left values are padded with false values.
+      
+      :arg shift: the number of values to shift.
+      
+
+   .. method:: proc type ^=(lhs: borrowed BitArray32, rhs: borrowed BitArray32)
+
+      Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.
+      If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
+      
+      :rhs: bit array to perform xor with
+      
+
+   .. method:: proc type &(lhs: borrowed BitArray32, rhs: borrowed BitArray32)
+
+      Perform the and operation on the values in this bit array with the values in anrhs bit array.
+      If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
+      
+      :rhs: bit array to perform and with
+      
+
+   .. method:: proc type |(lhs: borrowed BitArray32, rhs: borrowed BitArray32)
+
+      Perform the or operation on the values in this bit array with the values in anrhs bit array.
+      
+      :rhs: bit array to perform or with
+      
+

@@ -15,7 +15,7 @@ clean:
 	mason clean
 
 .PHONY: test
-test: $(shell pwd)/src/BitArray.chpl
+test:
 	mason test --show
 
 .PHONY: doc

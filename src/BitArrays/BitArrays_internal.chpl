@@ -1,0 +1,2 @@
+module BitArrays_internal {
+}

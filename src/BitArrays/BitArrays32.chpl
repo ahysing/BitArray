@@ -1,7 +1,7 @@
-/* BitArray is a library for effective storage of boolean values in arrays. */
-module BitArray {
+module BitArrays32 {
   use BitOps;
   use AllLocalesBarriers;
+  use BlockDist;
 
   pragma "no doc"
   const packSize : uint(32) = 32;
@@ -22,8 +22,8 @@ module BitArray {
     }
   }
 
-  /* BitArray1D is an array of boolean values stored packed together. All boolean values are mapped one to one with a bit value in memory. */
-  class BitArray1D {
+  /* BitArray32 is an array of boolean values stored packed together as 32 bit words. All boolean values are mapped one to one with a bit value in memory. */
+  class BitArray32 {
     pragma "no doc"
     var bitDomain : domain(rank=1, idxType=uint(32), stridable=false);
 
@@ -38,14 +38,16 @@ module BitArray {
 
     /* Create a bit array of a given size.
 
-       :size: The size of the bit array
+       :arg size: The size of the bit array
+       :arg locales: What nodes to distibute the values over
      */
-    proc init(size : uint(32)) {
+    proc init(size : uint(32), locales=Locales) {
       this.complete();
       var hasRemaining = (size % packSize) != 0;
       var sizeAsInt : uint(32) = this._getNumberOfBlocks(hasRemaining, size);
       var lastIdx = sizeAsInt - 1;
-      var bitDomain : domain(rank=1, idxType=uint(32), stridable=false) = {0..lastIdx};
+      var Space = {0..lastIdx};
+      var bitDomain : domain(rank=1, idxType=uint(32), stridable=false) dmapped Block(boundingBox=Space) = Space;
       var values : [bitDomain] uint(32);
       this.bitDomain = bitDomain;
       this.bitSize = size;
@@ -61,6 +63,7 @@ module BitArray {
       return sizeAsInt;
     }
 
+    pragma "no doc"
     const eightBitReversed : [0..255]uint(32) = [
         0x00: uint(32), 0x80: uint(32), 0x40: uint(32), 0xC0: uint(32), 0x20: uint(32), 0xA0: uint(32), 0x60: uint(32), 0xE0: uint(32), 0x10: uint(32), 0x90: uint(32), 0x50: uint(32), 0xD0: uint(32), 0x30: uint(32), 0xB0: uint(32), 0x70: uint(32), 0xF0: uint(32),
         0x08: uint(32), 0x88: uint(32), 0x48: uint(32), 0xC8: uint(32), 0x28: uint(32), 0xA8: uint(32), 0x68: uint(32), 0xE8: uint(32), 0x18: uint(32), 0x98: uint(32), 0x58: uint(32), 0xD8: uint(32), 0x38: uint(32), 0xB8: uint(32), 0x78: uint(32), 0xF8: uint(32),
@@ -79,38 +82,6 @@ module BitArray {
         0x07: uint(32), 0x87: uint(32), 0x47: uint(32), 0xC7: uint(32), 0x27: uint(32), 0xA7: uint(32), 0x67: uint(32), 0xE7: uint(32), 0x17: uint(32), 0x97: uint(32), 0x57: uint(32), 0xD7: uint(32), 0x37: uint(32), 0xB7: uint(32), 0x77: uint(32), 0xF7: uint(32),
         0x0F: uint(32), 0x8F: uint(32), 0x4F: uint(32), 0xCF: uint(32), 0x2F: uint(32), 0xAF: uint(32), 0x6F: uint(32), 0xEF: uint(32), 0x1F: uint(32), 0x9F: uint(32), 0x5F: uint(32), 0xDF: uint(32), 0x3F: uint(32), 0xBF: uint(32), 0x7F: uint(32), 0xFF: uint(32)
     ];
-
-    pragma "no doc"
-    inline proc _reverse64(value : uint(64)) {
-      var result : uint(64) = 0;
-      var idx : uint(64);
-
-      idx = value & 0xff;
-      result = (eightBitReversed[idx]) << 56;
-
-      idx = (value >> 8) & 0xff;
-      result |= (eightBitReversed[idx]) << 48;
-
-      idx = (value >> 16) & 0xff;
-      result |= (eightBitReversed[idx]) << 40;
-
-      idx = (value >> 24) & 0xff;
-      result |= (eightBitReversed[idx]) << 32;
-
-      idx = (value >> 32) & 0xff;
-      result |= (eightBitReversed[idx]) << 24;
-
-      idx = (value >> 40) & 0xff;
-      result |= (eightBitReversed[idx]) << 16;
-
-      idx = (value >> 48) & 0xff;
-      result |= (eightBitReversed[idx]) << 8;
-
-      idx = (value >> 56) & 0xff;
-      result |= (eightBitReversed[idx]);
-
-      return result;
-    }
 
     pragma "no doc"
     inline proc _reverse32(value : uint(32)) {
@@ -152,19 +123,8 @@ module BitArray {
     }
 
     pragma "no doc"
-    proc _reverse(value : uint(?bits)) {
-      select bits {
-        when 64 do
-          this._reverse64(value);
-        when 32 do
-          return this._reverse32(value);
-        when 16 do
-          return this._reverse16(value);
-        when 8 do
-          return this._reverse8(value);
-        otherwise
-          compilerError("_reverse is not supported for that bit width.");
-      }
+    proc _reverse(value : uint(32)) {
+      return this._reverse32(value);
     }
 
     pragma "no doc"
@@ -257,7 +217,6 @@ module BitArray {
 
     /* Tests all the values with or.
 
-
       :returns: `true` if any of the values are true
       :rtype: bool
     */
@@ -294,7 +253,7 @@ module BitArray {
 
        :returns: `true` if the two bit arrays has identical values.
      */
-    proc equals(rhs : borrowed BitArray1D) {
+    proc equals(rhs : borrowed BitArray32) {
       return this.values.equals(rhs.values);
     }
 
@@ -459,10 +418,10 @@ module BitArray {
     /* Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] == Y[i] where X and Y are the to bit arrays to compare.
 
        :returns: The result values
-       :rtype: BitArray1D
+       :rtype: BitArray32
      */
-    operator ==(lhs : borrowed BitArray1D, rhs : borrowed BitArray1D) {
-      var bitarray = new BitArray1D(lhs.size());
+    operator ==(lhs : borrowed BitArray32, rhs : borrowed BitArray32) {
+      var bitarray = new BitArray32(lhs.size());
       bitarray.values = lhs.values ^ ~rhs.values;
       return bitarray;
     }
@@ -470,51 +429,63 @@ module BitArray {
     /* Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] != Y[i] where X and Y are the to bit arrays to compare.
 
        :returns: The result values
-       :rtype: BitArray1D
+       :rtype: BitArray32
      */
-    operator !=(lhs : borrowed BitArray1D, rhs : borrowed BitArray1D) {
-      var bitarray = new BitArray1D(lhs.size());
+    operator !=(lhs : borrowed BitArray32, rhs : borrowed BitArray32) {
+      var bitarray = new BitArray32(lhs.size());
       bitarray.values = lhs.values ^ rhs.values;
       return bitarray;
     }
 
     /* Copies the values from an rhs bit array.
-
+       :arg lhs: the operator to assign
        :arg rhs: The bit array to copy
     */
-    operator =(rhs : borrowed BitArray1D) {
-      var D = this.values.domain;
+    operator =(ref lhs : BitArray32, rhs : borrowed BitArray32) {
+      var D = lhs.values.domain;
       var values : [D] uint(32);
       forall i in rhs.values.domain do
         values[i] = rhs.values[i];
 
-      this.bitDomain = rhs.bitDomain;
-      this.bitSize = rhs.bitSize;
-      this.hasRemaining = rhs.hasRemaining;
-      this.values = values;
+      lhs.bitDomain = rhs.bitDomain;
+      lhs.bitSize = rhs.bitSize;
+      lhs.hasRemaining = rhs.hasRemaining;
+      lhs.values = values;
     }
 
     /* Negate the values.
     */
-    operator ~(arg : borrowed BitArray1D) {
+    operator ~(arg : borrowed BitArray32) {
       arg.values = ~arg.values;
       arg.values[arg.values.domain.last] &= this._createReminderMask();
+    }
+
+    /*
+       :arg shift: the number of values to shift.
+     */
+    operator <<(shift : uint) {
     }
 
     /* Shift all the values to the right. Left values are padded with false values.
 
        :arg shift: the number of values to shift.
      */
-    operator <<(shift : uint) {
+    operator <<=(shift : uint) {
       this._bitshift(shift);
     }
-
 
     /* Shift all the values to the right. Left values are padded with false values.
 
        :arg shift: the number of values to shift.
      */
     operator >>(shift : uint) {
+    }
+
+    /* Shift all the values to the right. Left values are padded with false values.
+
+       :arg shift: the number of values to shift.
+     */
+    operator >>=(shift : uint) {
       this._bitshiftReverse(shift);
     }
 
@@ -523,7 +494,7 @@ module BitArray {
 
        :rhs: bit array to perform xor with
      */
-    operator ^(lhs : borrowed BitArray1D, rhs : borrowed BitArray1D) {
+    operator ^=(lhs : borrowed BitArray32, rhs : borrowed BitArray32) {
       lhs.values = lhs.values ^ rhs.values;
       if this.hasRemaining then
         lhs.values[lhs.values.domain.last] &= this._createReminderMask();
@@ -534,7 +505,7 @@ module BitArray {
 
        :rhs: bit array to perform and with
      */
-    operator &(lhs : borrowed BitArray1D, rhs : borrowed BitArray1D) {
+    operator &(lhs : borrowed BitArray32, rhs : borrowed BitArray32) {
       lhs.values = lhs.values & rhs.values;
       if this.hasRemaining then
         lhs.values[lhs.values.domain.last] &= this._createReminderMask();
@@ -544,7 +515,7 @@ module BitArray {
 
        :rhs: bit array to perform or with
      */
-    operator |(lhs : borrowed BitArray1D, rhs : borrowed BitArray1D) {
+    operator |(lhs : borrowed BitArray32, rhs : borrowed BitArray32) {
       lhs.values = lhs.values || rhs.values;
       if this.hasRemaining then
         lhs.values[lhs.values.domain.last] &= this._createReminderMask();

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BitArray32 &mdash; chpldoc 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="BitArray64" href="BitArray64.html" />
+    <link rel="prev" title="chpldoc documentation" href="../../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> chpldoc
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">chpldoc documentation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">BitArray32</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BitArray64.html">BitArray64</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BitArrays.html">BitArrays</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">chpldoc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>BitArray32</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/modules/src/BitArray32.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <span class="target" id="module-BitArray32"></span><div class="section" id="bitarray32">
+<h1>BitArray32<a class="headerlink" href="#bitarray32" title="Permalink to this headline">¶</a></h1>
+<p><strong>Usage</strong></p>
+<div class="highlight-chapel notranslate"><div class="highlight"><pre><span></span><span class="k">use</span> <span class="nx">BitArray32</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-chapel notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nx">BitArray32</span><span class="p">;</span>
+</pre></div>
+</div>
+<dl class="chpl class">
+<dt class="sig sig-object chpl" id="BitArray32.ArrayRangeError">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ArrayRangeError</span></span><span class="pre">:</span> <span class="pre">IllegalArgumentError</span><a class="headerlink" href="#BitArray32.ArrayRangeError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception thrown when indexing the bit arrays outside the range of values the bit array</p>
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.ArrayRangeError.init">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.ArrayRangeError.init" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="chpl class">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">BitArray32</span></span><a class="headerlink" href="#BitArray32.BitArray32" title="Permalink to this definition">¶</a></dt>
+<dd><p>BitArray32 is an array of boolean values stored packed together as 32 bit words. All boolean values are mapped one to one with a bit value in memory.</p>
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.init">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">size:</span> <span class="pre">uint(32)</span></em>, <em class="sig-param"><span class="pre">locales</span> <span class="pre">=</span> <span class="pre">Locales</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.BitArray32.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a bit array of a given size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>size</strong> – The size of the bit array</p></li>
+<li><p><strong>locales</strong> – What nodes to distibute the values over</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.all">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="pre">:</span> <span class="pre">bool</span><a class="headerlink" href="#BitArray32.BitArray32.all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests all the values with and.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>true</cite> if all the values are true</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>boolean value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.any">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">any</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="pre">:</span> <span class="pre">bool</span><a class="headerlink" href="#BitArray32.BitArray32.any" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests all the values with or.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>true</cite> if any of the values are true</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.at">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">idx:</span> <span class="pre">uint(32)</span></em><span class="sig-paren">)</span><span class="pre">:</span> <span class="pre">bool</span> <span class="pre">throws</span><a class="headerlink" href="#BitArray32.BitArray32.at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Looks up value at <cite>idx</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><p><strong>idx</strong> – The index in the bitarray to look up.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>ArrayRangeError</strong> – If <cite>idx</cite> is outside the range [1..size).</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>value at <cite>idx</cite></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.equals">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">equals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.BitArray32.equals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares two bit arrays by values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>true</cite> if the two bit arrays has identical values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.fill">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">fill</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.BitArray32.fill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set all the values to <cite>true</cite>.</p>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.popcount">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">popcount</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.BitArray32.popcount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Count the number of values set to true.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The count.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.rotr">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">rotr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.BitArray32.rotr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate all the values to the right. Let values falling out on one side reappear on the rhs side.</p>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.reverse">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">reverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.BitArray32.reverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reverse the ordering of the values. The last value becomes the first value. The second last value becomes the second first value. And so on.</p>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.rotateLeft">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">rotateLeft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift:</span> <span class="pre">uint</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.BitArray32.rotateLeft" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate all the values to the left. Let values falling out on one side reappear on the rhs side.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><p><strong>shift</strong> – number of bits to rotate</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.set">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">idx:</span> <span class="pre">uint(32)</span></em>, <em class="sig-param"><span class="pre">value:</span> <span class="pre">bool</span></em><span class="sig-paren">)</span> <span class="pre">throws</span><a class="headerlink" href="#BitArray32.BitArray32.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value at a given index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>idx</strong> – The index of the value to mutate.</p></li>
+<li><p><strong>value</strong> – The value to set at <cite>idx</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>ArrayRangeError</strong> – if the idx value is outside the range [0, size).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.size">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.BitArray32.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bit vector size.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>uint(32)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl itermethod">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.these">
+<em class="property"><span class="pre">iter</span> </em><span class="sig-name descname"><span class="pre">these</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.BitArray32.these" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over all the values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>All the values. yelds one value at a time</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.unfill">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">unfill</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.BitArray32.unfill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set all the values to <cite>false</cite>.</p>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.==">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">==</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.BitArray32.==" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] == Y[i] where X and Y are the to bit arrays to compare.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The result values</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>BitArray32</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.!=">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">!=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.BitArray32.!=" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] != Y[i] where X and Y are the to bit arrays to compare.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The result values</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>BitArray32</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.=">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray32</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.BitArray32.=" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copies the values from an rhs bit array.
+:arg lhs: the operator to assign
+:arg rhs: The bit array to copy</p>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl">
+<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">~(arg:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32)</span></span></dt>
+<dd><p>Negate the values.</p>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.&lt;&lt;">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">&lt;&lt;</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift:</span> <span class="pre">uint</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.BitArray32.<<" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><p><strong>shift</strong> – the number of values to shift.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.&lt;&lt;=">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">&lt;&lt;=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift:</span> <span class="pre">uint</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.BitArray32.<<=" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shift all the values to the right. Left values are padded with false values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><p><strong>shift</strong> – the number of values to shift.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.&gt;&gt;">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">&gt;&gt;</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift:</span> <span class="pre">uint</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.BitArray32.>>" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shift all the values to the right. Left values are padded with false values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><p><strong>shift</strong> – the number of values to shift.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArray32.BitArray32.&gt;&gt;=">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">&gt;&gt;=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift:</span> <span class="pre">uint</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.BitArray32.>>=" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shift all the values to the right. Left values are padded with false values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><p><strong>shift</strong> – the number of values to shift.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl">
+<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">^=(lhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32,</span> <span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32)</span></span></dt>
+<dd><p>Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.
+If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Rhs</dt>
+<dd class="field-odd"><p>bit array to perform xor with</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl">
+<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">&amp;(lhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32,</span> <span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32)</span></span></dt>
+<dd><p>Perform the and operation on the values in this bit array with the values in anrhs bit array.
+If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Rhs</dt>
+<dd class="field-odd"><p>bit array to perform and with</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl">
+<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">|(lhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32,</span> <span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32)</span></span></dt>
+<dd><p>Perform the or operation on the values in this bit array with the values in anrhs bit array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Rhs</dt>
+<dd class="field-odd"><p>bit array to perform or with</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../index.html" class="btn btn-neutral float-left" title="chpldoc documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="BitArray64.html" class="btn btn-neutral float-right" title="BitArray64" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2015.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>

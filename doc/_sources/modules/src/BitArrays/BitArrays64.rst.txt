@@ -1,0 +1,35 @@
+.. default-domain:: chpl
+
+.. module:: BitArrays64
+   :synopsis: BitArray is a library for effective storage of boolean values in arrays. 
+
+BitArrays64
+===========
+**Usage**
+
+.. code-block:: chapel
+
+   use BitArrays.BitArrays64;
+
+
+or
+
+.. code-block:: chapel
+
+   import BitArrays.BitArrays64;
+
+BitArray is a library for effective storage of boolean values in arrays. 
+
+.. class:: BitArray64
+
+   BitArray64 is an array of boolean values stored packed together as 64 bit words. All boolean values are mapped one to one with a bit value in memory. 
+
+
+   .. method:: proc init(size: uint(32), locales = Locales)
+
+      Create a bit array of a given size.
+      
+      :arg size: The size of the bit array
+      :arg locales: What nodes to distibute the values over
+      
+
