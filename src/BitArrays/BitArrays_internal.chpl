@@ -1,2 +1,0 @@
-module BitArrays_internal {
-}

@@ -83,12 +83,12 @@
 </pre></div>
 </div>
 <dl class="chpl class">
-<dt class="sig sig-object chpl" id="BitArray32.ArrayRangeError">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ArrayRangeError</span></span><span class="pre">:</span> <span class="pre">IllegalArgumentError</span><a class="headerlink" href="#BitArray32.ArrayRangeError" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object chpl" id="BitArray32.Bit32RangeError">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Bit32RangeError</span></span><span class="pre">:</span> <span class="pre">IllegalArgumentError</span><a class="headerlink" href="#BitArray32.Bit32RangeError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exception thrown when indexing the bit arrays outside the range of values the bit array</p>
 <dl class="chpl method">
-<dt class="sig sig-object chpl" id="BitArray32.ArrayRangeError.init">
-<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.ArrayRangeError.init" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object chpl" id="BitArray32.Bit32RangeError.init">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArray32.Bit32RangeError.init" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -148,7 +148,7 @@
 <dd class="field-odd"><p><strong>idx</strong> – The index in the bitarray to look up.</p>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>ArrayRangeError</strong> – If <cite>idx</cite> is outside the range [1..size).</p>
+<dd class="field-even"><p><strong>Bit32RangeError</strong> – If <cite>idx</cite> is outside the range [1..size).</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>value at <cite>idx</cite></p>
@@ -222,7 +222,7 @@
 </ul>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>ArrayRangeError</strong> – if the idx value is outside the range [0, size).</p>
+<dd class="field-even"><p><strong>Bit32RangeError</strong> – if the idx value is outside the range [0, size).</p>
 </dd>
 </dl>
 </dd></dl>

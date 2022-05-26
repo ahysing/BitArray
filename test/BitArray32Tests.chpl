@@ -8,24 +8,24 @@ proc BitArray32__createReminderMask(test: borrowed Test) throws {
   test.assertEqual(reminderMask, 1);
 }
 
-proc BitArray32__reverse_inputIs_1(test: borrowed Test) throws {
+proc BitArray32__reverseWord_inputIs_1(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
-  test.assertEqual(bitArray._reverse(1 : uint(32)), 0b10000000000000000000000000000000 : uint(32));
+  test.assertEqual(bitArray._reverseWord(1 : uint(32)), 0b10000000000000000000000000000000 : uint(32));
 }
 
-proc BitArray32__reverse_inputIs_2(test: borrowed Test) throws {
+proc BitArray32__reverseWord_inputIs_2(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
-  test.assertEqual(bitArray._reverse(2 : uint(32)), 0b01000000000000000000000000000000 : uint(32));
+  test.assertEqual(bitArray._reverseWord(2 : uint(32)), 0b01000000000000000000000000000000 : uint(32));
 }
 
-proc BitArray32__reverse_inputIs_3(test: borrowed Test) throws {
+proc BitArray32__reverseWord_inputIs_3(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
-  test.assertEqual(bitArray._reverse(3 : uint(32)), 0b11000000000000000000000000000000 : uint(32));
+  test.assertEqual(bitArray._reverseWord(3 : uint(32)), 0b11000000000000000000000000000000 : uint(32));
 }
 
-proc BitArray32__reverse_inputIs_100(test: borrowed Test) throws {
+proc BitArray32__reverseWord_inputIs_100(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
-  test.assertEqual(bitArray._reverse(100 : uint(32)), 0b00100110000000000000000000000000 : uint(32));
+  test.assertEqual(bitArray._reverseWord(100 : uint(32)), 0b00100110000000000000000000000000 : uint(32));
 }
 
 proc BitArray32_rotateLeft_inputIs1(test: borrowed Test) throws {
@@ -157,14 +157,6 @@ proc BitArray32_size_inputIs65_sizeIs3Blocks(test: borrowed Test) throws {
   for _x in bitArray.values.domain do
     i += 1;
   test.assertEqual(i, 3);
-}
-
-proc BitArray32__getNumberOfBlocks(test: borrowed Test) throws {
-  var size = 1 : uint(32);
-  var packSize = 32 : uint(32);
-  var hasRemaining = (size % packSize) != 0;
-  var sizeAsInt : uint(32) = (new BitArray32(1))._getNumberOfBlocks(hasRemaining, size);
-  test.assertEqual(sizeAsInt, 1);
 }
 
 proc BitArray32_popcount_inputIs32(test: borrowed Test) throws {

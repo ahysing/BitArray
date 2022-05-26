@@ -17,7 +17,7 @@ or
 
    import BitArray32;
 
-.. class:: ArrayRangeError : IllegalArgumentError
+.. class:: Bit32RangeError : IllegalArgumentError
 
    Exception thrown when indexing the bit arrays outside the range of values the bit array 
 
@@ -59,7 +59,7 @@ or
       
       :arg idx: The index in the bitarray to look up.
       
-      :throws ArrayRangeError: If `idx` is outside the range [1..size).
+      :throws Bit32RangeError: If `idx` is outside the range [1..size).
       
       :return: value at `idx`
       :rtype: bool
@@ -108,7 +108,7 @@ or
       :arg idx: The index of the value to mutate.
       :arg value: The value to set at `idx`.
       
-      :throws ArrayRangeError: if the idx value is outside the range [0, size).
+      :throws Bit32RangeError: if the idx value is outside the range [0, size).
       
 
    .. method:: proc size()

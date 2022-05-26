@@ -1,7 +1,6 @@
 .. default-domain:: chpl
 
 .. module:: BitArrays64
-   :synopsis: BitArray is a library for effective storage of boolean values in arrays. 
 
 BitArrays64
 ===========
@@ -18,11 +17,16 @@ or
 
    import BitArrays.BitArrays64;
 
-BitArray is a library for effective storage of boolean values in arrays. 
+.. class:: Bit64RangeError : IllegalArgumentError
+
+   Exception thrown when indexing the bit arrays outside the range of values the bit array 
+
+
+   .. method:: proc init()
 
 .. class:: BitArray64
 
-   BitArray64 is an array of boolean values stored packed together as 64 bit words. All boolean values are mapped one to one with a bit value in memory. 
+   BitArray64 is an array of boolean values stored packed together as 64 bit words. All boolean values are mapped one-to-one to a bit value in memory. 
 
 
    .. method:: proc init(size: uint(32), locales = Locales)
@@ -31,5 +35,75 @@ BitArray is a library for effective storage of boolean values in arrays.
       
       :arg size: The size of the bit array
       :arg locales: What nodes to distibute the values over
+      
+
+   .. method:: proc at(idx: uint(32)): bool throws
+
+      Looks up value at `idx`.
+      
+      :arg idx: The index in the bitarray to look up.
+      
+      :throws Bit64RangeError: If `idx` is outside the range [1..size).
+      
+      :return: value at `idx`
+      :rtype: bool
+      
+
+   .. method:: proc fill()
+
+      Set all the values to `true`.
+      
+
+   .. method:: proc popcount(): uint(32)
+
+      Count the number of values set to true.
+      
+      :returns: The count.
+      
+
+   .. method:: proc set(idx: uint(32), value: bool) throws
+
+      Set the value at a given index.
+      
+      :arg idx: The index of the value to mutate.
+      :arg value: The value to set at `idx`.
+      
+      :throws Bit64RangeError: if the idx value is outside the range [0, size).
+      
+
+   .. method:: proc size()
+
+      Get the number of values.
+      
+      :returns: bit vector size.
+      :rtype: uint(32)
+      
+
+   .. method:: proc unfill()
+
+      Set all the values to `false`.
+      
+
+   .. method:: proc type ^=(lhs: borrowed BitArray64, rhs: borrowed BitArray64)
+
+      Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.
+      If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
+      
+      :rhs: bit array to perform xor with
+      
+
+   .. method:: proc type &(lhs: borrowed BitArray64, rhs: borrowed BitArray64)
+
+      Perform the and operation on the values in this bit array with the values in another bit array.
+      If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
+      
+      :rhs: bit array to perform and with
+      
+
+   .. method:: proc type |(lhs: borrowed BitArray64, rhs: borrowed BitArray64)
+
+      Perform the or operation on the values in this bit array with the values in another bit array.
+      
+      :rhs: bit array to perform or with
       
 
