@@ -28,6 +28,19 @@ proc BitArray32__reverseWord_inputIs_100(test: borrowed Test) throws {
   test.assertEqual(bitArray._reverseWord(100 : uint(32)), 0b00100110000000000000000000000000 : uint(32));
 }
 
+proc BitArray32_reverse(test: borrowed Test) throws {
+  var bitArray = new BitArray32(32);
+  bitArray.reverse();
+  test.assertTrue(bitArray != nil);
+}
+
+proc BitArray32_reverse_fillThenReverse_returnsFull(test: borrowed Test) throws {
+  var bitArray = new BitArray32(33);
+  bitArray.fill();
+  bitArray.reverse();
+  test.assertTrue(bitArray.all());
+}
+
 proc BitArray32_rotateLeft_inputIs1(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
   bitArray.values[bitArray.values.domain.first] = 1;

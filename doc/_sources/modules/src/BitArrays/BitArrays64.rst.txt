@@ -17,6 +17,8 @@ or
 
    import BitArrays.BitArrays64;
 
+.. type:: type bit64Index = int
+
 .. class:: Bit64RangeError : IllegalArgumentError
 
    Exception thrown when indexing the bit arrays outside the range of values the bit array 
@@ -29,7 +31,7 @@ or
    BitArray64 is an array of boolean values stored packed together as 64 bit words. All boolean values are mapped one-to-one to a bit value in memory. 
 
 
-   .. method:: proc init(size: uint(32), locales = Locales)
+   .. method:: proc init(size: bit64Index, locales = Locales)
 
       Create a bit array of a given size.
       
@@ -37,7 +39,23 @@ or
       :arg locales: What nodes to distibute the values over
       
 
-   .. method:: proc at(idx: uint(32)): bool throws
+   .. method:: proc any(): bool
+
+      Tests all the values with or.
+      
+      :returns: `true` if any of the values are true
+      :rtype: bool
+      
+
+   .. method:: proc all(): bool
+
+      Tests all the values with and.
+      
+      :returns: `true` if any of the values are true
+      :rtype: bool
+      
+
+   .. method:: proc at(idx: bit64Index): bool throws
 
       Looks up value at `idx`.
       
@@ -54,14 +72,14 @@ or
       Set all the values to `true`.
       
 
-   .. method:: proc popcount(): uint(32)
+   .. method:: proc popcount(): bit64Index
 
       Count the number of values set to true.
       
       :returns: The count.
       
 
-   .. method:: proc set(idx: uint(32), value: bool) throws
+   .. method:: proc set(idx: bit64Index, value: bool) throws
 
       Set the value at a given index.
       
@@ -76,7 +94,15 @@ or
       Get the number of values.
       
       :returns: bit vector size.
-      :rtype: uint(32)
+      :rtype: int(64)
+      
+
+   .. itermethod:: iter these()
+
+      Iterate over all the values.
+      
+      :yields: All the values
+      :yields type: bool
       
 
    .. method:: proc unfill()

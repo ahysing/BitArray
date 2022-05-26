@@ -4,6 +4,8 @@ module BitArrays64 {
   use BlockDist;
   use super.Internal;
 
+  type bit64Index = int;
+
   pragma "no doc"
   const allOnes : uint(64) = 0b1111111111111111111111111111111111111111111111111111111111111111;
 
@@ -11,7 +13,7 @@ module BitArrays64 {
   const one : uint(64) = 1;
 
   pragma "no doc"
-  const packSize : uint(32) = 64;
+  const packSize : bit64Index = 64;
 
 /* Exception thrown when indexing the bit arrays outside the range of values the bit array */
   class Bit64RangeError : IllegalArgumentError {
@@ -22,10 +24,10 @@ module BitArrays64 {
   /* BitArray64 is an array of boolean values stored packed together as 64 bit words. All boolean values are mapped one-to-one to a bit value in memory. */
   class BitArray64 {
     pragma "no doc"
-    var bitDomain : domain(rank=1, idxType=uint(32), stridable=false);
+    var bitDomain : domain(rank=1, idxType=bit64Index, stridable=false);
 
     pragma "no doc"
-    var bitSize : uint(32);
+    var bitSize : bit64Index;
 
     pragma "no doc"
     var hasRemaining : bool;
@@ -38,14 +40,14 @@ module BitArrays64 {
        :arg size: The size of the bit array
        :arg locales: What nodes to distibute the values over
      */
-    proc init(size : uint(32), locales=Locales) {
+    proc init(size : bit64Index, locales=Locales) {
       this.complete();
       var hasRemaining = (size % packSize) != 0;
-      var sizeAsInt : uint(32) = getNumberOfBlocks(hasRemaining, packSize, size);
+      var sizeAsInt : bit64Index = getNumberOfBlocks(hasRemaining, packSize, size);
       var lastIdx = sizeAsInt - 1;
       var Space = {0..lastIdx};
-      var bitDomain : domain(rank=1, idxType=uint(32), stridable=false) dmapped Block(boundingBox=Space) = Space;
-      var values : [bitDomain] uint(32);
+      var bitDomain : domain(rank=1, idxType=bit64Index, stridable=false) dmapped Block(boundingBox=Space) = Space;
+      var values : [bitDomain] uint(64);
       this.bitDomain = bitDomain;
       this.bitSize = size;
       this.hasRemaining = hasRemaining;
@@ -60,6 +62,25 @@ module BitArrays64 {
         return allOnes;
     }
 
+    /* Tests all the values with or.
+
+      :returns: `true` if any of the values are true
+      :rtype: bool
+    */
+    proc any() : bool {
+      unsignedAny(this.values);
+    }
+
+
+    /* Tests all the values with and.
+
+      :returns: `true` if any of the values are true
+      :rtype: bool
+    */
+    proc all() : bool {
+      return unsignedAll(this.hasRemaining, packSize, this.values);
+    }
+
     /* Looks up value at `idx`.
 
        :arg idx: The index in the bitarray to look up.
@@ -69,7 +90,7 @@ module BitArrays64 {
        :return: value at `idx`
        :rtype: bool
     */
-    proc at(idx : uint(32)) : bool throws {
+    proc at(idx : bit64Index) : bool throws {
       if idx >= this.size() then
         throw new Bit64RangeError();
 
@@ -94,7 +115,7 @@ module BitArrays64 {
 
        :returns: The count.
      */
-    proc popcount() : uint(32) {
+    proc popcount() : bit64Index {
       return _popcount(values);
     }
 
@@ -105,13 +126,13 @@ module BitArrays64 {
 
        :throws Bit64RangeError: if the idx value is outside the range [0, size).
      */
-    proc set(idx : uint(32), value : bool) throws {
+    proc set(idx : bit64Index, value : bool) throws {
       if idx >= this.size() then
         throw new Bit64RangeError();
 
       var pageIdx = idx / packSize;
       var block = this.values[pageIdx];
-      var rem : uint(64) = (idx % packSize);
+      var rem = (idx % packSize);
       var mask : uint(64) = one << rem;
       if value && (block & mask) == 0 then
         this.values[pageIdx] = block | mask;
@@ -122,9 +143,9 @@ module BitArrays64 {
     /* Get the number of values.
 
        :returns: bit vector size.
-       :rtype: uint(32)
+       :rtype: int(64)
      */
-    proc size() {
+    inline proc size() {
       return this.bitSize;
     }
 

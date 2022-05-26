@@ -4,6 +4,8 @@ module BitArrays32 {
   use BlockDist;
   use super.Internal;
 
+  type bit32Index = int;
+
   pragma "no doc"
   const allOnes : uint(32) = 0b11111111111111111111111111111111;
 
@@ -11,21 +13,22 @@ module BitArrays32 {
   const one : uint(32) = 1;
 
   pragma "no doc"
-  const packSize : uint(32) = 32;
+  const packSize : bit32Index = 32;
 
-/* Exception thrown when indexing the bit arrays outside the range of values the bit array */
+  /* Exception thrown when indexing the bit arrays outside the range of values the bit array */
   class Bit32RangeError : IllegalArgumentError {
     proc init() {
       super.init("idx is out of range");
     }
   }
+
   /* BitArray32 is an array of boolean values stored packed together as 32 bit words. All boolean values are mapped one-to-one to a bit value in memory. */
   class BitArray32 {
     pragma "no doc"
-    var bitDomain : domain(rank=1, idxType=uint(32), stridable=false);
+    var bitDomain : domain(rank=1, idxType=bit32Index, stridable=false);
 
     pragma "no doc"
-    var bitSize : uint(32);
+    var bitSize : bit32Index;
 
     pragma "no doc"
     var hasRemaining : bool;
@@ -38,13 +41,13 @@ module BitArrays32 {
        :arg size: The size of the bit array
        :arg locales: What nodes to distibute the values over
      */
-    proc init(size : uint(32), locales=Locales) {
+    proc init(size : bit32Index, locales=Locales) {
       this.complete();
       var hasRemaining = (size % packSize) != 0;
-      var sizeAsInt : uint(32) = getNumberOfBlocks(hasRemaining, packSize, size);
+      var sizeAsInt : bit32Index = getNumberOfBlocks(hasRemaining, packSize, size);
       var lastIdx = sizeAsInt - 1;
       var Space = {0..lastIdx};
-      var bitDomain : domain(rank=1, idxType=uint(32), stridable=false) dmapped Block(boundingBox=Space) = Space;
+      var bitDomain : domain(rank=1, idxType=bit32Index, stridable=false) dmapped Block(boundingBox=Space) = Space;
       var values : [bitDomain] uint(32);
       this.bitDomain = bitDomain;
       this.bitSize = size;
@@ -58,21 +61,20 @@ module BitArrays32 {
     }
 
     pragma "no doc"
-    proc _bitshift(shift : uint) {
+    proc _bitshift(shift : bit32Index) {
       if shift < packSize && shift > 0 {
         var mask = one << (shift + 1) - 1;
         var topMask = ~mask;
-        var lastValue = this.values[0] & mask;
+        var lastValue = this.values[this.values.domain.first] & mask;
 
         forall i in this.values.domain do {
-          var temp = this.values[i - 1] & mask;
           var rollOverValues = (this.values[i - 1] & topMask);
           this.values[i] = this.values[i] & rollOverValues;
         }
 
-        this.values[this.values.domain - 1] = lastValue;
+        this.values[this.values.domain.last] = lastValue;
       } else if shift == packSize {
-        var lastValue : int = this.values[0];
+        var lastValue = this.values[this.values.domain.first];
 
         forall i in this.values.domain do
           this.values[i] = this.values[i - 1];
@@ -80,8 +82,8 @@ module BitArrays32 {
         this.values[this.values.domain.last] = lastValue;
       } else if shift > 0 {
         this._bitshift(packSize);
-        shift -= packSize;
-        this._bitshift(shift);
+        var nextShift = shift - packSize;
+        this._bitshift(nextShift);
       }
     }
 
@@ -93,7 +95,6 @@ module BitArrays32 {
         var lastValue = this.values[0] & mask;
 
         forall i in this.values.domain do {
-          var temp = this.values[i - 1] & mask;
           var rollOverValues = (this.values[i - 1] & topMask);
           this.values[i] = this.values[i] & rollOverValues;
         }
@@ -126,7 +127,7 @@ module BitArrays32 {
        :rtype: boolean value
      */
     proc all() : bool {
-      return all(this.hasRemaining, this.values);
+      return unsignedAll(this.hasRemaining, packSize, this.values);
     }
 
     /* Tests all the values with or.
@@ -135,10 +136,7 @@ module BitArrays32 {
       :rtype: bool
     */
     proc any() : bool {
-      var result = true;
-      forall i in this.values.domain do
-        result &= this.values[i] != 0;
-      return result;
+      unsignedAny(this.values);
     }
 
 
@@ -151,7 +149,7 @@ module BitArrays32 {
 
        :throws Bit32RangeError: If `idx` is outside the range [1..size).
     */
-    proc at(idx : uint(32)) : bool throws {
+    proc at(idx : bit32Index) : bool throws {
       if idx >= this.size() then
         throw new Bit32RangeError();
 
@@ -200,10 +198,14 @@ module BitArrays32 {
       forall i in this.values.domain do
         this.values[i] = this._reverseWord(this.values[i]);
 
-      if this.hasRemaining then
-        this._bitshift(this.bitSize % packSize);
+      if this.hasRemaining {
+        var shift = this.bitSize % packSize;
+        this._bitshift(shift);
+      }
     }
 
+
+    // https://chapel-lang.org/docs/modules/packages/CopyAggregation.html?highlight=aggregate
     /* Rotate all the values to the left. Let values falling out on one side reappear on the rhs side.
 
        :arg shift: number of bits to rotate
@@ -236,13 +238,13 @@ module BitArrays32 {
 
        :throws Bit32RangeError: if the idx value is outside the range [0, size).
      */
-    proc set(idx : uint(32), value : bool) throws {
+    proc set(idx : bit32Index, value : bool) throws {
       if idx >= this.size() then
         throw new Bit32RangeError();
 
       var pageIdx = idx / packSize;
       var block = this.values[pageIdx];
-      var rem : uint(32) = (idx % packSize);
+      var rem = (idx % packSize);
       var mask : uint(32) = one << rem : uint(32);
       if value && (block & mask) == 0 then
         this.values[pageIdx] = block | mask;
@@ -253,9 +255,9 @@ module BitArrays32 {
     /* Get the number of values.
 
        :returns: bit vector size.
-       :rtype: uint(32)
+       :rtype: int(64)
      */
-    proc size() {
+    inline proc size() {
       return this.bitSize;
     }
 
@@ -388,7 +390,7 @@ module BitArrays32 {
 
        :arg shift: the number of values to shift.
      */
-    operator <<=(shift : uint) {
+    operator <<=(shift : bit32Index) {
       this._bitshift(shift);
     }
 
@@ -409,7 +411,7 @@ module BitArrays32 {
 
        :arg shift: the number of values to shift.
      */
-    operator >>=(shift : uint) {
+    operator >>=(shift : bit32Index) {
       this._bitshiftReverse(shift);
     }
 

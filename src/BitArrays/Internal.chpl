@@ -22,17 +22,22 @@ module Internal {
   ];
 
   pragma "no doc"
-  proc all(hasRemaining : bool, const packSize : uint, values) {
+  inline proc findSize(values) {
+    return values.domain.last - values.domain.first;
+  }
+
+  pragma "no doc"
+  proc unsignedAll(hasRemaining : bool, const packSize, values) {
     if hasRemaining then {
-      var last = values.domain.dim(1) - 1;
-      var dom : subdomain(values.domain) = values.domain[..last];
+      var last = values.domain.last;
+      var dom : subdomain(values.domain) = values.domain[..(last-1)];
 
       var result = true;
       foreach i in dom do
         result &= BitOps.popcount(values[i]) == packSize;
 
-      var lastValues = values[values.domain.laset()];
-      result &= (lastValues == _createReminderMask());
+      var lastValues = values[values.domain.last];
+      result &= (BitOps.popcount(lastValues) == BitOps.popcount(findSize(values) % packSize));
       return result;
     } else {
       var result = true;
@@ -43,8 +48,16 @@ module Internal {
   }
 
   pragma "no doc"
-  proc getNumberOfBlocks(hasRemaining : bool, packSize : uint(32), size : uint(32)) {
-    var sizeAsInt : uint(32) = (size / packSize);
+  proc unsignedAny(values) {
+    var result = true;
+    foreach i in values.domain do
+      result &= values[i] != 0;
+    return result;
+  }
+
+  pragma "no doc"
+  proc getNumberOfBlocks(hasRemaining : bool, packSize, size) {
+    var sizeAsInt = size / packSize;
     if hasRemaining then
       sizeAsInt = sizeAsInt + 1;
     return sizeAsInt;

@@ -17,6 +17,8 @@ or
 
    import BitArrays.BitArrays32;
 
+.. type:: type bit32Index = int
+
 .. class:: Bit32RangeError : IllegalArgumentError
 
    Exception thrown when indexing the bit arrays outside the range of values the bit array 
@@ -29,7 +31,7 @@ or
    BitArray32 is an array of boolean values stored packed together as 32 bit words. All boolean values are mapped one-to-one to a bit value in memory. 
 
 
-   .. method:: proc init(size: uint(32), locales = Locales)
+   .. method:: proc init(size: bit32Index, locales = Locales)
 
       Create a bit array of a given size.
       
@@ -53,7 +55,7 @@ or
       :rtype: bool
       
 
-   .. method:: proc at(idx: uint(32)): bool throws
+   .. method:: proc at(idx: bit32Index): bool throws
 
       Looks up value at `idx`.
       
@@ -101,7 +103,7 @@ or
       :arg shift: number of bits to rotate
       
 
-   .. method:: proc set(idx: uint(32), value: bool) throws
+   .. method:: proc set(idx: bit32Index, value: bool) throws
 
       Set the value at a given index.
       
@@ -116,7 +118,7 @@ or
       Get the number of values.
       
       :returns: bit vector size.
-      :rtype: uint(32)
+      :rtype: int(64)
       
 
    .. itermethod:: iter these()
@@ -170,7 +172,7 @@ or
       :rtype: BitArray32
       
 
-   .. method:: proc type <<=(shift: uint)
+   .. method:: proc type <<=(shift: bit32Index)
 
       Shift all the values to the right. Left values are padded with false values.
       
@@ -187,7 +189,7 @@ or
       :rtype: BitArray32
       
 
-   .. method:: proc type >>=(shift: uint)
+   .. method:: proc type >>=(shift: bit32Index)
 
       Shift all the values to the right. Left values are padded with false values.
       
