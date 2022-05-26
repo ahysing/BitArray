@@ -198,7 +198,23 @@ proc BitArray32_popcount(test: borrowed Test) throws {
   test.assertEqual(bitArray.popcount(), 65);
 }
 
-proc BitArray32_these(test: borrowed Test) throws {
+proc BitArray32_these_inputHas63Values_OutputHas63Values(test: borrowed Test) throws {
+  var bitArray = new BitArray32(63);
+  var steps = 0;
+  for i in bitArray.these() do
+    steps += 1;
+  test.assertEqual(steps, 63);
+}
+
+proc BitArray32_these_inputHas64Values_OutputHas64Values(test: borrowed Test) throws {
+  var bitArray = new BitArray32(64);
+  var steps = 0;
+  for i in bitArray.these() do
+    steps += 1;
+  test.assertEqual(steps, 64);
+}
+
+proc BitArray32_these_inputHas65Values_OutputHas65Values(test: borrowed Test) throws {
   var bitArray = new BitArray32(65);
   var steps = 0;
   for i in bitArray.these() do

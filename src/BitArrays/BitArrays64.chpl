@@ -128,6 +128,33 @@ module BitArrays64 {
       return this.bitSize;
     }
 
+
+    /* Iterate over all the values.
+
+       :yields: All the values
+       :yields type: bool
+     */
+    iter these() {
+      const packSizeMinusOne = packSize - 1;
+      if this.hasRemaining {
+        var last = this.values.domain.last;
+        var lastMinusOne = last - 1;
+        var wholeBlocksDomain : subdomain(this.values.domain) = this.values.domain[..lastMinusOne];
+        for i in wholeBlocksDomain do
+          foreach j in {0..packSizeMinusOne} do
+            yield this.values[i] & (one << j) != 0;
+
+        var lastBlock = this.values[last];
+        var reminderSize = this.bitSize % packSize - 1;
+        foreach j in {0..reminderSize} do
+          yield lastBlock & (one << j) != 0;
+      } else {
+        for block in this.values do
+          foreach j in {0..packSizeMinusOne} do
+            yield block & (one << j) != 0;
+      }
+    }
+
     /* Set all the values to `false`.
      */
     proc unfill() {

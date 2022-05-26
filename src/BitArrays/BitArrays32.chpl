@@ -303,14 +303,14 @@ module BitArrays32 {
       const packSizeMinusOne = packSize - 1;
       if this.hasRemaining {
         var last = this.values.domain.last;
-        var lastMinusOne = last - 2;
+        var lastMinusOne = last - 1;
         var wholeBlocksDomain : subdomain(this.values.domain) = this.values.domain[..lastMinusOne];
         for i in wholeBlocksDomain do
           foreach j in {0..packSizeMinusOne} do
             yield this.values[i] & mask32[j] != 0;
 
         var lastBlock = this.values[last];
-        var reminderSize = this.bitSize % packSize;
+        var reminderSize = this.bitSize % packSize - 1;
         foreach j in {0..reminderSize} do
           yield lastBlock & mask32[j] != 0;
       } else {
