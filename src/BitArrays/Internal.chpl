@@ -1,5 +1,6 @@
 module Internal {
   use BitOps;
+  use UnorderedAtomics;
 
   pragma "no doc"
   private const eightBitReversed : [0..255]uint(32) = [
@@ -27,32 +28,32 @@ module Internal {
   }
 
   pragma "no doc"
-  proc unsignedAll(hasRemaining : bool, const packSize, values) {
+  proc unsignedAll(hasRemaining : bool, const packSize, size, values) {
+    var _expectedOldValueTrue = true;
+    var result : atomic bool = true;
     if hasRemaining then {
       var last = values.domain.last;
       var dom : subdomain(values.domain) = values.domain[..(last-1)];
+      var result : atomic bool = true;
+      forall i in dom do
+        result.compareAndSwap(_expectedOldValueTrue, BitOps.popcount(values[i]) == packSize);
 
-      var result = true;
-      foreach i in dom do
-        result &= BitOps.popcount(values[i]) == packSize;
-
-      var lastValues = values[values.domain.last];
-      result &= (BitOps.popcount(lastValues) == BitOps.popcount(findSize(values) % packSize));
-      return result;
+      var lastValues = values[last];
+      result.compareAndSwap(_expectedOldValueTrue, BitOps.popcount(lastValues) == size % packSize);
     } else {
-      var result = true;
-      foreach i in values.domain do
-        result &= BitOps.popcount(values[i]) == packSize;
-      return result;
+      forall i in values.domain do
+        result.compareAndSwap(_expectedOldValueTrue, BitOps.popcount(values[i]) == packSize);
     }
+    return result.read();
   }
 
   pragma "no doc"
   proc unsignedAny(values) {
-    var result = true;
-    foreach i in values.domain do
-      result &= values[i] != 0;
-    return result;
+    var _expectedOldValueFalse = false;
+    var result : atomic bool = false;
+    forall i in values.domain do
+      result.compareAndSwap(_expectedOldValueFalse, values[i] != 0);
+    return result.read();
   }
 
   pragma "no doc"
@@ -66,8 +67,8 @@ module Internal {
   pragma "no doc"
   proc _popcount(values) {
     var count : atomic uint(32) = 0;
-    for i in values.domain do
-      count.add(BitOps.popcount(values[i]));
+    forall i in values.domain do
+      count.unorderedAdd(BitOps.popcount(values[i]));
     return count.read();
   }
 

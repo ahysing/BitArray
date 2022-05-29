@@ -171,11 +171,14 @@
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.equals">
-<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">equals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.equals" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">equals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32</span></em><span class="sig-paren">)</span><span class="pre">:</span> <span class="pre">bool</span><a class="headerlink" href="#BitArrays32.BitArray32.equals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compares two bit arrays by values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><cite>true</cite> if the two bit arrays has identical values.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -194,6 +197,9 @@
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The count.</p>
 </dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>uint(32)</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -211,8 +217,9 @@
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.rotateLeft">
-<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">rotateLeft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift:</span> <span class="pre">uint</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.rotateLeft" title="Permalink to this definition">¶</a></dt>
-<dd><p>Rotate all the values to the left. Let values falling out on one side reappear on the rhs side.</p>
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">rotateLeft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift:</span> <span class="pre">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.rotateLeft" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate all the values to the left. Let values falling out on one side reappear on the rhs side.
+Uses <a class="reference external" href="https://chapel-lang.org/docs/modules/packages/CopyAggregation.html">https://chapel-lang.org/docs/modules/packages/CopyAggregation.html</a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments</dt>
 <dd class="field-odd"><p><strong>shift</strong> – number of bits to rotate</p>
@@ -239,14 +246,14 @@
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.size">
-<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.size" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="pre">:</span> <span class="pre">bit32Index</span><a class="headerlink" href="#BitArrays32.BitArray32.size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the number of values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>bit vector size.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>int(64)</p>
+<dd class="field-even"><p>bit32Index</p>
 </dd>
 </dl>
 </dd></dl>
@@ -375,8 +382,11 @@
 <dd><p>Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.
 If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Rhs</dt>
-<dd class="field-odd"><p>bit array to perform xor with</p>
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lhs</strong> – this bit array</p></li>
+<li><p><strong>rhs</strong> – bit array to perform xor with</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

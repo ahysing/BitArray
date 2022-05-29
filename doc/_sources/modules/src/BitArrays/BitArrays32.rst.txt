@@ -67,11 +67,12 @@ or
       :throws Bit32RangeError: If `idx` is outside the range [1..size).
       
 
-   .. method:: proc equals(rhs: borrowed BitArray32)
+   .. method:: proc equals(rhs: borrowed BitArray32): bool
 
       Compares two bit arrays by values.
       
       :returns: `true` if the two bit arrays has identical values.
+      :rtype: bool
       
 
    .. method:: proc fill()
@@ -84,6 +85,7 @@ or
       Count the number of values set to true.
       
       :returns: The count.
+      :rtype: uint(32)
       
 
    .. method:: proc rotr(shift)
@@ -96,9 +98,10 @@ or
       Reverse the ordering of the values. The last value becomes the first value. The second last value becomes the second first value. And so on.
       
 
-   .. method:: proc rotateLeft(shift: uint)
+   .. method:: proc rotateLeft(shift: int)
 
       Rotate all the values to the left. Let values falling out on one side reappear on the rhs side.
+      Uses https://chapel-lang.org/docs/modules/packages/CopyAggregation.html
       
       :arg shift: number of bits to rotate
       
@@ -113,12 +116,12 @@ or
       :throws Bit32RangeError: if the idx value is outside the range [0, size).
       
 
-   .. method:: proc size()
+   .. method:: proc size(): bit32Index
 
       Get the number of values.
       
       :returns: bit vector size.
-      :rtype: int(64)
+      :rtype: bit32Index
       
 
    .. itermethod:: iter these()
@@ -201,7 +204,8 @@ or
       Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.
       If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
       
-      :rhs: bit array to perform xor with
+      :arg lhs: this bit array
+      :arg rhs: bit array to perform xor with
       
 
    .. method:: proc type &(lhs: borrowed BitArray32, rhs: borrowed BitArray32)

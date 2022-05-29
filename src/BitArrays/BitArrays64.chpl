@@ -15,12 +15,13 @@ module BitArrays64 {
   pragma "no doc"
   const packSize : bit64Index = 64;
 
-/* Exception thrown when indexing the bit arrays outside the range of values the bit array */
+  /* Exception thrown when indexing the bit arrays outside the range of values the bit array */
   class Bit64RangeError : IllegalArgumentError {
     proc init() {
       super.init("idx is out of range");
     }
   }
+
   /* BitArray64 is an array of boolean values stored packed together as 64 bit words. All boolean values are mapped one-to-one to a bit value in memory. */
   class BitArray64 {
     pragma "no doc"
@@ -62,6 +63,11 @@ module BitArrays64 {
         return allOnes;
     }
 
+    pragma "no doc"
+    proc _reverseWord(value : uint(32)) {
+      return reverse64(value);
+    }
+
     /* Tests all the values with or.
 
       :returns: `true` if any of the values are true
@@ -71,14 +77,13 @@ module BitArrays64 {
       unsignedAny(this.values);
     }
 
-
     /* Tests all the values with and.
 
       :returns: `true` if any of the values are true
       :rtype: bool
     */
     proc all() : bool {
-      return unsignedAll(this.hasRemaining, packSize, this.values);
+      return unsignedAll(this.hasRemaining, packSize, this.size(), this.values);
     }
 
     /* Looks up value at `idx`.
@@ -94,8 +99,7 @@ module BitArrays64 {
       if idx >= this.size() then
         throw new Bit64RangeError();
 
-      var pageIdx = idx / packSize;
-      pageIdx += this.values.domain.first;
+      var pageIdx = idx / packSize + this.values.domain.first;
       var block : uint(64) = this.values[pageIdx];
       var mask = one << (idx % packSize);
       var bit = block & mask;
@@ -107,8 +111,7 @@ module BitArrays64 {
     proc fill() {
       for i in this.values.domain do
         this.values[i] = allOnes;
-      var reminderMask = this._createReminderMask();
-      this.values[this.values.domain.last] = this.values[this.values.domain.last] & reminderMask;
+      this.values[this.values.domain.last] &= this._createReminderMask();
     }
 
     /* Count the number of values set to true.
@@ -130,7 +133,7 @@ module BitArrays64 {
       if idx >= this.size() then
         throw new Bit64RangeError();
 
-      var pageIdx = idx / packSize;
+      var pageIdx = idx / packSize + this.values.domain.first;
       var block = this.values[pageIdx];
       var rem = (idx % packSize);
       var mask : uint(64) = one << rem;
@@ -148,7 +151,6 @@ module BitArrays64 {
     inline proc size() {
       return this.bitSize;
     }
-
 
     /* Iterate over all the values.
 
@@ -181,8 +183,6 @@ module BitArrays64 {
     proc unfill() {
       this.values = 0;
     }
-
-
 
     /* Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.
        If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.

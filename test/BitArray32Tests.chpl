@@ -28,10 +28,55 @@ proc BitArray32__reverseWord_inputIs_100(test: borrowed Test) throws {
   test.assertEqual(bitArray._reverseWord(100 : uint(32)), 0b00100110000000000000000000000000 : uint(32));
 }
 
+proc BitArray32_all_sizeIs64_inputIs64Trues(test: borrowed Test) throws {
+  var bitArray = new BitArray32(64);
+  bitArray.values[0] = ~0 : uint(32);
+  bitArray.values[1] = ~0 : uint(32);
+  test.assertTrue(bitArray.all());
+}
+
+proc BitArray32_all_sizeIs33_inputIs33Trues(test: borrowed Test) throws {
+  var bitArray = new BitArray32(33);
+  bitArray.values[0] = ~0 : uint(32);
+  bitArray.values[1] = 1 : uint(32);
+  test.assertTrue(bitArray.all());
+}
+
+proc BitArray32_any_sizeIs33_inputIs33False(test: borrowed Test) throws {
+  var bitArray = new BitArray32(33);
+  test.assertFalse(bitArray.any());
+}
+
+proc BitArray32_any_sizeIs33_inputIsOneTrue(test: borrowed Test) throws {
+  var bitArray = new BitArray32(33);
+  bitArray.set(1, true);
+  test.assertTrue(bitArray.any());
+}
+
+proc BitArray32_any_sizeIs64_inputIs64False(test: borrowed Test) throws {
+  var bitArray = new BitArray32(64);
+  test.assertFalse(bitArray.any());
+}
+
+proc BitArray32_any_sizeIs64_inputIs64Trues(test: borrowed Test) throws {
+  var bitArray = new BitArray32(64);
+  bitArray.values[0] = ~0 : uint(32);
+  bitArray.values[1] = ~0 : uint(32);
+  test.assertTrue(bitArray.any());
+}
+
+proc BitArray32_any_sizeIs33_inputIs33Trues(test: borrowed Test) throws {
+  var bitArray = new BitArray32(33);
+  bitArray.values[0] = ~0 : uint(32);
+  bitArray.values[1] = 1 : uint(32);
+  test.assertTrue(bitArray.any());
+}
+
 proc BitArray32_reverse(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
   bitArray.reverse();
   test.assertTrue(bitArray != nil);
+  test.assertFalse(bitArray.all());
 }
 
 proc BitArray32_reverse_fillThenReverse_returnsFull(test: borrowed Test) throws {
