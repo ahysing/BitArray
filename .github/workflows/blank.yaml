@@ -42,7 +42,7 @@ jobs:
           export CHPL_VERSION=1.26.0
           export CHPL_HOME=/opt/chapel/$CHPL_VERSION
           export CHPL_GMP=system
-          export CHPL_LLVM=llvm
+          export CHPL_LLVM=system
 
           source $CHPL_HOME/util/setchplenv.bash
 
