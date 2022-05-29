@@ -58,5 +58,9 @@ jobs:
           echo "------------ Run Tests -------------"
           echo
           make test -C ${GITHUB_WORKSPACE}
+      - name: Run unit tests
+        run: |
+          make test
+      
 
 
