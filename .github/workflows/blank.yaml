@@ -27,8 +27,6 @@ jobs:
           version: 13
           # Whether to accept unsupported LLVM and Clang versions.
           force-version: false
-          # The directory to install LLVM and Clang binaries to.
-          directory: /opt/chapel/1.26.0/third-party/llvm
       - name: Create chapel directory
         run: |
           export PATH=$PATH:${{ ENV.LLVM_PATH }}
