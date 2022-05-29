@@ -40,7 +40,7 @@ jobs:
 
           export CHPL_GMP=system
           export CHPL_LLVM=system
-
+          export CHPL_TARGET_CPU=native
           source $CHPL_HOME/util/setchplenv.bash
 
           make -j 16 -C $CHPL_HOME
