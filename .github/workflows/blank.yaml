@@ -17,7 +17,7 @@ jobs:
       - name: apt helper action
         uses: ryankurte/action-apt@v0.2.0
         with:
-          packages: wget ca-certificates curl perl python-is-python3 python-dev-is-python3 python-setuptools libgmp10 libgmp-dev locales bash make mawk file pkg-config git
+          packages: curl wget ca-certificates curl perl python3 python3-dev python-setuptools libgmp10 libgmp-dev locales bash make mawk file pkg-config git
       - name: Create chapel directory
         run: |
           export CHPL_VERSION=1.26.0
