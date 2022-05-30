@@ -19,5 +19,7 @@ test:
 	mason test --show
 
 .PHONY: doc
-doc:
+doc: docs
+docs:
 	mason doc
+	@mv doc docs
