@@ -8,14 +8,14 @@ BitArrays64
 
 .. code-block:: chapel
 
-   use BitArrays64;
+   use BitArrays.BitArrays64;
 
 
 or
 
 .. code-block:: chapel
 
-   import BitArrays64;
+   import BitArrays.BitArrays64;
 
 .. type:: type bit64Index = int
 
