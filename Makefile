@@ -14,17 +14,23 @@ run:
 clean:
 	mason clean
 
-clean-doc:
+.PHONY: clean-docs
+clean-docs:
 	rm -r docs/
 
 .PHONY: test
 test:
 	mason test --show
 
-SOURCES = $(wildcard src/*/*.chpl) $(wildcard test/*/*.chpl)
+SOURCES = $(wildcard src/*.chpl) $(wildcard src/*/*.chpl)
 SOURCES := $(filter-out src/BitArrays/Internal.chpl,$(SOURCES))
-.PHONY: doc
-doc: docs
-docs:
+
+INDEX := ./docs/index.html
+$(INDEX): $(SOURCES)
 	chpldoc $(SOURCES) -o docs/
-	touch docs/.nojekyll
+
+NOJERKYLL := ./docs/.nojerkyll
+$(NOJERKYLL):
+	touch $(NOJERKYLL)
+
+docs: $(INDEX) $(NOJERKYLL)
