@@ -100,6 +100,37 @@ proc BitArray32_rotateLeft_inputIs31(test: borrowed Test) throws {
   test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b10000000000000000000000000000000);
 }
 
+proc BitArray32_rotateLeft_inputIs1_LastBitIsSet_ResultShouldRollBitOver(test: borrowed Test) throws {
+  var bitArray = new BitArray32(32);
+  bitArray.values[bitArray.values.domain.first] = 0b10000000000000000000000000000000;
+  bitArray.rotateLeft(1);
+  test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b00000000000000000000000000000001);
+}
+
+proc BitArray32_rotateLeft_inputIs2_LastBitIsSet_ResultShouldRollBitOver(test: borrowed Test) throws {
+  var bitArray = new BitArray32(32);
+  bitArray.values[bitArray.values.domain.first] = 0b10000000000000000000000000000000;
+  bitArray.rotateLeft(2);
+  test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b00000000000000000000000000000010);
+}
+
+
+proc BitArray32_rotateLeft_inputIs1_SizeIs64_LastBitIsSet_ResultShouldRollBitOver(test: borrowed Test) throws {
+  var bitArray = new BitArray32(64);
+  bitArray.values[bitArray.values.domain.first] = 0b10000000000000000000000000000000;
+  bitArray.rotateLeft(1);
+  test.assertEqual(bitArray.values[bitArray.values.domain.last], 0b00000000000000000000000000000001);
+}
+
+proc BitArray32_rotateLeft_inputIs2_SizeIs64_LastBitIsSet_ResultShouldRollBitOver(test: borrowed Test) throws {
+  var bitArray = new BitArray32(32);
+  bitArray.values[bitArray.values.domain.first] = 0b10000000000000000000000000000000;
+  bitArray.rotateLeft(2);
+  test.assertEqual(bitArray.values[bitArray.values.domain.last], 0b00000000000000000000000000000010);
+}
+
+
+
 proc BitArray32__createReminderMask_sizeIsTwo(test: borrowed Test) throws {
   var bitarray = new BitArray32(2 : uint(32));
   var reminderMask = bitarray._createReminderMask();
