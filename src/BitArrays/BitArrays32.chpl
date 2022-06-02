@@ -115,11 +115,22 @@ module BitArrays32 {
     }
 
     pragma "no doc"
+    proc _createMainMask(shift : int) : uint(32) {
+      return ((1 << shift) - 1) : uint(32);
+    }
+    
+    pragma "no doc"
     proc _createReminderMask() : uint(32) {
-      if this.hasRemaining then
-        return (1 << (this.bitSize % packSize)) : uint(32) - one;
-      else
-        return allOnes;
+    if this.hasRemaining then
+      return (1 << (this.bitSize % packSize)) : uint(32) - one;
+    else
+      return allOnes;  
+    }
+
+    pragma "no doc"
+    proc _createShiftRolloverMask(shift : int) : uint(32) {
+      const one = 1 : uint(32); 
+      return allOnes - ((one << shift) - 1) : uint(32);
     }
 
     pragma "no doc"
@@ -211,16 +222,6 @@ module BitArrays32 {
     }
 
     pragma "no doc"
-    proc _createMainMask(shift : int) : uint(32) {
-      return ((1 << shift) - 1) : uint(32);
-    }
-
-    pragma "no doc"
-    proc _createShiftRolloverMask(shift : int) : uint(32) {
-      return allOnes - ((1 << shift) - 1) : uint(32);
-    }
-
-    pragma "no doc"
     proc _bitshiftLeft32Bits() {
         var firstValue = this.values[this.values.domain.first];
 
@@ -277,9 +278,9 @@ module BitArrays32 {
     proc _rotateRightNBits(shiftNow : int) {
       var firstValue : uint(32);
       var lastValue : uint(32);
-      on this.values[this.values.domain.last] {                     
-        lastValue = BitOps.rotl(this.values[this.values.domain.last], shiftNow);
+      on this.values[this.values.domain.last] {   
         firstValue = BitOps.rotl(this.values[this.values.domain.first], shiftNow);
+        lastValue = BitOps.rotl(this.values[this.values.domain.last], shiftNow);
       }
       
       var D = this.values.domain[this.values.domain.first + 1..];
@@ -308,7 +309,7 @@ module BitArrays32 {
        :arg shift: number of bits to rotate
     */
     proc rotateLeft(shift : int) {
-      if shift % packSize == 0 && shift > 0 {
+      if shift > 0 && shift % packSize == 0 {
         this._rotateLeft32Bits(shift);
         this.rotateLeft((shift : bit32Index) - packSize);
       } else if shift > 0 {
@@ -356,7 +357,7 @@ module BitArrays32 {
        :arg shift: number of bits to rotate
     */
     proc rotateRight(shift : int) {
-      if shift % packSize == 0 && shift > 0 {
+      if shift > 0 && shift % packSize == 0 {
         this._rotateRight32Bits(shift);
         this.rotateRight((shift : bit32Index) - packSize);
       } else if shift > 0 {
