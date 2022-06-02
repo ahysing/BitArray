@@ -221,8 +221,22 @@ module BitArrays32 {
     }
 
     pragma "no doc"
+    proc _bitshiftLeft32Bits() {
+        var firstValue = this.values[this.values.domain.first];
+
+        var sub = this.values.domain[this.values.first + 1..];       
+        forall i in sub with (var aggregator = new SrcAggregator(uint(32))) do
+          aggregator.copy(this.values[i], this.values[i + 1]);
+
+        this.values[this.values.domain.last] = firstValue;
+    }
+
+    pragma "no doc"
     proc _rotateLeft32Bits(shift : int) {
-      var lastValue = this.values[this.values.domain.last];
+      var lastValue : uint(32) = 0;
+      on this.values[this.values.domain.first] do
+        lastValue = this.values[this.values.domain.last];
+   
       var D = this.values.domain[this.values.domain.first + 1..];
       var DBefore = this.values.domain[..this.values.domain.last - 1];
       // Copy the value value into the value at index
@@ -232,16 +246,6 @@ module BitArrays32 {
       // Copy the last value into the first value
       on this.values[this.values.domain.first] do
         this.values[this.values.domain.first] = lastValue;
-    }
-
-    pragma "no doc"
-    proc _bitshiftLeft32Bits() {
-        var lastValue = this.values[this.values.domain.first];
-
-        forall i in this.values.domain do
-          this.values[i] = this.values[i - 1];
-
-        this.values[this.values.domain.last] = lastValue;
     }
 
     pragma "no doc"
@@ -268,6 +272,35 @@ module BitArrays32 {
         this.values[this.values.domain.last] = (lastValue & mainMask) | (firstValue & rollOverMask);
       }
     }
+    
+    pragma "no doc"
+    proc _rotateRightNBits(shiftNow : int) {
+      var firstValue : uint(32);
+      var lastValue : uint(32);
+      on this.values[this.values.domain.last] {                     
+        lastValue = BitOps.rotl(this.values[this.values.domain.last], shiftNow);
+        firstValue = BitOps.rotl(this.values[this.values.domain.first], shiftNow);
+      }
+      
+      var D = this.values.domain[this.values.domain.first + 1..];
+      var DBefore = this.values.domain[..this.values.domain.last - 1];
+      forall (i, iBefore) in zip(D, DBefore) {
+        var mainMask = this._createMainMask(shiftNow);
+        var rollOverMask = this._createShiftRolloverMask(shiftNow);
+
+        // Rotate the value by `shift` bits
+        var value = BitOps.rotr(this.values[i], shiftNow);
+        var valueBefore = BitOps.rotr(this.values[iBefore], shiftNow);
+        // Copy `shift` bits from the value before into the value at index
+        this.values[i] = (value & mainMask) | (valueBefore & rollOverMask);
+      }
+
+      on this.values[this.values.domain.last] {
+        var mainMask = this._createMainMask(shiftNow);
+        var rollOverMask = this._createShiftRolloverMask(shiftNow);
+        this.values[this.values.domain.last] = (lastValue & mainMask) | (firstValue & rollOverMask);
+      }
+    }
 
     /* Rotate all the values to the left. Let values falling out on one side reappear on the rhs side.
        Uses https://chapel-lang.org/docs/modules/packages/CopyAggregation.html
@@ -278,12 +311,62 @@ module BitArrays32 {
       if shift % packSize == 0 && shift > 0 {
         this._rotateLeft32Bits(shift);
         this.rotateLeft((shift : bit32Index) - packSize);
-      } else if shift < packSize && shift > 0 {
+      } else if shift > 0 {
         var shiftNow = shift % packSize;
         this._rotateLeftNBits(shiftNow);
         this.rotateLeft((shiftNow : bit32Index) - packSize);
       }
     }
+    
+    
+    
+    
+    
+    
+    pragma "no doc"
+    proc _rotateRight32Bits(shift : int) {
+      var firstValue : uint(32);
+      on this.values[this.values.domain.last] do
+        firstValue = this.values[this.values.domain.first];
+      var D = this.values.domain[..this.values.domain.last - 1];
+      var DAfter = this.values.domain[this.values.domain.first..];
+      // Copy the value value into the value at index
+      forall (i, j) in zip(D, DAfter) with (var aggregator = new SrcAggregator(uint(32))) do
+        aggregator.copy(this.values[i], this.values[j]);
+
+      // Copy the last value into the first value
+      on this.values[this.values.domain.last] do
+        this.values[this.values.domain.last] = firstValue;
+    }
+
+    pragma "no doc"
+    proc _bitshiftRight32Bits() {
+        var firstValue = this.values[this.values.domain.first];
+        
+        var sub = this.values.domain[..this.values.last - 1];
+        forall i in sub with (var aggregator = new SrcAggregator(uint(32))) do
+          this.values[i] = this.values[i - 1];
+
+        this.values[this.values.domain.last] = firstValue;
+    }
+
+    /* Rotate all the values to the right. Let values falling out on one side reappear on the rhs side.
+       Uses https://chapel-lang.org/docs/modules/packages/CopyAggregation.html
+
+       :arg shift: number of bits to rotate
+    */
+    proc rotateRight(shift : int) {
+      if shift % packSize == 0 && shift > 0 {
+        this._rotateRight32Bits(shift);
+        this.rotateRight((shift : bit32Index) - packSize);
+      } else if shift > 0 {
+        var shiftNow = shift % packSize;
+        this._rotateRightNBits(shiftNow);
+        this.rotateRight((shiftNow : bit32Index) - packSize);
+      }
+    }
+    
+
 
     /* Set the value at a given index.
 
