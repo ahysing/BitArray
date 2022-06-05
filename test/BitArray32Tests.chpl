@@ -421,6 +421,15 @@ proc BitArray32_popcount(test: borrowed Test) throws {
   test.assertEqual(bitArray.popcount(), 65);
 }
 
+
+proc BitArray32_these_inputHas0Values_OutputHas0Values(test: borrowed Test) throws {
+  var bitArray = new BitArray32(0);
+  var steps = 0;
+  for i in bitArray.these() do
+    steps += 1;
+  test.assertEqual(steps, 0);
+}
+
 proc BitArray32_these_inputHas63Values_OutputHas63Values(test: borrowed Test) throws {
   var bitArray = new BitArray32(63);
   var steps = 0;

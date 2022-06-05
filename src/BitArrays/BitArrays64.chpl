@@ -132,15 +132,7 @@ module BitArrays64 {
     proc set(idx : bit64Index, value : bool) throws {
       if idx >= this.size() then
         throw new Bit64RangeError();
-
-      var pageIdx = idx / packSize + this.values.domain.first;
-      var block = this.values[pageIdx];
-      var rem = (idx % packSize);
-      var mask : uint(64) = one << rem;
-      if value && (block & mask) == 0 then
-        this.values[pageIdx] = block | mask;
-      else if !value && (block & mask) != 0 then
-        this.values[pageIdx] = block ^ mask;
+      unsignedSet(packSize, this.values, idx, value);
     }
 
     /* Get the number of values.

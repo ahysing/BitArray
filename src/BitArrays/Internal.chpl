@@ -142,4 +142,15 @@ module Internal {
   inline proc reverse8(value :uint(8)) {
     return eightBitReversed[value] : uint(8);
   }
+
+  pragma "no doc"
+  proc unsignedSet(packSize, values, idx, value: bool) {
+    var pageIdx = idx / packSize + values.domain.first;
+    var block = values[pageIdx];
+    var mask = (1 : values.eltType) << (idx % packSize);
+    if value && (block & mask) == 0 then
+      values[pageIdx] = block | mask;
+    else if !value && (block & mask) != 0 then
+      values[pageIdx] = block ^ mask;
+  }
 }

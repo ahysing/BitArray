@@ -374,14 +374,7 @@ module BitArrays32 {
     proc set(idx : bit32Index, value : bool) throws {
       if idx >= this.size() then
         throw new Bit32RangeError();
-
-      var pageIdx = idx / packSize + this.values.domain.first;
-      var block = this.values[pageIdx];
-      var mask : uint(32) = one << (idx % packSize) : uint(32);
-      if value && (block & mask) == 0 then
-        this.values[pageIdx] = block | mask;
-      else if !value && (block & mask) != 0 then
-        this.values[pageIdx] = block ^ mask;
+      unsignedSet(packSize, this.values, idx, value);
     }
 
     /* Get the number of values.
