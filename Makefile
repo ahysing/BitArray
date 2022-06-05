@@ -1,10 +1,10 @@
 .PHONY: build
 build:
-	mason build --show --release --force -- --vectorize
+	CHPL_TARGET_CPU=native mason build --show --release --force -- --specialize --fast --print-commands --explain-verbose
 
 .PHONY: debug
 debug:
-	mason build --show -g --force -- --vectorize
+	CHPL_TARGET_CPU=native mason build --show --force -- -g --specialize
 
 .PHONY: run
 run:

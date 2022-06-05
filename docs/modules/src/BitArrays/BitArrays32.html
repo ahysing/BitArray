@@ -204,12 +204,6 @@
 </dd></dl>
 
 <dl class="chpl method">
-<dt class="sig sig-object chpl" id="BitArrays32.BitArray32.rotr">
-<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">rotr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.rotr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Rotate all the values to the right. Let values falling out on one side reappear on the rhs side.</p>
-</dd></dl>
-
-<dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.reverse">
 <em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">reverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.reverse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reverse the ordering of the values. The last value becomes the first value. The second last value becomes the second first value. And so on.</p>
@@ -219,6 +213,18 @@
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.rotateLeft">
 <em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">rotateLeft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift:</span> <span class="pre">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.rotateLeft" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rotate all the values to the left. Let values falling out on one side reappear on the rhs side.
+Uses <a class="reference external" href="https://chapel-lang.org/docs/modules/packages/CopyAggregation.html">https://chapel-lang.org/docs/modules/packages/CopyAggregation.html</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><p><strong>shift</strong> – number of bits to rotate</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArrays32.BitArray32.rotateRight">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">rotateRight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift:</span> <span class="pre">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.rotateRight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate all the values to the right. Let values falling out on one side reappear on the rhs side.
 Uses <a class="reference external" href="https://chapel-lang.org/docs/modules/packages/CopyAggregation.html">https://chapel-lang.org/docs/modules/packages/CopyAggregation.html</a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments</dt>

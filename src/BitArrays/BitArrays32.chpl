@@ -118,18 +118,18 @@ module BitArrays32 {
     proc _createMainMask(shift : int) : uint(32) {
       return ((1 << shift) - 1) : uint(32);
     }
-    
+
     pragma "no doc"
     proc _createReminderMask() : uint(32) {
     if this.hasRemaining then
       return (1 << (this.bitSize % packSize)) : uint(32) - one;
     else
-      return allOnes;  
+      return allOnes;
     }
 
     pragma "no doc"
     proc _createShiftRolloverMask(shift : int) : uint(32) {
-      const one = 1 : uint(32); 
+      const one = 1 : uint(32);
       return allOnes - ((one << shift) - 1) : uint(32);
     }
 
@@ -203,11 +203,6 @@ module BitArrays32 {
       return _popcount(values);
     }
 
-    /* Rotate all the values to the right. Let values falling out on one side reappear on the rhs side.
-    */
-    proc rotr(shift) {
-    }
-
     /* Reverse the ordering of the values. The last value becomes the first value. The second last value becomes the second first value. And so on.
      */
     proc reverse() {
@@ -225,7 +220,7 @@ module BitArrays32 {
     proc _bitshiftLeft32Bits() {
         var firstValue = this.values[this.values.domain.first];
 
-        var sub = this.values.domain[this.values.first + 1..];       
+        var sub = this.values.domain[this.values.first + 1..];
         forall i in sub with (var aggregator = new SrcAggregator(uint(32))) do
           aggregator.copy(this.values[i], this.values[i + 1]);
 
@@ -237,7 +232,7 @@ module BitArrays32 {
       var lastValue : uint(32) = 0;
       on this.values[this.values.domain.first] do
         lastValue = this.values[this.values.domain.last];
-   
+
       var D = this.values.domain[this.values.domain.first + 1..];
       var DBefore = this.values.domain[..this.values.domain.last - 1];
       // Copy the value value into the value at index
@@ -273,16 +268,16 @@ module BitArrays32 {
         this.values[this.values.domain.last] = (lastValue & mainMask) | (firstValue & rollOverMask);
       }
     }
-    
+
     pragma "no doc"
     proc _rotateRightNBits(shiftNow : int) {
       var firstValue : uint(32);
       var lastValue : uint(32);
-      on this.values[this.values.domain.last] {   
+      on this.values[this.values.domain.last] {
         firstValue = BitOps.rotl(this.values[this.values.domain.first], shiftNow);
         lastValue = BitOps.rotl(this.values[this.values.domain.last], shiftNow);
       }
-      
+
       var D = this.values.domain[this.values.domain.first + 1..];
       var DBefore = this.values.domain[..this.values.domain.last - 1];
       forall (i, iBefore) in zip(D, DBefore) {
@@ -318,12 +313,12 @@ module BitArrays32 {
         this.rotateLeft((shiftNow : bit32Index) - packSize);
       }
     }
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     pragma "no doc"
     proc _rotateRight32Bits(shift : int) {
       var firstValue : uint(32);
@@ -343,7 +338,7 @@ module BitArrays32 {
     pragma "no doc"
     proc _bitshiftRight32Bits() {
         var firstValue = this.values[this.values.domain.first];
-        
+
         var sub = this.values.domain[..this.values.last - 1];
         forall i in sub with (var aggregator = new SrcAggregator(uint(32))) do
           this.values[i] = this.values[i - 1];
@@ -366,7 +361,7 @@ module BitArrays32 {
         this.rotateRight((shiftNow : bit32Index) - packSize);
       }
     }
-    
+
 
 
     /* Set the value at a given index.

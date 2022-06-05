@@ -88,11 +88,6 @@ or
       :rtype: uint(32)
       
 
-   .. method:: proc rotr(shift)
-
-      Rotate all the values to the right. Let values falling out on one side reappear on the rhs side.
-      
-
    .. method:: proc reverse()
 
       Reverse the ordering of the values. The last value becomes the first value. The second last value becomes the second first value. And so on.
@@ -101,6 +96,14 @@ or
    .. method:: proc rotateLeft(shift: int)
 
       Rotate all the values to the left. Let values falling out on one side reappear on the rhs side.
+      Uses https://chapel-lang.org/docs/modules/packages/CopyAggregation.html
+      
+      :arg shift: number of bits to rotate
+      
+
+   .. method:: proc rotateRight(shift: int)
+
+      Rotate all the values to the right. Let values falling out on one side reappear on the rhs side.
       Uses https://chapel-lang.org/docs/modules/packages/CopyAggregation.html
       
       :arg shift: number of bits to rotate

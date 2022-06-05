@@ -174,6 +174,14 @@ proc BitArray32_rotateRight_inputIs2_SizeIs64_LastBitIsSet_ResultShouldRollBitOv
   test.assertEqual(bitArray.values[0], 0b00000000000000000000000000000010);
 }
 
+
+
+
+
+
+
+
+
 proc BitArray32__createShiftRolloverMask_sizeIsOne(test: borrowed Test) throws {
   var bitarray = new BitArray32(1 : uint(32));
   var reminderMask = bitarray._createShiftRolloverMask(1);
@@ -212,10 +220,10 @@ proc BitArray32__createShiftRolloverMask_sizeIsSeven(test: borrowed Test) throws
 }
 
 
-proc BitArray32__createShiftRolloverMask_sizeIsThirtyTwo(test: borrowed Test) throws {
+proc BitArray32__createShiftRolloverMask_sizeIsThirtyOne(test: borrowed Test) throws {
   var bitarray = new BitArray32(32 : uint(32));
-  var reminderMask = bitarray._createShiftRolloverMask(32);
-  test.assertEqual(reminderMask, 0b11111111111111111111111111111111);
+  var reminderMask = bitarray._createShiftRolloverMask(31);
+  test.assertEqual(reminderMask, 0b10000000000000000000000000000000);
 }
 
 
@@ -261,10 +269,10 @@ proc BitArray32__createMainMask_sizeIsSeven(test: borrowed Test) throws {
 }
 
 
-proc BitArray32__createMainMask_sizeIsThirtyTwo(test: borrowed Test) throws {
+proc BitArray32__createMainMask_sizeIsThirtyOne(test: borrowed Test) throws {
   var bitarray = new BitArray32(32 : uint(32));
-  var reminderMask = bitarray._createMainMask(32);
-  test.assertEqual(reminderMask, 0b00000000000000000000000000000000);
+  var reminderMask = bitarray._createMainMask(31);
+  test.assertEqual(reminderMask, 0b01111111111111111111111111111111);
 }
 
 
@@ -421,6 +429,19 @@ proc BitArray32_these_inputHas63Values_OutputHas63Values(test: borrowed Test) th
   test.assertEqual(steps, 63);
 }
 
+proc BitArray32_these_inputHas63Values_OutputHas64Values(test: borrowed Test) throws {
+  var bitArray = new BitArray32(64);
+  var steps = 0;
+  for i in {1..63} do
+    bitArray.set(i, i % 2 == 1);
+
+  var it = 0;
+  for i in bitArray.these() {
+    test.assertEqual(i, i % 2 == 1);
+    it += 1;
+  }
+}
+
 proc BitArray32_these_inputHas64Values_OutputHas64Values(test: borrowed Test) throws {
   var bitArray = new BitArray32(64);
   var steps = 0;
@@ -451,5 +472,15 @@ proc BitArray32_set_inputIsTrueAtIndexOne(test: borrowed Test) throws {
 
   test.assertEqual(bitArray.values[0], 0b00000000000000000000000000000010);
 }
+
+proc BitArray32_set_oddValuesAreTrue(test: borrowed Test) throws {
+  var bitArray = new BitArray32(32);
+  for i in {1..31} do
+    bitArray.set(i, i % 2 == 1);
+
+  for i in {1..31} do
+    test.assertEqual(bitArray.at(i), i % 2 == 1);
+}
+
 
 UnitTest.main();
