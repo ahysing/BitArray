@@ -422,12 +422,12 @@ proc BitArray32_popcount(test: borrowed Test) throws {
 }
 
 
-proc BitArray32_these_inputHas0Values_OutputHas0Values(test: borrowed Test) throws {
-  var bitArray = new BitArray32(0);
+proc BitArray32_these_inputHas1Values_OutputHas1Values(test: borrowed Test) throws {
+  var bitArray = new BitArray32(1);
   var steps = 0;
   for i in bitArray.these() do
     steps += 1;
-  test.assertEqual(steps, 0);
+  test.assertEqual(steps, 1);
 }
 
 proc BitArray32_these_inputHas63Values_OutputHas63Values(test: borrowed Test) throws {
@@ -491,5 +491,16 @@ proc BitArray32_set_oddValuesAreTrue(test: borrowed Test) throws {
     test.assertEqual(bitArray.at(i), i % 2 == 1);
 }
 
+proc BitArray32_ampersand_(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  test.assertNotNil(bitArrayA & bitArrayB);
+}
 
+proc BitArray32_ampersand_And(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA &= bitArrayB;
+  test.assertNotNil(bitArrayA);
+}
 UnitTest.main();

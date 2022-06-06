@@ -144,6 +144,15 @@ module Internal {
   }
 
   pragma "no doc"
+  proc unsignedAt(packSize, values, idx) {
+    var pageIdx = idx / packSize + values.domain.first;
+    var block  = values[pageIdx];
+    var mask = (1 : values.eltType) << (idx % packSize);
+    var bit = block & mask;
+    return bit != 0;
+  }
+
+  pragma "no doc"
   proc unsignedSet(packSize, values, idx, value: bool) {
     var pageIdx = idx / packSize + values.domain.first;
     var block = values[pageIdx];

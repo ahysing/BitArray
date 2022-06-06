@@ -4,7 +4,12 @@ build:
 
 .PHONY: debug
 debug:
-	CHPL_TARGET_CPU=native mason build --show --force -- -g --specialize
+	CHPL_TARGET_CPU=native mason build --show --force -- -g --specialize --fast
+
+FUNC :=unsignedAll
+.PHONY: print-ir
+print-ir:
+	CHPL_TARGET_CPU=native mason build --show --force -- --specialize --fast --llvm-print-ir $(FUNC) --llvm-print-ir-stage full
 
 .PHONY: run
 run:
@@ -20,7 +25,7 @@ clean-docs:
 
 .PHONY: test
 test:
-	mason test --show
+	CHPL_TARGET_CPU=native mason test --show -- -g --specialize --fast
 
 SOURCES = $(wildcard src/*.chpl) $(wildcard src/*/*.chpl)
 SOURCES := $(filter-out src/BitArrays/Internal.chpl,$(SOURCES))

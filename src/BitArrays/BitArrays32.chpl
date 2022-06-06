@@ -169,12 +169,7 @@ module BitArrays32 {
     proc at(idx : bit32Index) : bool throws {
       if idx >= this.size() then
         throw new Bit32RangeError();
-
-      var pageIdx = idx / packSize + this.values.domain.first;
-      var block : uint(32) = this.values[pageIdx];
-      var mask = one << (idx % packSize);
-      var bit = block & mask;
-      return bit != 0;
+      return unsignedAt(packSize, this.values, idx);
     }
 
     /* Compares two bit arrays by values.
@@ -555,19 +550,39 @@ module BitArrays32 {
     /* Perform the and operation on the values in this bit array with the values in another bit array.
        If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
 
+       :lhs: this bit array
+       :rhs: bit array to perform and with
+
+       :returns: the results
+       :rtype: BitArray32
+     */
+    operator &(lhs : BitArray32, rhs : BitArray32) : BitArray32 {
+      var next = new BitArray32(0);
+      next.values = lhs.values & rhs.values;
+      next.bitSize = lhs.bitSize;
+      next.hasRemaining = lhs.hasRemaining;
+      if next.hasRemaining then
+        next.values[next.values.domain.last] &= next._createReminderMask();
+      return next;
+    }
+
+    /* Perform the and operation on the values in this bit array with the values in another bit array.
+       If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
+
+       :lhs: this bit array
        :rhs: bit array to perform and with
      */
-    operator &(lhs : borrowed BitArray32, rhs : borrowed BitArray32) {
+    operator &=(ref lhs : BitArray32, rhs : BitArray32) : BitArray32 {
       lhs.values = lhs.values & rhs.values;
-      if this.hasRemaining then
-        lhs.values[lhs.values.domain.last] &= this._createReminderMask();
+      if lhs.hasRemaining then
+        lhs.values[lhs.values.domain.last] &= lhs._createReminderMask();
     }
 
     /* Perform the or operation on the values in this bit array with the values in another bit array.
 
        :rhs: bit array to perform or with
      */
-    operator |(lhs : borrowed BitArray32, rhs : borrowed BitArray32) {
+    operator |(lhs : BitArray32, rhs : BitArray32) {
       lhs.values = lhs.values || rhs.values;
       if this.hasRemaining then
         lhs.values[lhs.values.domain.last] &= this._createReminderMask();

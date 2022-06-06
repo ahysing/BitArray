@@ -98,12 +98,7 @@ module BitArrays64 {
     proc at(idx : bit64Index) : bool throws {
       if idx >= this.size() then
         throw new Bit64RangeError();
-
-      var pageIdx = idx / packSize + this.values.domain.first;
-      var block : uint(64) = this.values[pageIdx];
-      var mask = one << (idx % packSize);
-      var bit = block & mask;
-      return bit != 0;
+      return unsignedAt(packSize, this.values, idx);
     }
 
     /* Set all the values to `true`.
