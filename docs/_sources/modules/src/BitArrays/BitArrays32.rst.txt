@@ -209,7 +209,18 @@ or
       :arg shift: the number of values to shift.
       
 
-   .. method:: proc type ^=(lhs: borrowed BitArray32, rhs: borrowed BitArray32)
+   .. method:: proc type ^(lhs: BitArray32, rhs: BitArray32)
+
+      Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.
+      If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
+      
+      :arg lhs: this bit array
+      :arg rhs: bit array to perform xor with
+      :returns: The results
+      :rtype: BitArray32
+      
+
+   .. method:: proc type ^=(ref lhs: BitArray32, rhs: BitArray32)
 
       Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.
       If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.

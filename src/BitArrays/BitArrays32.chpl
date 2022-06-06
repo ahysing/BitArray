@@ -561,11 +561,26 @@ module BitArrays32 {
 
        :arg lhs: this bit array
        :arg rhs: bit array to perform xor with
+       :returns: The results
+       :rtype: BitArray32
      */
-    operator ^=(lhs : borrowed BitArray32, rhs : borrowed BitArray32) {
-      lhs.values = lhs.values ^ rhs.values;
-      if this.hasRemaining then
-        lhs.values[lhs.values.domain.last] &= this._createReminderMask();
+    operator ^(lhs : BitArray32, rhs : BitArray32) {
+      var values = lhs.values ^ rhs.values;
+      var size = if lhs.size() < rhs.size() then lhs.size() else rhs.size();
+      var hasRemaining = (size % packSize) != 0;
+      values[values.domain.last] &= _createReminderMaskFromSizeAndReminder(size, hasRemaining);
+      return new BitArray32(values, size);
+    }
+
+    /* Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.
+       If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
+
+       :arg lhs: this bit array
+       :arg rhs: bit array to perform xor with
+     */
+    operator ^=(ref lhs : BitArray32, rhs : BitArray32) {
+      lhs.values ^= rhs.values;
+      lhs.values &= lhs._createReminderMask();
     }
 
     /* Perform the and operation on the values in this bit array with the values in another bit array.

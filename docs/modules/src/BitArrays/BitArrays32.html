@@ -395,7 +395,28 @@ Uses <a class="reference external" href="https://chapel-lang.org/docs/modules/pa
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl">
-<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">^=(lhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32,</span> <span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32)</span></span></dt>
+<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">^(lhs:</span> <span class="pre">BitArray32,</span> <span class="pre">rhs:</span> <span class="pre">BitArray32)</span></span></dt>
+<dd><p>Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.
+If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lhs</strong> – this bit array</p></li>
+<li><p><strong>rhs</strong> – bit array to perform xor with</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The results</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>BitArray32</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl">
+<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">^=(ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray32,</span> <span class="pre">rhs:</span> <span class="pre">BitArray32)</span></span></dt>
 <dd><p>Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.
 If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.</p>
 <dl class="field-list simple">
