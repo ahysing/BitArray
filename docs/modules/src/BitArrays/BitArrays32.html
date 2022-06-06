@@ -138,10 +138,10 @@
 <dd><p>Tests all the values with and.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><cite>true</cite> if all the values are true</p>
+<dd class="field-odd"><p><cite>true</cite> if all the values are <cite>true</cite></p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>boolean value</p>
+<dd class="field-even"><p><cite>bool</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -152,10 +152,10 @@
 <dd><p>Tests all the values with or.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><cite>true</cite> if any of the values are true</p>
+<dd class="field-odd"><p><cite>true</cite> if any of the values are <cite>true</cite></p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>bool</p>
+<dd class="field-even"><p><cite>bool</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -172,7 +172,7 @@
 <dd class="field-even"><p>value at <cite>idx</cite></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>bool</p>
+<dd class="field-odd"><p><cite>bool</cite></p>
 </dd>
 <dt class="field-even">Throws</dt>
 <dd class="field-even"><p><strong>Bit32RangeError</strong> – If <cite>idx</cite> is outside the range [1..size).</p>
@@ -182,14 +182,14 @@
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.equals">
-<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">equals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32</span></em><span class="sig-paren">)</span><span class="pre">:</span> <span class="pre">bool</span><a class="headerlink" href="#BitArrays32.BitArray32.equals" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">equals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray32</span></em><span class="sig-paren">)</span><span class="pre">:</span> <span class="pre">bool</span><a class="headerlink" href="#BitArrays32.BitArray32.equals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compares two bit arrays by values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><cite>true</cite> if the two bit arrays has identical values.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>bool</p>
+<dd class="field-even"><p><cite>bool</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -203,13 +203,13 @@
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.popcount">
 <em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">popcount</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="pre">:</span> <span class="pre">uint(32)</span><a class="headerlink" href="#BitArrays32.BitArray32.popcount" title="Permalink to this definition">¶</a></dt>
-<dd><p>Count the number of values set to true.</p>
+<dd><p>Count the number of values set to <cite>true</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The count.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>uint(32)</p>
+<dd class="field-even"><p><cite>uint(32)</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -297,44 +297,58 @@ Uses <a class="reference external" href="https://chapel-lang.org/docs/modules/pa
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.==">
-<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">==</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.==" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] == Y[i] where X and Y are the to bit arrays to compare.</p>
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">==</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lhs:</span> <span class="pre">BitArray32</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.==" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares two bit arrays for in equality.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The result values</p>
+<dd class="field-odd"><p>if the bit arrays are equal</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>BitArray32</p>
+<dd class="field-even"><p><cite>bool</cite></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.!=">
-<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">!=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.!=" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] != Y[i] where X and Y are the to bit arrays to compare.</p>
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">!=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lhs:</span> <span class="pre">BitArray32</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.!=" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares two bit arrays for inequality.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The result values</p>
+<dd class="field-odd"><p>if the bit arrays are unequal</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>BitArray32</p>
+<dd class="field-even"><p><cite>bool</cite></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.=">
-<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray32</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.=" title="Permalink to this definition">¶</a></dt>
-<dd><p>Copies the values from an rhs bit array.
-:arg lhs: the operator to assign
-:arg rhs: The bit array to copy</p>
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray32</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.=" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copies the values from an rhs bit array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lhs</strong> – the operator to assign</p></li>
+<li><p><strong>rhs</strong> – The bit array to copy</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl">
-<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">~(arg:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32)</span></span></dt>
-<dd><p>Negate the values.</p>
+<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">~(arg:</span> <span class="pre">BitArray32):</span> <span class="pre">BitArray32</span></span></dt>
+<dd><p>One’s complement operator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The results</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>BitArray32</cite></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="chpl method">
@@ -349,7 +363,7 @@ Uses <a class="reference external" href="https://chapel-lang.org/docs/modules/pa
 <dd class="field-even"><p>A copy of the values shifted <cite>shift</cite> positions to the right.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>BitArray32</p>
+<dd class="field-odd"><p><cite>BitArray32</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -357,7 +371,7 @@ Uses <a class="reference external" href="https://chapel-lang.org/docs/modules/pa
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.&lt;&lt;=">
 <em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">&lt;&lt;=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift:</span> <span class="pre">bit32Index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.<<=" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shift all the values to the right. Left values are padded with false values.</p>
+<dd><p>Shift all the values to the right. Left values are padded with <cite>false</cite> values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments</dt>
 <dd class="field-odd"><p><strong>shift</strong> – the number of values to shift.</p>
@@ -377,7 +391,7 @@ Uses <a class="reference external" href="https://chapel-lang.org/docs/modules/pa
 <dd class="field-even"><p>a copy of the values shifted <cite>shift</cite> positions to the left.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>BitArray32</p>
+<dd class="field-odd"><p><cite>BitArray32</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -385,7 +399,7 @@ Uses <a class="reference external" href="https://chapel-lang.org/docs/modules/pa
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.&gt;&gt;=">
 <em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">&gt;&gt;=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift:</span> <span class="pre">bit32Index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.>>=" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shift all the values to the right. Left values are padded with false values.</p>
+<dd><p>Shift all the values to the right. Left values are padded with <cite>false</cite> values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments</dt>
 <dd class="field-odd"><p><strong>shift</strong> – the number of values to shift.</p>
@@ -409,7 +423,7 @@ If one of the two bit arrays has different size then indices fitting the shortes
 <dd class="field-even"><p>The results</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>BitArray32</p>
+<dd class="field-odd"><p><cite>BitArray32</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -445,7 +459,7 @@ If one of the two bit arrays has different size then indices fitting the shortes
 <dd class="field-odd"><p>the results</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>BitArray32</p>
+<dd class="field-even"><p><cite>BitArray32</cite></p>
 </dd>
 </dl>
 </dd></dl>

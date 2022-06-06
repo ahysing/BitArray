@@ -50,16 +50,16 @@ or
 
       Tests all the values with and.
       
-      :returns: `true` if all the values are true
-      :rtype: boolean value
+      :returns: `true` if all the values are `true`
+      :rtype: `bool`
       
 
    .. method:: proc any(): bool
 
       Tests all the values with or.
       
-      :returns: `true` if any of the values are true
-      :rtype: bool
+      :returns: `true` if any of the values are `true`
+      :rtype: `bool`
       
 
    .. method:: proc at(idx: bit32Index): bool throws
@@ -69,17 +69,17 @@ or
       :arg idx: The index in the bitarray to look up.
       
       :returns: value at `idx`
-      :rtype: bool
+      :rtype: `bool`
       
       :throws Bit32RangeError: If `idx` is outside the range [1..size).
       
 
-   .. method:: proc equals(rhs: borrowed BitArray32): bool
+   .. method:: proc equals(rhs: BitArray32): bool
 
       Compares two bit arrays by values.
       
       :returns: `true` if the two bit arrays has identical values.
-      :rtype: bool
+      :rtype: `bool`
       
 
    .. method:: proc fill()
@@ -89,10 +89,10 @@ or
 
    .. method:: proc popcount(): uint(32)
 
-      Count the number of values set to true.
+      Count the number of values set to `true`.
       
       :returns: The count.
-      :rtype: uint(32)
+      :rtype: `uint(32)`
       
 
    .. method:: proc reverse()
@@ -147,32 +147,36 @@ or
       Set all the values to `false`.
       
 
-   .. method:: proc type ==(lhs: borrowed BitArray32, rhs: borrowed BitArray32)
+   .. method:: proc type ==(lhs: BitArray32, rhs: BitArray32)
 
-      Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] == Y[i] where X and Y are the to bit arrays to compare.
+      Compares two bit arrays for in equality.
       
-      :returns: The result values
-      :rtype: BitArray32
-      
-
-   .. method:: proc type !=(lhs: borrowed BitArray32, rhs: borrowed BitArray32)
-
-      Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] != Y[i] where X and Y are the to bit arrays to compare.
-      
-      :returns: The result values
-      :rtype: BitArray32
+      :returns: if the bit arrays are equal
+      :rtype: `bool`
       
 
-   .. method:: proc type =(ref lhs: BitArray32, rhs: borrowed BitArray32)
+   .. method:: proc type !=(lhs: BitArray32, rhs: BitArray32)
+
+      Compares two bit arrays for inequality.
+      
+      :returns: if the bit arrays are unequal
+      :rtype: `bool`
+      
+
+   .. method:: proc type =(ref lhs: BitArray32, rhs: BitArray32)
 
       Copies the values from an rhs bit array.
+      
       :arg lhs: the operator to assign
       :arg rhs: The bit array to copy
       
 
-   .. method:: proc type ~(arg: borrowed BitArray32)
+   .. method:: proc type ~(arg: BitArray32): BitArray32
 
-      Negate the values.
+      One's complement operator.
+      
+      :returns: The results
+      :rtype: `BitArray32`
       
 
    .. method:: proc type <<(shift: uint): BitArray32
@@ -182,12 +186,12 @@ or
       :arg shift: the number of values to shift.
       
       :returns: A copy of the values shifted `shift` positions to the right.
-      :rtype: BitArray32
+      :rtype: `BitArray32`
       
 
    .. method:: proc type <<=(shift: bit32Index)
 
-      Shift all the values to the right. Left values are padded with false values.
+      Shift all the values to the right. Left values are padded with `false` values.
       
       :arg shift: the number of values to shift.
       
@@ -199,12 +203,12 @@ or
       :arg shift: the number of values to shift.
       
       :returns: a copy of the values shifted `shift` positions to the left.
-      :rtype: BitArray32
+      :rtype: `BitArray32`
       
 
    .. method:: proc type >>=(shift: bit32Index)
 
-      Shift all the values to the right. Left values are padded with false values.
+      Shift all the values to the right. Left values are padded with `false` values.
       
       :arg shift: the number of values to shift.
       
@@ -217,7 +221,7 @@ or
       :arg lhs: this bit array
       :arg rhs: bit array to perform xor with
       :returns: The results
-      :rtype: BitArray32
+      :rtype: `BitArray32`
       
 
    .. method:: proc type ^=(ref lhs: BitArray32, rhs: BitArray32)
@@ -238,7 +242,7 @@ or
       :rhs: bit array to perform and with
       
       :returns: the results
-      :rtype: BitArray32
+      :rtype: `BitArray32`
       
 
    .. method:: proc type &=(ref lhs: BitArray32, rhs: BitArray32): BitArray32

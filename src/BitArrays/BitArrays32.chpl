@@ -106,35 +106,24 @@ module BitArrays32 {
         var nextShift = shift - packSize;
         this._bitshiftLeft(nextShift);
       } else if shift > 0 {
-        this._bitshiftLeftNBits(shift);
-        var nextShift = shift - packSize;
+        var shiftNow = shift % packSize;
+        this._bitshiftLeftNBits(shiftNow);
+        var nextShift = shift - shiftNow;
         this._bitshiftLeft(nextShift);
       }
     }
 
     pragma "no doc"
     proc _bitshiftRight(shift : uint) {
-      if shift < packSize && shift > 0 {
-        var mask = one >> (shift + 1) - 1;
-        var topMask = ~mask;
-        var lastValue = this.values[0] & mask;
-
-        forall i in this.values.domain do {
-          var rollOverValues = (this.values[i - 1] & topMask);
-          this.values[i] = this.values[i] & rollOverValues;
-        }
-
-        this.values[this.values.domain - 1] = lastValue;
-      } else if shift == packSize {
-        var lastValue : int = this.values[0];
-
-        forall i in this.values.domain do
-          this.values[i] = this.values[i - 1];
-
-        this.values[this.values.domain.last] = lastValue;
+      if shift % packSize == 0 && shift > 0 {
+        this._bitshiftRight32Bits();
+        var nextShift = shift - packSize;
+        this._bitshiftRight(nextShift);
       } else if shift > 0 {
-        this._bitshiftRight(packSize);
-        this._bitshiftRight(shift - packSize);
+        var shiftNow = shift % packSize;
+        this._bitshiftRightNBits(shiftNow);
+        var nextShift = shift - shiftNow;
+        this._bitshiftRight(nextShift);
       }
     }
 
@@ -161,8 +150,8 @@ module BitArrays32 {
 
     /* Tests all the values with and.
 
-       :returns: `true` if all the values are true
-       :rtype: boolean value
+       :returns: `true` if all the values are `true`
+       :rtype: `bool`
      */
     proc all() : bool {
       return unsignedAll(this.hasRemaining, packSize, this.size(), this.values);
@@ -170,8 +159,8 @@ module BitArrays32 {
 
     /* Tests all the values with or.
 
-      :returns: `true` if any of the values are true
-      :rtype: bool
+      :returns: `true` if any of the values are `true`
+      :rtype: `bool`
     */
     proc any() : bool {
       return unsignedAny(this.values);
@@ -183,7 +172,7 @@ module BitArrays32 {
        :arg idx: The index in the bitarray to look up.
 
        :returns: value at `idx`
-       :rtype: bool
+       :rtype: `bool`
 
        :throws Bit32RangeError: If `idx` is outside the range [1..size).
     */
@@ -196,10 +185,10 @@ module BitArrays32 {
     /* Compares two bit arrays by values.
 
        :returns: `true` if the two bit arrays has identical values.
-       :rtype: bool
+       :rtype: `bool`
      */
-    proc equals(rhs : borrowed BitArray32) : bool {
-      return this.values.equals(rhs.values);
+    proc equals(rhs : BitArray32) : bool {
+      return this.bitSize == rhs.bitSize && this.bitDomain == rhs.bitDomain && this.hasRemaining == rhs.hasRemaining && this.values.equals(rhs.values);
     }
 
     /* Set all the values to `true`.
@@ -210,10 +199,10 @@ module BitArrays32 {
         this.values[this.values.domain.last] &= this._createReminderMask();
     }
 
-    /* Count the number of values set to true.
+    /* Count the number of values set to `true`.
 
        :returns: The count.
-       :rtype: uint(32)
+       :rtype: `uint(32)`
      */
     proc popcount() : uint(32) {
       return _popcount(values);
@@ -234,17 +223,16 @@ module BitArrays32 {
 
     pragma "no doc"
     proc _bitshiftLeft32Bits() {
-        var firstValue = this.values[this.values.domain.first];
+      var sub = this.values.domain[this.values.first + 1..];
+      forall i in sub with (var aggregator = new SrcAggregator(uint(32))) do
+        aggregator.copy(this.values[i], this.values[i - 1]);
 
-        var sub = this.values.domain[this.values.first + 1..];
-        forall i in sub with (var aggregator = new SrcAggregator(uint(32))) do
-          aggregator.copy(this.values[i], this.values[i + 1]);
-
-        this.values[this.values.domain.last] = firstValue;
+      on this.values[this.values.domain.first] do
+       this.values[this.values.domain.first] = 0;
     }
 
     pragma "no doc"
-    proc _rotateLeft32Bits(shift : int) {
+    proc _rotateLeftWholeBlock() {
       var lastValue : uint(32) = 0;
       on this.values[this.values.domain.first] do
         lastValue = this.values[this.values.domain.last];
@@ -290,8 +278,8 @@ module BitArrays32 {
       var firstValue : uint(32);
       var lastValue : uint(32);
       on this.values[this.values.domain.last] {
-        firstValue = BitOps.rotl(this.values[this.values.domain.first], shiftNow);
-        lastValue = BitOps.rotl(this.values[this.values.domain.last], shiftNow);
+        firstValue = BitOps.rotr(this.values[this.values.domain.first], shiftNow);
+        lastValue = BitOps.rotr(this.values[this.values.domain.last], shiftNow);
       }
 
       var D = this.values.domain[this.values.domain.first + 1..];
@@ -314,29 +302,23 @@ module BitArrays32 {
       }
     }
 
-    /* Rotate all the values to the left. Let values falling out on one side reappear on the rhs side.
-       Uses https://chapel-lang.org/docs/modules/packages/CopyAggregation.html
+    /* Rotate all the values to the left. Let values falling out on one side reappear on the left side.
 
        :arg shift: number of bits to rotate
     */
     proc rotateLeft(shift : int) {
       if shift > 0 && shift % packSize == 0 {
-        this._rotateLeft32Bits(shift);
-        this.rotateLeft((shift : bit32Index) - packSize);
+        this._rotateLeftWholeBlock();
+        this.rotateLeft(shift - packSize);
       } else if shift > 0 {
         var shiftNow = shift % packSize;
         this._rotateLeftNBits(shiftNow);
-        this.rotateLeft((shiftNow : bit32Index) - packSize);
+        this.rotateLeft(shift - shiftNow);
       }
     }
 
-
-
-
-
-
     pragma "no doc"
-    proc _rotateRight32Bits(shift : int) {
+    proc _rotateRightWholeBlock(shift : int) {
       var firstValue : uint(32);
       on this.values[this.values.domain.last] do
         firstValue = this.values[this.values.domain.first];
@@ -353,28 +335,26 @@ module BitArrays32 {
 
     pragma "no doc"
     proc _bitshiftRight32Bits() {
-        var firstValue = this.values[this.values.domain.first];
+      var sub = this.values.domain[..this.values.last - 1];
+      forall i in sub with (var aggregator = new SrcAggregator(uint(32))) do
+        aggregator.copy(this.values[i], this.values[i + 1]);
 
-        var sub = this.values.domain[..this.values.last - 1];
-        forall i in sub with (var aggregator = new SrcAggregator(uint(32))) do
-          this.values[i] = this.values[i - 1];
-
-        this.values[this.values.domain.last] = firstValue;
+      on this.values[this.values.domain.last] do
+        this.values[this.values.domain.last] = 0;
     }
 
-    /* Rotate all the values to the right. Let values falling out on one side reappear on the rhs side.
-       Uses https://chapel-lang.org/docs/modules/packages/CopyAggregation.html
+    /* Rotate all the values to the right. Let values falling out on one side reappear on the right side.
 
        :arg shift: number of bits to rotate
     */
     proc rotateRight(shift : int) {
       if shift > 0 && shift % packSize == 0 {
-        this._rotateRight32Bits(shift);
-        this.rotateRight((shift : bit32Index) - packSize);
+        this._rotateRightWholeBlock(shift);
+        this.rotateRight(shift - packSize);
       } else if shift > 0 {
         var shiftNow = shift % packSize;
         this._rotateRightNBits(shiftNow);
-        this.rotateRight((shiftNow : bit32Index) - packSize);
+        this.rotateRight(shift - shiftNow);
       }
     }
 
@@ -447,11 +427,12 @@ module BitArrays32 {
       if this.hasRemaining {
         var last = this.values.domain.last;
         var lastMinusOne = last - 1;
-        var wholeBlocksDomain : subdomain(this.values.domain) = this.values.domain[..lastMinusOne];
-        for i in wholeBlocksDomain do
-          foreach j in {0..packSizeMinusOne} do
-            yield this.values[i] & mask32[j] != 0;
-
+        if lastMinusOne >= 0 {
+          var wholeBlocksDomain : subdomain(this.values.domain) = this.values.domain[..lastMinusOne];
+          for i in wholeBlocksDomain do
+            foreach j in {0..packSizeMinusOne} do
+              yield this.values[i] & mask32[j] != 0;
+        }
         var lastBlock = this.values[last];
         var reminderSize = this.bitSize % packSize - 1;
         foreach j in {0..reminderSize} do
@@ -469,33 +450,30 @@ module BitArrays32 {
       this.values = 0;
     }
 
-    /* Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] == Y[i] where X and Y are the to bit arrays to compare.
+    /* Compares parwise the values of the two bit arrays for equality.
 
-       :returns: The result values
-       :rtype: BitArray32
+       :returns: if the bits in the arrays are equal
+       :rtype: `list`
      */
-    operator ==(lhs : borrowed BitArray32, rhs : borrowed BitArray32) {
-      var bitarray = new BitArray32(lhs.size());
-      bitarray.values = lhs.values ^ ~rhs.values;
-      return bitarray;
+    operator ==(lhs : BitArray32, rhs : BitArray32) {
+      return lhs.values == rhs.values;
     }
 
-    /* Compares two bit arrays by values with corresponding indices. All the values are set according to X[i] != Y[i] where X and Y are the to bit arrays to compare.
+    /*  Compares parwise the values of the two bit arrays for in equality.
 
-       :returns: The result values
-       :rtype: BitArray32
+       :returns: if the bits in the arrays are equal
+       :rtype: `list`
      */
-    operator !=(lhs : borrowed BitArray32, rhs : borrowed BitArray32) {
-      var bitarray = new BitArray32(lhs.size());
-      bitarray.values = lhs.values ^ rhs.values;
-      return bitarray;
+    operator !=(lhs : BitArray32, rhs : BitArray32) {
+      return lhs.values != rhs.values;
     }
 
     /* Copies the values from an rhs bit array.
+
        :arg lhs: the operator to assign
        :arg rhs: The bit array to copy
     */
-    operator =(ref lhs : BitArray32, rhs : borrowed BitArray32) {
+    operator =(ref lhs : BitArray32, rhs : BitArray32) {
       var D = lhs.values.domain;
       var values : [D] uint(32);
       forall i in rhs.values.domain do
@@ -507,11 +485,17 @@ module BitArrays32 {
       lhs.values = values;
     }
 
-    /* Negate the values.
+    /* Nagation operator. Turn all `true` values into `false` values. Turn all `false` values into `true` values.
+
+      :returns: The results
+      :rtype: `BitArray32`
     */
-    operator ~(arg : borrowed BitArray32) {
-      arg.values = ~arg.values;
-      arg.values[arg.values.domain.last] &= this._createReminderMask();
+    operator !(arg : BitArray32) : BitArray32 {
+      var values = ~arg.values;
+      var size = arg.size();
+      on values[values.domain.last] do
+        values[values.domain.last] &= _createReminderMaskFromSizeAndReminder(size, arg.hasRemaining);
+      return new BitArray32(values, size);
     }
 
     /* Shift the values `shift` values to the right. Missing right values are padded with `false` values.
@@ -519,7 +503,7 @@ module BitArrays32 {
        :arg shift: the number of values to shift.
 
        :returns: A copy of the values shifted `shift` positions to the right.
-       :rtype: BitArray32
+       :rtype: `BitArray32`
      */
     operator <<(shift : uint) : BitArray32 {
       var bitArray : BitArray32 = this;
@@ -527,7 +511,7 @@ module BitArrays32 {
       return bitArray;
     }
 
-    /* Shift all the values to the right. Left values are padded with false values.
+    /* Shift all the values to the right. Left values are padded with `false` values.
 
        :arg shift: the number of values to shift.
      */
@@ -540,7 +524,7 @@ module BitArrays32 {
        :arg shift: the number of values to shift.
 
        :returns: a copy of the values shifted `shift` positions to the left.
-       :rtype: BitArray32
+       :rtype: `BitArray32`
      */
     operator >>(shift : uint) : BitArray32 {
       var bitArray : BitArray32 = this;
@@ -548,7 +532,7 @@ module BitArrays32 {
       return bitArray;
     }
 
-    /* Shift all the values to the right. Left values are padded with false values.
+    /* Shift all the values to the right. Left values are padded with `false` values.
 
        :arg shift: the number of values to shift.
      */
@@ -562,13 +546,14 @@ module BitArrays32 {
        :arg lhs: this bit array
        :arg rhs: bit array to perform xor with
        :returns: The results
-       :rtype: BitArray32
+       :rtype: `BitArray32`
      */
     operator ^(lhs : BitArray32, rhs : BitArray32) {
       var values = lhs.values ^ rhs.values;
       var size = if lhs.size() < rhs.size() then lhs.size() else rhs.size();
       var hasRemaining = (size % packSize) != 0;
-      values[values.domain.last] &= _createReminderMaskFromSizeAndReminder(size, hasRemaining);
+      on values[values.domain.last] do
+        values[values.domain.last] &= _createReminderMaskFromSizeAndReminder(size, hasRemaining);
       return new BitArray32(values, size);
     }
 
@@ -580,7 +565,8 @@ module BitArrays32 {
      */
     operator ^=(ref lhs : BitArray32, rhs : BitArray32) {
       lhs.values ^= rhs.values;
-      lhs.values &= lhs._createReminderMask();
+      on lhs.values[values.domain.last] do
+        lhs.values[values.domain.last] &= lhs._createReminderMask();
     }
 
     /* Perform the and operation on the values in this bit array with the values in another bit array.
@@ -590,13 +576,11 @@ module BitArrays32 {
        :rhs: bit array to perform and with
 
        :returns: the results
-       :rtype: BitArray32
+       :rtype: `BitArray32`
      */
     operator &(lhs : BitArray32, rhs : BitArray32) : BitArray32 {
       var values = lhs.values & rhs.values;
       var size = if lhs.size() < rhs.size() then lhs.size() else rhs.size();
-      var hasRemaining = (size % packSize) != 0;
-      values[values.domain.last] &= _createReminderMaskFromSizeAndReminder(size, hasRemaining);
       return new BitArray32(values, size);
     }
 
@@ -608,7 +592,6 @@ module BitArrays32 {
      */
     operator &=(ref lhs : BitArray32, rhs : BitArray32) : BitArray32 {
       lhs.values &= rhs.values;
-      lhs.values[lhs.values.domain.last] &= lhs._createReminderMask();
     }
 
     /* Perform the or operation on the values in this bit array with the values in another bit array.
@@ -619,8 +602,6 @@ module BitArrays32 {
     operator |(lhs : BitArray32, rhs : BitArray32) : BitArray32 {
       var values = lhs.values | rhs.values;
       var size = if lhs.size() < rhs.size() then lhs.size() else rhs.size();
-      var hasRemaining = (size % packSize) != 0;
-      values[values.domain.last] &= _createReminderMaskFromSizeAndReminder(size, hasRemaining);
       return new BitArray32(values, size);
     }
 
@@ -631,7 +612,6 @@ module BitArrays32 {
     */
     operator |=(ref lhs : BitArray32, rhs : BitArray32) {
       lhs.values |= rhs.values;
-      lhs.values[lhs.values.domain.last] &= lhs._createReminderMask();
     }
   }
 }

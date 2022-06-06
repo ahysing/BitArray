@@ -71,7 +71,7 @@ module BitArrays64 {
     /* Tests all the values with or.
 
       :returns: `true` if any of the values are true
-      :rtype: bool
+      :rtype: `bool`
     */
     proc any() : bool {
       unsignedAny(this.values);
@@ -80,7 +80,7 @@ module BitArrays64 {
     /* Tests all the values with and.
 
       :returns: `true` if any of the values are true
-      :rtype: bool
+      :rtype: `bool`
     */
     proc all() : bool {
       return unsignedAll(this.hasRemaining, packSize, this.size(), this.values);
@@ -93,7 +93,7 @@ module BitArrays64 {
        :throws Bit64RangeError: If `idx` is outside the range [1..size).
 
        :return: value at `idx`
-       :rtype: bool
+       :rtype: `bool`
     */
     proc at(idx : bit64Index) : bool throws {
       if idx >= this.size() then

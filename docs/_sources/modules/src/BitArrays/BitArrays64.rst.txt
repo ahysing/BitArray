@@ -44,7 +44,7 @@ or
       Tests all the values with or.
       
       :returns: `true` if any of the values are true
-      :rtype: bool
+      :rtype: `bool`
       
 
    .. method:: proc all(): bool
@@ -52,7 +52,7 @@ or
       Tests all the values with and.
       
       :returns: `true` if any of the values are true
-      :rtype: bool
+      :rtype: `bool`
       
 
    .. method:: proc at(idx: bit64Index): bool throws
@@ -64,7 +64,7 @@ or
       :throws Bit64RangeError: If `idx` is outside the range [1..size).
       
       :return: value at `idx`
-      :rtype: bool
+      :rtype: `bool`
       
 
    .. method:: proc fill()

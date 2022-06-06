@@ -80,7 +80,33 @@ proc BitArray32_reverse_fillThenReverse_returnsFull(test: borrowed Test) throws 
   test.assertTrue(bitArray.all());
 }
 
+proc BitArray32_reverse_at0(test: borrowed Test) throws {
+  var bitArray = new BitArray32(32);
+  bitArray.set(0, true);
+  bitArray.reverse();
+  test.assertTrue(bitArray.at(31));
+}
 
+proc BitArray32_reverse_at1(test: borrowed Test) throws {
+  var bitArray = new BitArray32(32);
+  bitArray.set(1, true);
+  bitArray.reverse();
+  test.assertTrue(bitArray.at(30));
+}
+
+proc BitArray32_reverse_at2(test: borrowed Test) throws {
+  var bitArray = new BitArray32(32);
+  bitArray.set(2, true);
+  bitArray.reverse();
+  test.assertTrue(bitArray.at(29));
+}
+
+proc BitArray32_reverse_sizeIs33_at0(test: borrowed Test) throws {
+  var bitArray = new BitArray32(33);
+  bitArray.set(0, true);
+  bitArray.reverse();
+  test.assertTrue(bitArray.at(32));
+}
 
 proc BitArray32_rotateLeft_inputIs1(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
@@ -131,18 +157,39 @@ proc BitArray32_rotateLeft_inputIs2_SizeIs64_LastBitIsSet_ResultShouldRollBitOve
 
 
 
-proc BitArray32_rotateRight_inputIs1(test: borrowed Test) throws {
+proc BitArray32_rotateRight_valueIsOne_inputIs1(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
   bitArray.values[bitArray.values.domain.first] = 1;
   bitArray.rotateRight(1);
-  test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b00000000000000000000000000000010);
+  test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b10000000000000000000000000000000);
 }
 
-proc BitArray32_rotateRight_inputIs31(test: borrowed Test) throws {
+proc BitArray32_rotateRight_valueIsOne_inputIs31(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
   bitArray.values[bitArray.values.domain.first] = 1;
   bitArray.rotateRight(31);
-  test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b10000000000000000000000000000000);
+  test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b00000000000000000000000000000010);
+}
+
+proc BitArray32_rotateRight_valueIsTwpp_inputIs1(test: borrowed Test) throws {
+  var bitArray = new BitArray32(32);
+  bitArray.values[bitArray.values.domain.first] = 2;
+  bitArray.rotateRight(1);
+  test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b00000000000000000000000000000001);
+}
+
+proc BitArray32_rotateRight_valueIsTwo_inputIs31(test: borrowed Test) throws {
+  var bitArray = new BitArray32(32);
+  bitArray.values[bitArray.values.domain.first] = 2;
+  bitArray.rotateRight(31);
+  test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b00000000000000000000000000000100);
+}
+
+proc BitArray32_rotateRight_valueIsTwo_inputIs32(test: borrowed Test) throws {
+  var bitArray = new BitArray32(32);
+  bitArray.values[bitArray.values.domain.first] = 2;
+  bitArray.rotateRight(32);
+  test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b00000000000000000000000000000010);
 }
 
 proc BitArray32_rotateRight_inputIs1_LastBitIsSet_ResultShouldRollBitOver(test: borrowed Test) throws {
