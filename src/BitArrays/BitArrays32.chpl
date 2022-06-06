@@ -23,6 +23,14 @@ module BitArrays32 {
     }
   }
 
+  pragma "no doc"
+  proc _createReminderMaskFromSizeAndReminder(size : bit32Index, hasRemaining : bool) {
+    if hasRemaining then
+      return (1 << (size % packSize)) : uint(32) - one;
+    else
+      return allOnes;
+  }
+
   /* BitArray32 is an array of boolean values stored packed together as 32 bit words. All boolean values are mapped one-to-one to a bit value in memory. */
   class BitArray32 {
     pragma "no doc"
@@ -42,15 +50,31 @@ module BitArrays32 {
        :arg size: The size of the bit array
        :arg locales: What nodes to distibute the values over
      */
-    proc init(size : bit32Index, locales=Locales) {
+    proc init(size : bit32Index, targetLocales=Locales) {
       this.complete();
       var hasRemaining = (size % packSize) != 0;
       var sizeAsInt : bit32Index = getNumberOfBlocks(hasRemaining, packSize, size);
       var lastIdx = sizeAsInt - 1;
       var Space = {0..lastIdx};
-      var bitDomain : domain(rank=1, idxType=bit32Index, stridable=false) dmapped Block(boundingBox=Space) = Space;
+      var bitDomain : domain(rank=1, idxType=bit32Index, stridable=false) dmapped Block(boundingBox=Space, targetLocales=targetLocales) = Space;
       var values : [bitDomain] uint(32);
       this.bitDomain = bitDomain;
+      this.bitSize = size;
+      this.hasRemaining = hasRemaining;
+      this.values = values;
+    }
+
+    /* Create a bit array from a given set of values. The input values are used directly in the bit array. Values are not copied into the class BitArray32 instance.
+
+       :arg values: The bit array.
+     */
+    proc init(values : [] uint(32), size : bit32Index) {
+      this.complete();
+      // Compare sizes from blocks of 32 bits and given size.
+      // Make sure the the number of bits in a block fits size or size + 1
+      assert(findNumberOfBlocks(values) / 2 == (size / packSize) / 2);
+      var hasRemaining = (size % packSize) != 0;
+      this.bitDomain = values.domain;
       this.bitSize = size;
       this.hasRemaining = hasRemaining;
       this.values = values;
@@ -121,10 +145,7 @@ module BitArrays32 {
 
     pragma "no doc"
     proc _createReminderMask() : uint(32) {
-    if this.hasRemaining then
-      return (1 << (this.bitSize % packSize)) : uint(32) - one;
-    else
-      return allOnes;
+      return _createReminderMaskFromSizeAndReminder(this.bitSize, this.hasRemaining);
     }
 
     pragma "no doc"
@@ -557,13 +578,11 @@ module BitArrays32 {
        :rtype: BitArray32
      */
     operator &(lhs : BitArray32, rhs : BitArray32) : BitArray32 {
-      var next = new BitArray32(0);
-      next.values = lhs.values & rhs.values;
-      next.bitSize = lhs.bitSize;
-      next.hasRemaining = lhs.hasRemaining;
-      if next.hasRemaining then
-        next.values[next.values.domain.last] &= next._createReminderMask();
-      return next;
+      var values = lhs.values & rhs.values;
+      var size = if lhs.size() < rhs.size() then lhs.size() else rhs.size();
+      var hasRemaining = (size % packSize) != 0;
+      values[values.domain.last] &= _createReminderMaskFromSizeAndReminder(size, hasRemaining);
+      return new BitArray32(values, size);
     }
 
     /* Perform the and operation on the values in this bit array with the values in another bit array.
@@ -573,19 +592,31 @@ module BitArrays32 {
        :rhs: bit array to perform and with
      */
     operator &=(ref lhs : BitArray32, rhs : BitArray32) : BitArray32 {
-      lhs.values = lhs.values & rhs.values;
-      if lhs.hasRemaining then
-        lhs.values[lhs.values.domain.last] &= lhs._createReminderMask();
+      lhs.values &= rhs.values;
+      lhs.values[lhs.values.domain.last] &= lhs._createReminderMask();
     }
 
     /* Perform the or operation on the values in this bit array with the values in another bit array.
 
+       :lhs: this bit array
        :rhs: bit array to perform or with
      */
-    operator |(lhs : BitArray32, rhs : BitArray32) {
-      lhs.values = lhs.values || rhs.values;
-      if this.hasRemaining then
-        lhs.values[lhs.values.domain.last] &= this._createReminderMask();
+    operator |(lhs : BitArray32, rhs : BitArray32) : BitArray32 {
+      var values = lhs.values | rhs.values;
+      var size = if lhs.size() < rhs.size() then lhs.size() else rhs.size();
+      var hasRemaining = (size % packSize) != 0;
+      values[values.domain.last] &= _createReminderMaskFromSizeAndReminder(size, hasRemaining);
+      return new BitArray32(values, size);
+    }
+
+    /* Perform the or operation on the values in this bit array with the values in another bit array.
+
+      :lhs: this bit array
+      :rhs: bit array to perform or with
+    */
+    operator |=(ref lhs : BitArray32, rhs : BitArray32) {
+      lhs.values |= rhs.values;
+      lhs.values[lhs.values.domain.last] &= lhs._createReminderMask();
     }
   }
 }

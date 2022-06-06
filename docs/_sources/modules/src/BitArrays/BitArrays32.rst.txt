@@ -31,12 +31,19 @@ or
    BitArray32 is an array of boolean values stored packed together as 32 bit words. All boolean values are mapped one-to-one to a bit value in memory. 
 
 
-   .. method:: proc init(size: bit32Index, locales = Locales)
+   .. method:: proc init(size: bit32Index, targetLocales = Locales)
 
       Create a bit array of a given size.
       
       :arg size: The size of the bit array
       :arg locales: What nodes to distibute the values over
+      
+
+   .. method:: proc init(values: [] uint(32), size: bit32Index)
+
+      Create a bit array from a given set of values. The input values are used directly in the bit array. Values are not copied into the class BitArray32 instance.
+      
+      :arg values: The bit array.
       
 
    .. method:: proc all(): bool
@@ -211,18 +218,40 @@ or
       :arg rhs: bit array to perform xor with
       
 
-   .. method:: proc type &(lhs: borrowed BitArray32, rhs: borrowed BitArray32)
+   .. method:: proc type &(lhs: BitArray32, rhs: BitArray32): BitArray32
 
       Perform the and operation on the values in this bit array with the values in another bit array.
       If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
       
+      :lhs: this bit array
+      :rhs: bit array to perform and with
+      
+      :returns: the results
+      :rtype: BitArray32
+      
+
+   .. method:: proc type &=(ref lhs: BitArray32, rhs: BitArray32): BitArray32
+
+      Perform the and operation on the values in this bit array with the values in another bit array.
+      If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
+      
+      :lhs: this bit array
       :rhs: bit array to perform and with
       
 
-   .. method:: proc type |(lhs: borrowed BitArray32, rhs: borrowed BitArray32)
+   .. method:: proc type |(lhs: BitArray32, rhs: BitArray32): BitArray32
 
       Perform the or operation on the values in this bit array with the values in another bit array.
       
+      :lhs: this bit array
+      :rhs: bit array to perform or with
+      
+
+   .. method:: proc type |=(ref lhs: BitArray32, rhs: BitArray32)
+
+      Perform the or operation on the values in this bit array with the values in another bit array.
+      
+      :lhs: this bit array
       :rhs: bit array to perform or with
       
 

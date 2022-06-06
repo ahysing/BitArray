@@ -491,7 +491,7 @@ proc BitArray32_set_oddValuesAreTrue(test: borrowed Test) throws {
     test.assertEqual(bitArray.at(i), i % 2 == 1);
 }
 
-proc BitArray32_ampersand_(test: borrowed Test) throws {
+proc BitArray32_ampersand(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);
   var bitArrayB = new BitArray32(32);
   bitArrayA.set(1, true);
@@ -509,7 +509,7 @@ proc BitArray32_ampersand_bitAtIndexOneIsTrue(test: borrowed Test) throws {
   test.assertTrue(result.any());
 }
 
-proc BitArray32_ampersandAnd(test: borrowed Test) throws {
+proc BitArray32_ampersandEquals(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);
   var bitArrayB = new BitArray32(32);
   bitArrayA.set(1, true);
@@ -519,7 +519,7 @@ proc BitArray32_ampersandAnd(test: borrowed Test) throws {
 }
 
 
-proc BitArray32_ampersandAnd_bitAtIndexOneIsTrue(test: borrowed Test) throws {
+proc BitArray32_ampersandEquals_bitAtIndexOneIsTrue(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);
   var bitArrayB = new BitArray32(32);
   bitArrayA.set(1, true);
@@ -527,5 +527,47 @@ proc BitArray32_ampersandAnd_bitAtIndexOneIsTrue(test: borrowed Test) throws {
   bitArrayA &= bitArrayB;
   test.assertTrue(bitArrayA.any());
 }
+
+
+
+
+
+proc BitArray32_pipe(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.set(1, true);
+  bitArrayB.set(2, true);
+  var result = bitArrayA | bitArrayB;
+  test.assertTrue(result.any());
+}
+
+proc BitArray32_pipe_bitAtIndexOneIsTrue(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.set(1, true);
+  bitArrayB.set(1, true);
+  var result = bitArrayA | bitArrayB;
+  test.assertTrue(result.any());
+}
+
+proc BitArray32_pipeEquals(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.set(1, true);
+  bitArrayB.set(2, true);
+  bitArrayA |= bitArrayB;
+  test.assertTrue(bitArrayA.any());
+}
+
+
+proc BitArray32_pipeEquals_bitAtIndexOneIsTrue(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.set(1, true);
+  bitArrayB.set(1, true);
+  bitArrayA |= bitArrayB;
+  test.assertTrue(bitArrayA.any());
+}
+
 
 UnitTest.main();

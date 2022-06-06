@@ -109,7 +109,7 @@
 <dd><p>BitArray32 is an array of boolean values stored packed together as 32 bit words. All boolean values are mapped one-to-one to a bit value in memory.</p>
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.init">
-<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">size:</span> <span class="pre">bit32Index</span></em>, <em class="sig-param"><span class="pre">locales</span> <span class="pre">=</span> <span class="pre">Locales</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.init" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">size:</span> <span class="pre">bit32Index</span></em>, <em class="sig-param"><span class="pre">targetLocales</span> <span class="pre">=</span> <span class="pre">Locales</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.init" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a bit array of a given size.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments</dt>
@@ -117,6 +117,17 @@
 <li><p><strong>size</strong> – The size of the bit array</p></li>
 <li><p><strong>locales</strong> – What nodes to distibute the values over</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">values:</span> <span class="pre">[]</span> <span class="pre">uint(32)</span></em>, <em class="sig-param"><span class="pre">size:</span> <span class="pre">bit32Index</span></em><span class="sig-paren">)</span></dt>
+<dd><p>Create a bit array from a given set of values. The input values are used directly in the bit array. Values are not copied into the class BitArray32 instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><p><strong>values</strong> – The bit array.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -399,23 +410,64 @@ If one of the two bit arrays has different size then indices fitting the shortes
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl">
-<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">&amp;(lhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32,</span> <span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32)</span></span></dt>
+<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">&amp;(lhs:</span> <span class="pre">BitArray32,</span> <span class="pre">rhs:</span> <span class="pre">BitArray32):</span> <span class="pre">BitArray32</span></span></dt>
 <dd><p>Perform the and operation on the values in this bit array with the values in another bit array.
 If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Rhs</dt>
-<dd class="field-odd"><p>bit array to perform and with</p>
+<dt class="field-odd">Lhs</dt>
+<dd class="field-odd"><p>this bit array</p>
+</dd>
+<dt class="field-even">Rhs</dt>
+<dd class="field-even"><p>bit array to perform and with</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the results</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>BitArray32</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl">
-<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">|(lhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32,</span> <span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray32)</span></span></dt>
+<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">&amp;=(ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray32,</span> <span class="pre">rhs:</span> <span class="pre">BitArray32):</span> <span class="pre">BitArray32</span></span></dt>
+<dd><p>Perform the and operation on the values in this bit array with the values in another bit array.
+If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Lhs</dt>
+<dd class="field-odd"><p>this bit array</p>
+</dd>
+<dt class="field-even">Rhs</dt>
+<dd class="field-even"><p>bit array to perform and with</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl">
+<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">|(lhs:</span> <span class="pre">BitArray32,</span> <span class="pre">rhs:</span> <span class="pre">BitArray32):</span> <span class="pre">BitArray32</span></span></dt>
 <dd><p>Perform the or operation on the values in this bit array with the values in another bit array.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Rhs</dt>
-<dd class="field-odd"><p>bit array to perform or with</p>
+<dt class="field-odd">Lhs</dt>
+<dd class="field-odd"><p>this bit array</p>
+</dd>
+<dt class="field-even">Rhs</dt>
+<dd class="field-even"><p>bit array to perform or with</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl">
+<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">|=(ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray32,</span> <span class="pre">rhs:</span> <span class="pre">BitArray32)</span></span></dt>
+<dd><p>Perform the or operation on the values in this bit array with the values in another bit array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Lhs</dt>
+<dd class="field-odd"><p>this bit array</p>
+</dd>
+<dt class="field-even">Rhs</dt>
+<dd class="field-even"><p>bit array to perform or with</p>
 </dd>
 </dl>
 </dd></dl>
