@@ -25,7 +25,7 @@ clean-docs:
 
 .PHONY: test
 test:
-	CHPL_TARGET_CPU=native mason test --show -- -g --specialize --fast
+	CHPL_TARGET_CPU=native mason test --parallel --show -- -g --specialize --fast
 
 SOURCES = $(wildcard src/*.chpl) $(wildcard src/*/*.chpl)
 SOURCES := $(filter-out src/BitArrays/Internal.chpl,$(SOURCES))

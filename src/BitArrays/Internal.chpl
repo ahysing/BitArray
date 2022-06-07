@@ -138,8 +138,7 @@ module Internal {
     return result;
   }
 
-  pragma "no doc"
-  inline proc reverse8(value :uint(8)) {
+  proc reverse8(value :uint(8)) {
     return eightBitReversed[value] : uint(8);
   }
 

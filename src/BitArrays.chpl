@@ -5,5 +5,7 @@ module BitArrays {
     public import this.BitArrays32;
     include module BitArrays64;
     public import this.BitArrays64;
-    include private module Internal;
+
+    include module Internal;
+    public import this.Internal;
 }
