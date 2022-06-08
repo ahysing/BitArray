@@ -565,8 +565,8 @@ module BitArrays32 {
      */
     operator ^=(ref lhs : BitArray32, rhs : BitArray32) {
       lhs.values ^= rhs.values;
-      on lhs.values[values.domain.last] do
-        lhs.values[values.domain.last] &= lhs._createReminderMask();
+      on lhs.values[lhs.values.domain.last] do
+        lhs.values[lhs.values.domain.last] &= lhs._createReminderMask();
     }
 
     /* Perform the and operation on the values in this bit array with the values in another bit array.

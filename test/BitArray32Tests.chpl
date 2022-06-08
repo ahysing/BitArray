@@ -634,7 +634,7 @@ proc BitArray32_pipe_inputisTrueatIndex1_outputIsTrueAtIndex1(test: borrowed Tes
   test.assertTrue(result.any());
 }
 
-proc BitArray32_pipe_inputisTrueatIndex1_outputIsTrueAtIndex1(test: borrowed Test) throws {
+proc BitArray32_pipeEquals_inputisTrueatIndex1_outputIsTrueAtIndex1(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);
   var bitArrayB = new BitArray32(32);
   bitArrayA.set(1, true);
@@ -679,6 +679,12 @@ proc BitArray32_ampersandAnd_inputisTrueatIndex1onBoth_outputIsTrue(test: borrow
   test.assertTrue(bitArrayA.any());
 }
 
+proc BitArray32_not_outputIsTrue(test: borrowed Test) throws {
+  var bitArray = new BitArray32(32);
+  var result = !bitArray;
+  test.assertTrue(result.all());
+}
+
 proc BitArray32_xor_inputisTrueatIndex1onBoth_outputIsFalse(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);
   var bitArrayB = new BitArray32(32);
@@ -703,7 +709,7 @@ proc BitArray32_xorEquals_inputisTrueatIndex1onBoth_outputIsFalse(test: borrowed
   bitArrayA.set(1, true);
   bitArrayB.set(1, true);
   bitArrayA ^= bitArrayB;
-  test.assertFalse(result.any());
+  test.assertFalse(bitArrayA.any());
 }
 
 proc BitArray32_xorEquals_inputisTrueatIndex1and2_outputIsTrue(test: borrowed Test) throws {
