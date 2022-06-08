@@ -661,7 +661,7 @@ proc BitArray32_ampersand_inputisTrueatIndex1or2_outputIsFalse(test: borrowed Te
 }
 
 
-proc BitArray32_ampersandAND_inputisTrueatIndex1or2_outputIsFalse(test: borrowed Test) throws {
+proc BitArray32_ampersandAnd_inputisTrueatIndex1or2_outputIsFalse(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);
   var bitArrayB = new BitArray32(32);
   bitArrayA.set(1, true);
@@ -670,12 +670,48 @@ proc BitArray32_ampersandAND_inputisTrueatIndex1or2_outputIsFalse(test: borrowed
   test.assertFalse(bitArrayA.any());
 }
 
-proc BitArray32_ampersandAND_inputisTrueatIndex1onBoth_outputIsFalse(test: borrowed Test) throws {
+proc BitArray32_ampersandAnd_inputisTrueatIndex1onBoth_outputIsTrue(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);
   var bitArrayB = new BitArray32(32);
   bitArrayA.set(1, true);
   bitArrayB.set(1, true);
   bitArrayA &= bitArrayB;
+  test.assertTrue(bitArrayA.any());
+}
+
+proc BitArray32_xor_inputisTrueatIndex1onBoth_outputIsFalse(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.set(1, true);
+  bitArrayB.set(1, true);
+  var result = bitArrayA ^ bitArrayB;
+  test.assertFalse(result.any());
+}
+
+proc BitArray32_xor_inputisTrueatIndex1and2_outputIsTrue(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.set(1, true);
+  bitArrayB.set(2, true);
+  var result = bitArrayA ^ bitArrayB;
+  test.assertTrue(result.any());
+}
+
+proc BitArray32_xorEquals_inputisTrueatIndex1onBoth_outputIsFalse(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.set(1, true);
+  bitArrayB.set(1, true);
+  bitArrayA ^= bitArrayB;
+  test.assertFalse(result.any());
+}
+
+proc BitArray32_xorEquals_inputisTrueatIndex1and2_outputIsTrue(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.set(1, true);
+  bitArrayB.set(2, true);
+  bitArrayA ^= bitArrayB;
   test.assertTrue(bitArrayA.any());
 }
 
