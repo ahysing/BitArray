@@ -625,5 +625,58 @@ proc BitArray32_pipeEquals_bitAtIndexOneIsTrue(test: borrowed Test) throws {
   test.assertTrue(bitArrayA.any());
 }
 
+proc BitArray32_pipe_inputisTrueatIndex1_outputIsTrueAtIndex1(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.set(1, true);
+  bitArrayB.set(1, true);
+  var result = bitArrayA | bitArrayB;
+  test.assertTrue(result.any());
+}
+
+proc BitArray32_pipe_inputisTrueatIndex1_outputIsTrueAtIndex1(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.set(1, true);
+  var result = bitArrayA | bitArrayB;
+  test.assertTrue(result.any());
+}
+
+proc BitArray32_ampersand_inputisTrueatIndex1OnBothBitArrays_outputIsTrueAtIndex1(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.set(1, true);
+  bitArrayB.set(1, true);
+  var result = bitArrayA & bitArrayB;
+  test.assertTrue(result.any());
+}
+
+proc BitArray32_ampersand_inputisTrueatIndex1or2_outputIsFalse(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.set(1, true);
+  bitArrayB.set(2, true);
+  var result = bitArrayA & bitArrayB;
+  test.assertFalse(result.any());
+}
+
+
+proc BitArray32_ampersandAND_inputisTrueatIndex1or2_outputIsFalse(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.set(1, true);
+  bitArrayB.set(2, true);
+  bitArrayA &= bitArrayB;
+  test.assertFalse(bitArrayA.any());
+}
+
+proc BitArray32_ampersandAND_inputisTrueatIndex1onBoth_outputIsFalse(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.set(1, true);
+  bitArrayB.set(1, true);
+  bitArrayA &= bitArrayB;
+  test.assertTrue(bitArrayA.any());
+}
 
 UnitTest.main();
