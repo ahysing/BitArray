@@ -110,26 +110,84 @@ or
       Set all the values to `false`.
       
 
-   .. method:: proc type ^=(lhs: borrowed BitArray64, rhs: borrowed BitArray64)
+   .. method:: proc type ==(lhs: BitArray64, rhs: BitArray64)
+
+      Compares parwise the values of the two bit arrays for equality.
+      
+      :returns: if the bits in the arrays are equal
+      :rtype: `list`
+      
+
+   .. method:: proc type !=(lhs: BitArray64, rhs: BitArray64)
+
+      Compares parwise the values of the two bit arrays for in equality.
+      
+      :returns: if the bits in the arrays are equal
+      :rtype: `list`
+      
+
+   .. method:: proc type =(ref lhs: BitArray64, rhs: BitArray64)
+
+      Copies the values from an rhs bit array.
+      
+      :arg lhs: the operator to assign
+      :arg rhs: The bit array to copy
+      
+
+   .. method:: proc type ^(lhs: BitArray64, rhs: BitArray64)
 
       Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.
       If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
       
-      :rhs: bit array to perform xor with
+      :arg lhs: this bit array
+      :arg rhs: bit array to perform xor with
+      :returns: The results
+      :rtype: `BitArray64`
       
 
-   .. method:: proc type &(lhs: borrowed BitArray64, rhs: borrowed BitArray64)
+   .. method:: proc type ^=(ref lhs: BitArray64, rhs: BitArray64)
+
+      Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.
+      If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
+      
+      :arg lhs: this bit array
+      :arg rhs: bit array to perform xor with
+      
+
+   .. method:: proc type &(lhs: BitArray64, rhs: BitArray64): BitArray64
 
       Perform the and operation on the values in this bit array with the values in another bit array.
       If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
       
+      :lhs: this bit array
+      :rhs: bit array to perform and with
+      
+      :returns: the results
+      :rtype: `BitArray64`
+      
+
+   .. method:: proc type &=(ref lhs: BitArray64, rhs: BitArray64): BitArray64
+
+      Perform the and operation on the values in this bit array with the values in another bit array.
+      If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
+      
+      :lhs: this bit array
       :rhs: bit array to perform and with
       
 
-   .. method:: proc type |(lhs: borrowed BitArray64, rhs: borrowed BitArray64)
+   .. method:: proc type |(lhs: BitArray64, rhs: BitArray64): BitArray64
 
       Perform the or operation on the values in this bit array with the values in another bit array.
       
+      :lhs: this bit array
+      :rhs: bit array to perform or with
+      
+
+   .. method:: proc type |=(ref lhs: BitArray64, rhs: BitArray64)
+
+      Perform the or operation on the values in this bit array with the values in another bit array.
+      
+      :lhs: this bit array
       :rhs: bit array to perform or with
       
 

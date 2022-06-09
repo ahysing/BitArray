@@ -102,16 +102,14 @@ or
 
    .. method:: proc rotateLeft(shift: int)
 
-      Rotate all the values to the left. Let values falling out on one side reappear on the rhs side.
-      Uses https://chapel-lang.org/docs/modules/packages/CopyAggregation.html
+      Rotate all the values to the left. Let values falling out on one side reappear on the left side.
       
       :arg shift: number of bits to rotate
       
 
    .. method:: proc rotateRight(shift: int)
 
-      Rotate all the values to the right. Let values falling out on one side reappear on the rhs side.
-      Uses https://chapel-lang.org/docs/modules/packages/CopyAggregation.html
+      Rotate all the values to the right. Let values falling out on one side reappear on the right side.
       
       :arg shift: number of bits to rotate
       
@@ -149,18 +147,18 @@ or
 
    .. method:: proc type ==(lhs: BitArray32, rhs: BitArray32)
 
-      Compares two bit arrays for in equality.
+      Compares parwise the values of the two bit arrays for equality.
       
-      :returns: if the bit arrays are equal
-      :rtype: `bool`
+      :returns: if the bits in the arrays are equal
+      :rtype: `list`
       
 
    .. method:: proc type !=(lhs: BitArray32, rhs: BitArray32)
 
-      Compares two bit arrays for inequality.
+      Compares parwise the values of the two bit arrays for in equality.
       
-      :returns: if the bit arrays are unequal
-      :rtype: `bool`
+      :returns: if the bits in the arrays are equal
+      :rtype: `list`
       
 
    .. method:: proc type =(ref lhs: BitArray32, rhs: BitArray32)
@@ -171,9 +169,9 @@ or
       :arg rhs: The bit array to copy
       
 
-   .. method:: proc type ~(arg: BitArray32): BitArray32
+   .. method:: proc type !(arg: BitArray32): BitArray32
 
-      One's complement operator.
+      Nagation operator. Turn all `true` values into `false` values. Turn all `false` values into `true` values.
       
       :returns: The results
       :rtype: `BitArray32`

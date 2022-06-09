@@ -17,6 +17,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Internal" href="Internal.html" />
     <link rel="prev" title="BitArrays32" href="BitArrays32.html" /> 
 </head>
 
@@ -45,10 +46,12 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../BitArrays.html">BitArrays</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="BitArrays32.html">BitArrays32</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">BitArrays64</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Internal.html">Internal</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="BitArrays32.html">BitArrays32</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">BitArrays64</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Internal.html">Internal</a></li>
 </ul>
 
         </div>
@@ -237,36 +240,143 @@
 </dd></dl>
 
 <dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArrays64.BitArray64.==">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">==</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lhs:</span> <span class="pre">BitArray64</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray64</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays64.BitArray64.==" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares parwise the values of the two bit arrays for equality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>if the bits in the arrays are equal</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>list</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArrays64.BitArray64.!=">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">!=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lhs:</span> <span class="pre">BitArray64</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray64</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays64.BitArray64.!=" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares parwise the values of the two bit arrays for in equality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>if the bits in the arrays are equal</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>list</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArrays64.BitArray64.=">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray64</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray64</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays64.BitArray64.=" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copies the values from an rhs bit array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lhs</strong> – the operator to assign</p></li>
+<li><p><strong>rhs</strong> – The bit array to copy</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
 <dt class="sig sig-object chpl">
-<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">^=(lhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray64,</span> <span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray64)</span></span></dt>
+<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">^(lhs:</span> <span class="pre">BitArray64,</span> <span class="pre">rhs:</span> <span class="pre">BitArray64)</span></span></dt>
 <dd><p>Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.
 If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Rhs</dt>
-<dd class="field-odd"><p>bit array to perform xor with</p>
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lhs</strong> – this bit array</p></li>
+<li><p><strong>rhs</strong> – bit array to perform xor with</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The results</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>BitArray64</cite></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl">
-<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">&amp;(lhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray64,</span> <span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray64)</span></span></dt>
+<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">^=(ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray64,</span> <span class="pre">rhs:</span> <span class="pre">BitArray64)</span></span></dt>
+<dd><p>Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.
+If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lhs</strong> – this bit array</p></li>
+<li><p><strong>rhs</strong> – bit array to perform xor with</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl">
+<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">&amp;(lhs:</span> <span class="pre">BitArray64,</span> <span class="pre">rhs:</span> <span class="pre">BitArray64):</span> <span class="pre">BitArray64</span></span></dt>
 <dd><p>Perform the and operation on the values in this bit array with the values in another bit array.
 If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Rhs</dt>
-<dd class="field-odd"><p>bit array to perform and with</p>
+<dt class="field-odd">Lhs</dt>
+<dd class="field-odd"><p>this bit array</p>
+</dd>
+<dt class="field-even">Rhs</dt>
+<dd class="field-even"><p>bit array to perform and with</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the results</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>BitArray64</cite></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl">
-<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">|(lhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray64,</span> <span class="pre">rhs:</span> <span class="pre">borrowed</span> <span class="pre">BitArray64)</span></span></dt>
+<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">&amp;=(ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray64,</span> <span class="pre">rhs:</span> <span class="pre">BitArray64):</span> <span class="pre">BitArray64</span></span></dt>
+<dd><p>Perform the and operation on the values in this bit array with the values in another bit array.
+If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Lhs</dt>
+<dd class="field-odd"><p>this bit array</p>
+</dd>
+<dt class="field-even">Rhs</dt>
+<dd class="field-even"><p>bit array to perform and with</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl">
+<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">|(lhs:</span> <span class="pre">BitArray64,</span> <span class="pre">rhs:</span> <span class="pre">BitArray64):</span> <span class="pre">BitArray64</span></span></dt>
 <dd><p>Perform the or operation on the values in this bit array with the values in another bit array.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Rhs</dt>
-<dd class="field-odd"><p>bit array to perform or with</p>
+<dt class="field-odd">Lhs</dt>
+<dd class="field-odd"><p>this bit array</p>
+</dd>
+<dt class="field-even">Rhs</dt>
+<dd class="field-even"><p>bit array to perform or with</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl">
+<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">|=(ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray64,</span> <span class="pre">rhs:</span> <span class="pre">BitArray64)</span></span></dt>
+<dd><p>Perform the or operation on the values in this bit array with the values in another bit array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Lhs</dt>
+<dd class="field-odd"><p>this bit array</p>
+</dd>
+<dt class="field-even">Rhs</dt>
+<dd class="field-even"><p>bit array to perform or with</p>
 </dd>
 </dl>
 </dd></dl>
@@ -280,6 +390,7 @@ If one of the two bit arrays has different size then indices fitting the shortes
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="BitArrays32.html" class="btn btn-neutral float-left" title="BitArrays32" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Internal.html" class="btn btn-neutral float-right" title="Internal" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

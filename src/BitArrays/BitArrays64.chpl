@@ -171,36 +171,114 @@ module BitArrays64 {
       this.values = 0;
     }
 
+
+    /* Compares parwise the values of the two bit arrays for equality.
+
+       :returns: if the bits in the arrays are equal
+       :rtype: `list`
+     */
+    operator ==(lhs : BitArray64, rhs : BitArray64) {
+      return lhs.values == rhs.values;
+    }
+
+    /*  Compares parwise the values of the two bit arrays for in equality.
+
+       :returns: if the bits in the arrays are equal
+       :rtype: `list`
+     */
+    operator !=(lhs : BitArray64, rhs : BitArray64) {
+      return lhs.values != rhs.values;
+    }
+
+    /* Copies the values from an rhs bit array.
+
+       :arg lhs: the operator to assign
+       :arg rhs: The bit array to copy
+    */
+    operator =(ref lhs : BitArray64, rhs : BitArray64) {
+      var D = lhs.values.domain;
+      var values : [D] uint(32);
+      forall i in rhs.values.domain do
+        values[i] = rhs.values[i];
+
+      lhs.bitDomain = rhs.bitDomain;
+      lhs.bitSize = rhs.bitSize;
+      lhs.hasRemaining = rhs.hasRemaining;
+      lhs.values = values;
+    }
+
     /* Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.
        If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
 
-       :rhs: bit array to perform xor with
+       :arg lhs: this bit array
+       :arg rhs: bit array to perform xor with
+       :returns: The results
+       :rtype: `BitArray64`
      */
-    operator ^=(lhs : borrowed BitArray64, rhs : borrowed BitArray64) {
-      lhs.values = lhs.values ^ rhs.values;
-      if this.hasRemaining then
-        lhs.values[lhs.values.domain.last] &= this._createReminderMask();
+    operator ^(lhs : BitArray64, rhs : BitArray64) {
+      var values = lhs.values ^ rhs.values;
+      var size = if lhs.size() < rhs.size() then lhs.size() else rhs.size();
+      var hasRemaining = (size % packSize) != 0;
+      on values[values.domain.last] do
+        values[values.domain.last] &= _createReminderMaskFromSizeAndReminder(size, hasRemaining);
+      return new BitArray64(values, size);
+    }
+
+    /* Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.
+       If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
+
+       :arg lhs: this bit array
+       :arg rhs: bit array to perform xor with
+     */
+    operator ^=(ref lhs : BitArray64, rhs : BitArray64) {
+      lhs.values ^= rhs.values;
+      on lhs.values[lhs.values.domain.last] do
+        lhs.values[lhs.values.domain.last] &= lhs._createReminderMask();
     }
 
     /* Perform the and operation on the values in this bit array with the values in another bit array.
        If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
 
+       :lhs: this bit array
+       :rhs: bit array to perform and with
+
+       :returns: the results
+       :rtype: `BitArray64`
+     */
+    operator &(lhs : BitArray64, rhs : BitArray64) : BitArray64 {
+      var values = lhs.values & rhs.values;
+      var size = if lhs.size() < rhs.size() then lhs.size() else rhs.size();
+      return new BitArray64(values, size);
+    }
+
+    /* Perform the and operation on the values in this bit array with the values in another bit array.
+       If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
+
+       :lhs: this bit array
        :rhs: bit array to perform and with
      */
-    operator &(lhs : borrowed BitArray64, rhs : borrowed BitArray64) {
-      lhs.values = lhs.values & rhs.values;
-      if this.hasRemaining then
-        lhs.values[lhs.values.domain.last] &= this._createReminderMask();
+    operator &=(ref lhs : BitArray64, rhs : BitArray64) : BitArray64 {
+      lhs.values &= rhs.values;
     }
 
     /* Perform the or operation on the values in this bit array with the values in another bit array.
 
+       :lhs: this bit array
        :rhs: bit array to perform or with
      */
-    operator |(lhs : borrowed BitArray64, rhs : borrowed BitArray64) {
-      lhs.values = lhs.values || rhs.values;
-      if this.hasRemaining then
-        lhs.values[lhs.values.domain.last] &= this._createReminderMask();
+    operator |(lhs : BitArray64, rhs : BitArray64) : BitArray64 {
+      var values = lhs.values | rhs.values;
+      var size = if lhs.size() < rhs.size() then lhs.size() else rhs.size();
+      return new BitArray64(values, size);
+    }
+
+    /* Perform the or operation on the values in this bit array with the values in another bit array.
+
+      :lhs: this bit array
+      :rhs: bit array to perform or with
+    */
+    operator |=(ref lhs : BitArray64, rhs : BitArray64) {
+      lhs.values |= rhs.values;
     }
   }
 }

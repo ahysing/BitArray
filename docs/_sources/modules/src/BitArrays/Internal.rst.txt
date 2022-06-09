@@ -1,0 +1,21 @@
+.. default-domain:: chpl
+
+.. module:: Internal
+
+Internal
+========
+**Usage**
+
+.. code-block:: chapel
+
+   use BitArrays.Internal;
+
+
+or
+
+.. code-block:: chapel
+
+   import BitArrays.Internal;
+
+.. function:: proc reverse8(value: uint(8))
+
