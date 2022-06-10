@@ -55,6 +55,24 @@ module BitArrays64 {
       this.values = values;
     }
 
+
+    /* Create a bit array from a given set of values. The input values are used directly in the bit array. Values are not copied into this BitArray64 instance.
+
+       :arg values: The bit array packed as 64 bit integers.
+       :arg size: How many vlaues there are
+     */
+    proc init(values : [] uint(64), size : bit64Index) {
+      this.complete();
+      // Compare sizes from blocks of 64 bits and given size.
+      // Make sure the the number of bits in a block fits size or size + 1
+      assert(findNumberOfBlocks(values) / 2 == (size / packSize) / 2);
+      var hasRemaining = (size % packSize) != 0;
+      this.bitDomain = values.domain;
+      this.bitSize = size;
+      this.hasRemaining = hasRemaining;
+      this.values = values;
+    }
+
     pragma "no doc"
     proc _createReminderMask() {
       if this.hasRemaining then
@@ -184,10 +202,10 @@ module BitArrays64 {
     /*  Compares parwise the values of the two bit arrays for in equality.
 
        :returns: if the bits in the arrays are equal
-       :rtype: `list`
+       :rtype: `BitArray64`
      */
     operator !=(lhs : BitArray64, rhs : BitArray64) {
-      return lhs.values != rhs.values;
+      return new BitArray64(lhs.values != rhs.values);
     }
 
     /* Copies the values from an rhs bit array.
@@ -212,6 +230,7 @@ module BitArrays64 {
 
        :arg lhs: this bit array
        :arg rhs: bit array to perform xor with
+
        :returns: The results
        :rtype: `BitArray64`
      */
@@ -252,7 +271,7 @@ module BitArrays64 {
     }
 
     /* Perform the and operation on the values in this bit array with the values in another bit array.
-       If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
+       `lhs` is updated with the result of the operation.
 
        :lhs: this bit array
        :rhs: bit array to perform and with
@@ -265,6 +284,9 @@ module BitArrays64 {
 
        :lhs: this bit array
        :rhs: bit array to perform or with
+
+       :returns: A copy of the values from `lhs` or `rhs``
+       :rtype: BitArray32
      */
     operator |(lhs : BitArray64, rhs : BitArray64) : BitArray64 {
       var values = lhs.values | rhs.values;
@@ -273,6 +295,7 @@ module BitArrays64 {
     }
 
     /* Perform the or operation on the values in this bit array with the values in another bit array.
+       `lhs` is updated with the result of the operation.
 
       :lhs: this bit array
       :rhs: bit array to perform or with
