@@ -82,6 +82,7 @@ module BitArrays32 {
 
     pragma "no doc"
     proc _bitshiftLeftNBits(shift : bit32Index) {
+      assert(shift >= 0 && shift < packSize);
       var mainMask = this._createMainMask(shift);
       var rollOverMask = this._createShiftRolloverMask(shift);
 
@@ -94,9 +95,8 @@ module BitArrays32 {
         aggregator.copy(this.values[i], ((this.values[i] << shift) & mainMask) | ((this.values[iBefore] << shift) & rollOverMask));
       }
 
-      on Locales[this.values.domain.first] {
+      on Locales[this.values.domain.first] do
         this.values[this.values.domain.first] = ((this.values[this.values.domain.first] << shift) & mainMask) | ((lastValue << shift) & rollOverMask);
-      }
     }
 
     pragma "no doc"
@@ -141,11 +141,6 @@ module BitArrays32 {
     proc _createShiftRolloverMask(shift : int) : uint(32) {
       const one = 1 : uint(32);
       return allOnes - ((one << shift) - 1) : uint(32);
-    }
-
-    pragma "no doc"
-    inline proc _reverseWord(value : uint(32)) {
-      return reverse32(value);
     }
 
     /* Tests all the values with and.
@@ -213,12 +208,10 @@ module BitArrays32 {
     proc reverse() {
       this.values.reverse();
       forall i in this.values.domain do
-        this.values[i] = this._reverseWord(this.values[i]);
+        this.values[i] = reverse32(this.values[i]);
 
-      if this.hasRemaining {
-        var shift = this.bitSize % packSize;
-        this._bitshiftLeft(shift);
-      }
+      if this.hasRemaining then
+        this._bitshiftLeftNBits(this.bitSize % packSize);
     }
 
     pragma "no doc"
@@ -341,6 +334,26 @@ module BitArrays32 {
 
       on this.values[this.values.domain.last] do
         this.values[this.values.domain.last] = 0;
+    }
+
+    pragma "no doc"
+    proc _bitshiftRightNBits(shift : bit32Index) {
+      assert(shift >= 0 && shift < packSize);
+      // TODO: rewrite this
+      var mainMask = this._createMainMask(shift);
+      var rollOverMask = this._createShiftRolloverMask(shift);
+
+      var lastValue = this.values[this.values.domain.first];
+
+      var D = this.values.domain[this.values.domain.first + 1..];
+      var DBefore = this.values.domain[..this.values.domain.last - 1];
+      // Copy the value value into the value at index
+      forall (i, iBefore) in zip(D, DBefore) with (var aggregator = new SrcAggregator(uint(32))) {
+        aggregator.copy(this.values[i], ((this.values[i] << shift) & mainMask) | ((this.values[iBefore] << shift) & rollOverMask));
+      }
+
+      on Locales[this.values.domain.first] do
+        this.values[this.values.domain.first] = ((this.values[this.values.domain.first] << shift) & mainMask) | ((lastValue << shift) & rollOverMask);
     }
 
     /* Rotate all the values to the right. Let values falling out on one side reappear on the right side.

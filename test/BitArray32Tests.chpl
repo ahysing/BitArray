@@ -2,26 +2,6 @@ use UnitTest;
 use BitArrays.BitArrays32;
 use BitOps;
 
-proc BitArray32__reverseWord_inputIs_1(test: borrowed Test) throws {
-  var bitArray = new BitArray32(32);
-  test.assertEqual(bitArray._reverseWord(1 : uint(32)), 0b10000000000000000000000000000000 : uint(32));
-}
-
-proc BitArray32__reverseWord_inputIs_2(test: borrowed Test) throws {
-  var bitArray = new BitArray32(32);
-  test.assertEqual(bitArray._reverseWord(2 : uint(32)), 0b01000000000000000000000000000000 : uint(32));
-}
-
-proc BitArray32__reverseWord_inputIs_3(test: borrowed Test) throws {
-  var bitArray = new BitArray32(32);
-  test.assertEqual(bitArray._reverseWord(3 : uint(32)), 0b11000000000000000000000000000000 : uint(32));
-}
-
-proc BitArray32__reverseWord_inputIs_100(test: borrowed Test) throws {
-  var bitArray = new BitArray32(32);
-  test.assertEqual(bitArray._reverseWord(100 : uint(32)), 0b00100110000000000000000000000000 : uint(32));
-}
-
 proc BitArray32_all_sizeIs64_inputIs64Trues(test: borrowed Test) throws {
   var bitArray = new BitArray32(64);
   bitArray.values[0] = ~0 : uint(32);

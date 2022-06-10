@@ -1,3 +1,4 @@
+pragma "no doc"
 module Internal {
   use BitOps;
   use UnorderedAtomics;
@@ -138,6 +139,7 @@ module Internal {
     return result;
   }
 
+  pragma "no doc"
   proc reverse8(value :uint(8)) {
     return eightBitReversed[value] : uint(8);
   }
