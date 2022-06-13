@@ -32,9 +32,9 @@ or
       :arg locales: What nodes to distibute the values over
       
 
-   .. method:: proc init(ref values: [] uint(32), size: bit32Index)
+   .. method:: proc init(const ref values: [] uint(32), size: bit32Index)
 
-      Create a bit array from a given set of values. The input values are used directly in the bit array. Values are not copied into the class BitArray32 instance.
+      Create a bit array from a given set of values. The input values are copied inte the bit array.
       
       :arg values: The bit array.
       

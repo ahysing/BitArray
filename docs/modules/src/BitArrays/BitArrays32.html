@@ -114,8 +114,8 @@
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl">
-<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ref</span> <span class="pre">values:</span> <span class="pre">[]</span> <span class="pre">uint(32)</span></em>, <em class="sig-param"><span class="pre">size:</span> <span class="pre">bit32Index</span></em><span class="sig-paren">)</span></dt>
-<dd><p>Create a bit array from a given set of values. The input values are used directly in the bit array. Values are not copied into the class BitArray32 instance.</p>
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">const</span> <span class="pre">ref</span> <span class="pre">values:</span> <span class="pre">[]</span> <span class="pre">uint(32)</span></em>, <em class="sig-param"><span class="pre">size:</span> <span class="pre">bit32Index</span></em><span class="sig-paren">)</span></dt>
+<dd><p>Create a bit array from a given set of values. The input values are copied inte the bit array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments</dt>
 <dd class="field-odd"><p><strong>values</strong> – The bit array.</p>
