@@ -67,6 +67,7 @@ module BitArrays32 {
       assert(!values.isAssociative());
       assert(!values.isSparse());
       assert(values.isRectangular());
+
       // Compare sizes from blocks of 32 bits and given size.
       // Make sure the the number of bits in a block fits size or size + 1
       assert(findNumberOfBlocks(values) / 2 == (size / packSize) / 2);
@@ -214,13 +215,17 @@ module BitArrays32 {
     pragma "no doc"
     proc _bitshiftLeft32Bits() {
       var D = this.values.domain;
-      var destination : [D] uint(32) = 0;
-      var DExceptFirst = D[(this.values.first + 1)..this.values.last];
-      forall (i, j) in zip(DExceptFirst, D) with (var aggregator = new SrcAggregator(uint(32))) {
-        aggregator.copy(destination[i], this.values[j]);
-        aggregator.flush();
-        aggregator.copy(this.values[i], destination[i]);
-      }
+
+      var DExceptEdges : sparse subdomain(D) = D[(D.first + 1)..(D.last)];
+      var destination : [D] this.values.eltType;
+
+      for i in DExceptEdges do
+        destination[i] = this.values[i - 1];
+      destination[D.last - 1] = this.values[D.last - 2];
+
+      this.values[D.first] = 0;
+      for i in DExceptEdges do
+        this.values[i] = destination[i];
     }
 
     pragma "no doc"

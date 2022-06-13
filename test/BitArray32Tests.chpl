@@ -701,14 +701,29 @@ proc BitArray32_xorEquals_inputisTrueatIndex1and2_outputIsTrue(test: borrowed Te
   test.assertTrue(bitArrayA.any());
 }
 
-// TODO
 proc BitArray32__bitshiftLeft32Bits_inputIsLower32BitsSet_sizeIs64(test: borrowed Test) throws {
   var bitArray = new BitArray32(64);
-  bitArray.values[0] = ~0 : uint(32);
+  bitArray.values[0] = 0b11111111111111111111111111111111 : uint(32);
 
   bitArray._bitshiftLeft32Bits();
 
-  test.assertEqual(~0 : uint(32), bitArray.values[1]);
+  test.assertEqual(0 : uint(32), bitArray.values[0]);
+  test.assertEqual(0b11111111111111111111111111111111 : uint(32), bitArray.values[1]);
+}
+
+proc BitArray32__bitshiftLeft32Bits_inputIsLower32BitsSet_sizeIs128(test: borrowed Test) throws {
+  var bitArray = new BitArray32(128);
+  bitArray.values[0] = 0b11111111111111111111111111111111 : uint(32);
+  bitArray.values[1] = 0b10101010101010101010101010101010 : uint(32);
+  bitArray.values[2] = 0;
+  bitArray.values[3] = 0;
+
+  bitArray._bitshiftLeft32Bits();
+
+  test.assertEqual(0 : uint(32), bitArray.values[0]);
+  test.assertEqual(0b11111111111111111111111111111111 : uint(32), bitArray.values[1]);
+  test.assertEqual(0b10101010101010101010101010101010 : uint(32), bitArray.values[2]);
+  test.assertEqual(0 : uint(32), bitArray.values[3]);
 }
 
 proc BitArray32__bitshiftLeft32Bits_inputIsUpper32BitSet_sizeIs64(test: borrowed Test) throws {
