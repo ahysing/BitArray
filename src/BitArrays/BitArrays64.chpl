@@ -3,6 +3,7 @@ module BitArrays64 {
   use BitOps;
   use BlockDist;
   use super.Internal;
+  use super.Errors;
 
   type bit64Index = int;
 
@@ -14,13 +15,6 @@ module BitArrays64 {
 
   pragma "no doc"
   const packSize : bit64Index = 64;
-
-  /* Exception thrown when indexing the bit arrays outside the range of values the bit array */
-  class Bit64RangeError : IllegalArgumentError {
-    proc init() {
-      super.init("idx is out of range");
-    }
-  }
 
   /* BitArray64 is an array of boolean values stored packed together as 64 bit words. All boolean values are mapped one-to-one to a bit value in memory. */
   class BitArray64 {
@@ -86,7 +80,7 @@ module BitArrays64 {
       return reverse64(value);
     }
 
-    /* Tests all the values with or.
+    /* Test if any of the values are true
 
       :returns: `true` if any of the values are true
       :rtype: `bool`
@@ -95,7 +89,7 @@ module BitArrays64 {
       unsignedAny(this.values);
     }
 
-    /* Tests all the values with and.
+    /* Test if all the values are true
 
       :returns: `true` if any of the values are true
       :rtype: `bool`
@@ -108,14 +102,14 @@ module BitArrays64 {
 
        :arg idx: The index in the bitarray to look up.
 
-       :throws Bit64RangeError: If `idx` is outside the range [1..size).
+       :throws BitRangeError: If `idx` is outside the range [1..size).
 
        :return: value at `idx`
        :rtype: `bool`
     */
     proc at(idx : bit64Index) : bool throws {
       if idx >= this.size() then
-        throw new Bit64RangeError();
+        throw new BitRangeError();
       return unsignedAt(packSize, this.values, idx);
     }
 
@@ -129,7 +123,8 @@ module BitArrays64 {
 
     /* Count the number of values set to true.
 
-       :returns: The count.
+       :returns: The count
+       :rtype: `int`
      */
     proc popcount() : bit64Index {
       return _popcount(values);
@@ -140,11 +135,11 @@ module BitArrays64 {
        :arg idx: The index of the value to mutate.
        :arg value: The value to set at `idx`.
 
-       :throws Bit64RangeError: if the idx value is outside the range [0, size).
+       :throws BitRangeError: if the idx value is outside the range [0, size).
      */
     proc set(idx : bit64Index, value : bool) throws {
       if idx >= this.size() then
-        throw new Bit64RangeError();
+        throw new BitRangeError();
       unsignedSet(packSize, this.values, idx, value);
     }
 
@@ -192,6 +187,9 @@ module BitArrays64 {
 
     /* Compares parwise the values of the two bit arrays for equality.
 
+       :arg lhs: left hand bit array
+       :arg rhs: right hand bit array
+
        :returns: if the bits in the arrays are equal
        :rtype: `list`
      */
@@ -199,7 +197,10 @@ module BitArrays64 {
       return lhs.values == rhs.values;
     }
 
-    /*  Compares parwise the values of the two bit arrays for in equality.
+    /*  Compares parwise the values of the two bit arrays for inequality
+
+       :arg lhs: left hand bit array
+       :arg rhs: right hand bit array
 
        :returns: if the bits in the arrays are equal
        :rtype: `BitArray64`
@@ -210,8 +211,8 @@ module BitArrays64 {
 
     /* Copies the values from an rhs bit array.
 
-       :arg lhs: the operator to assign
-       :arg rhs: The bit array to copy
+       :arg lhs: the left hand bit array to assign
+       :arg rhs: The right hand array to copy
     */
     operator =(ref lhs : BitArray64, rhs : BitArray64) {
       var D = lhs.values.domain;
@@ -258,8 +259,8 @@ module BitArrays64 {
     /* Perform the and operation on the values in this bit array with the values in another bit array.
        If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
 
-       :lhs: this bit array
-       :rhs: bit array to perform and with
+       :arg lhs: this bit array
+       :arg rhs: bit array to perform and with
 
        :returns: the results
        :rtype: `BitArray64`
@@ -273,8 +274,8 @@ module BitArrays64 {
     /* Perform the and operation on the values in this bit array with the values in another bit array.
        `lhs` is updated with the result of the operation.
 
-       :lhs: this bit array
-       :rhs: bit array to perform and with
+       :arg lhs: this bit array
+       :arg rhs: bit array to perform and with
      */
     operator &=(ref lhs : BitArray64, rhs : BitArray64) : BitArray64 {
       lhs.values &= rhs.values;
@@ -282,10 +283,10 @@ module BitArrays64 {
 
     /* Perform the or operation on the values in this bit array with the values in another bit array.
 
-       :lhs: this bit array
-       :rhs: bit array to perform or with
+       :arg lhs: this bit array
+       :arg rhs: bit array to perform or with
 
-       :returns: A copy of the values from `lhs` or `rhs``
+       :returns: A copy of the values from `lhs` or `rhs`
        :rtype: BitArray32
      */
     operator |(lhs : BitArray64, rhs : BitArray64) : BitArray64 {
@@ -297,8 +298,8 @@ module BitArrays64 {
     /* Perform the or operation on the values in this bit array with the values in another bit array.
        `lhs` is updated with the result of the operation.
 
-      :lhs: this bit array
-      :rhs: bit array to perform or with
+      :arg lhs: this bit array
+      :arg rhs: bit array to perform or with
     */
     operator |=(ref lhs : BitArray64, rhs : BitArray64) {
       lhs.values |= rhs.values;

@@ -1,6 +1,14 @@
 .PHONY: test
 test:
-	CHPL_TARGET_CPU=native mason test --parallel --show -- -g --specialize --fast
+	mason test --parallel --show -- -g --specialize --fast --print-commands --explain-verbose
+
+DEBUGGER := lldb
+.PHONY: debug-test
+debug-test:
+	mason test --no-run --show -- -g --specialize --fast
+	./target/test/BitArray32Tests --$(DEBUGGER)
+	./target/test/BitArray64Tests --$(DEBUGGER)
+	./target/test/InternalTests --$(DEBUGGER)
 
 .PHONY: build
 build:
@@ -32,7 +40,7 @@ SOURCES := $(filter-out src/BitArrays/Internal.chpl,$(SOURCES))
 
 INDEX := ./docs/index.html
 $(INDEX): $(SOURCES)
-	chpldoc $(SOURCES) -o docs/
+	chpldoc $(SOURCES) -o docs/ --author "Andreas Dreyer Hysing"
 
 NOJERKYLL := ./docs/.nojerkyll
 $(NOJERKYLL):

@@ -1,0 +1,26 @@
+.. default-domain:: chpl
+
+.. module:: Errors
+
+Errors
+======
+**Usage**
+
+.. code-block:: chapel
+
+   use BitArrays.Errors;
+
+
+or
+
+.. code-block:: chapel
+
+   import BitArrays.Errors;
+
+.. class:: BitRangeError : IllegalArgumentError
+
+   Exception thrown when indexing the bit arrays outside the range of values the bit array 
+
+
+   .. method:: proc init()
+

@@ -17,7 +17,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Internal" href="Internal.html" />
+    <link rel="next" title="Errors" href="Errors.html" />
     <link rel="prev" title="BitArrays32" href="BitArrays32.html" /> 
 </head>
 
@@ -46,12 +46,12 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../BitArrays.html">BitArrays</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="BitArrays32.html">BitArrays32</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">BitArrays64</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Internal.html">Internal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Errors.html">Errors</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="BitArrays32.html">BitArrays32</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">BitArrays64</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Internal.html">Internal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Errors.html">Errors</a></li>
 </ul>
 
         </div>
@@ -95,17 +95,6 @@
 <dd></dd></dl>
 
 <dl class="chpl class">
-<dt class="sig sig-object chpl" id="BitArrays64.Bit64RangeError">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Bit64RangeError</span></span><span class="pre">:</span> <span class="pre">IllegalArgumentError</span><a class="headerlink" href="#BitArrays64.Bit64RangeError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exception thrown when indexing the bit arrays outside the range of values the bit array</p>
-<dl class="chpl method">
-<dt class="sig sig-object chpl" id="BitArrays64.Bit64RangeError.init">
-<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays64.Bit64RangeError.init" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="chpl class">
 <dt class="sig sig-object chpl" id="BitArrays64.BitArray64">
 <em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">BitArray64</span></span><a class="headerlink" href="#BitArrays64.BitArray64" title="Permalink to this definition">¶</a></dt>
 <dd><p>BitArray64 is an array of boolean values stored packed together as 64 bit words. All boolean values are mapped one-to-one to a bit value in memory.</p>
@@ -124,9 +113,23 @@
 </dd></dl>
 
 <dl class="chpl method">
+<dt class="sig sig-object chpl">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">values:</span> <span class="pre">[]</span> <span class="pre">uint(64)</span></em>, <em class="sig-param"><span class="pre">size:</span> <span class="pre">bit64Index</span></em><span class="sig-paren">)</span></dt>
+<dd><p>Create a bit array from a given set of values. The input values are used directly in the bit array. Values are not copied into this BitArray64 instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> – The bit array packed as 64 bit integers.</p></li>
+<li><p><strong>size</strong> – How many vlaues there are</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays64.BitArray64.any">
 <em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">any</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="pre">:</span> <span class="pre">bool</span><a class="headerlink" href="#BitArrays64.BitArray64.any" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tests all the values with or.</p>
+<dd><p>Test if any of the values are true</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><cite>true</cite> if any of the values are true</p>
@@ -140,7 +143,7 @@
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays64.BitArray64.all">
 <em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="pre">:</span> <span class="pre">bool</span><a class="headerlink" href="#BitArrays64.BitArray64.all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tests all the values with and.</p>
+<dd><p>Test if all the values are true</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><cite>true</cite> if any of the values are true</p>
@@ -160,7 +163,7 @@
 <dd class="field-odd"><p><strong>idx</strong> – The index in the bitarray to look up.</p>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>Bit64RangeError</strong> – If <cite>idx</cite> is outside the range [1..size).</p>
+<dd class="field-even"><p><strong>BitRangeError</strong> – If <cite>idx</cite> is outside the range [1..size).</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>value at <cite>idx</cite></p>
@@ -183,7 +186,10 @@
 <dd><p>Count the number of values set to true.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The count.</p>
+<dd class="field-odd"><p>The count</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>int</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -200,7 +206,7 @@
 </ul>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>Bit64RangeError</strong> – if the idx value is outside the range [0, size).</p>
+<dd class="field-even"><p><strong>BitRangeError</strong> – if the idx value is outside the range [0, size).</p>
 </dd>
 </dl>
 </dd></dl>
@@ -244,11 +250,17 @@
 <em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">==</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lhs:</span> <span class="pre">BitArray64</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray64</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays64.BitArray64.==" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compares parwise the values of the two bit arrays for equality.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>if the bits in the arrays are equal</p>
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lhs</strong> – left hand bit array</p></li>
+<li><p><strong>rhs</strong> – right hand bit array</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><cite>list</cite></p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>if the bits in the arrays are equal</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>list</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -256,13 +268,19 @@
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays64.BitArray64.!=">
 <em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">!=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lhs:</span> <span class="pre">BitArray64</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray64</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays64.BitArray64.!=" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compares parwise the values of the two bit arrays for in equality.</p>
+<dd><p>Compares parwise the values of the two bit arrays for inequality</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>if the bits in the arrays are equal</p>
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lhs</strong> – left hand bit array</p></li>
+<li><p><strong>rhs</strong> – right hand bit array</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><cite>list</cite></p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>if the bits in the arrays are equal</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>BitArray64</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -274,8 +292,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Arguments</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>lhs</strong> – the operator to assign</p></li>
-<li><p><strong>rhs</strong> – The bit array to copy</p></li>
+<li><p><strong>lhs</strong> – the left hand bit array to assign</p></li>
+<li><p><strong>rhs</strong> – The right hand array to copy</p></li>
 </ul>
 </dd>
 </dl>
@@ -323,17 +341,17 @@ If one of the two bit arrays has different size then indices fitting the shortes
 <dd><p>Perform the and operation on the values in this bit array with the values in another bit array.
 If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Lhs</dt>
-<dd class="field-odd"><p>this bit array</p>
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lhs</strong> – this bit array</p></li>
+<li><p><strong>rhs</strong> – bit array to perform and with</p></li>
+</ul>
 </dd>
-<dt class="field-even">Rhs</dt>
-<dd class="field-even"><p>bit array to perform and with</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the results</p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>the results</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><cite>BitArray64</cite></p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>BitArray64</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -342,13 +360,13 @@ If one of the two bit arrays has different size then indices fitting the shortes
 <dt class="sig sig-object chpl">
 <span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">&amp;=(ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray64,</span> <span class="pre">rhs:</span> <span class="pre">BitArray64):</span> <span class="pre">BitArray64</span></span></dt>
 <dd><p>Perform the and operation on the values in this bit array with the values in another bit array.
-If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.</p>
+<cite>lhs</cite> is updated with the result of the operation.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Lhs</dt>
-<dd class="field-odd"><p>this bit array</p>
-</dd>
-<dt class="field-even">Rhs</dt>
-<dd class="field-even"><p>bit array to perform and with</p>
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lhs</strong> – this bit array</p></li>
+<li><p><strong>rhs</strong> – bit array to perform and with</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -358,11 +376,17 @@ If one of the two bit arrays has different size then indices fitting the shortes
 <span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">|(lhs:</span> <span class="pre">BitArray64,</span> <span class="pre">rhs:</span> <span class="pre">BitArray64):</span> <span class="pre">BitArray64</span></span></dt>
 <dd><p>Perform the or operation on the values in this bit array with the values in another bit array.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Lhs</dt>
-<dd class="field-odd"><p>this bit array</p>
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lhs</strong> – this bit array</p></li>
+<li><p><strong>rhs</strong> – bit array to perform or with</p></li>
+</ul>
 </dd>
-<dt class="field-even">Rhs</dt>
-<dd class="field-even"><p>bit array to perform or with</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A copy of the values from <cite>lhs</cite> or <cite>rhs</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>BitArray32</p>
 </dd>
 </dl>
 </dd></dl>
@@ -370,13 +394,16 @@ If one of the two bit arrays has different size then indices fitting the shortes
 <dl class="chpl method">
 <dt class="sig sig-object chpl">
 <span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">|=(ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray64,</span> <span class="pre">rhs:</span> <span class="pre">BitArray64)</span></span></dt>
-<dd><p>Perform the or operation on the values in this bit array with the values in another bit array.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Lhs</dt>
-<dd class="field-odd"><p>this bit array</p>
+<dd><dl class="simple">
+<dt>Perform the or operation on the values in this bit array with the values in another bit array.</dt><dd><p><cite>lhs</cite> is updated with the result of the operation.</p>
 </dd>
-<dt class="field-even">Rhs</dt>
-<dd class="field-even"><p>bit array to perform or with</p>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lhs</strong> – this bit array</p></li>
+<li><p><strong>rhs</strong> – bit array to perform or with</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -390,13 +417,13 @@ If one of the two bit arrays has different size then indices fitting the shortes
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="BitArrays32.html" class="btn btn-neutral float-left" title="BitArrays32" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Internal.html" class="btn btn-neutral float-right" title="Internal" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Errors.html" class="btn btn-neutral float-right" title="Errors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2015.</p>
+    <p>&#169; Copyright 2015, Andreas Dreyer Hysing.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

@@ -19,13 +19,6 @@ or
 
 .. type:: type bit64Index = int
 
-.. class:: Bit64RangeError : IllegalArgumentError
-
-   Exception thrown when indexing the bit arrays outside the range of values the bit array 
-
-
-   .. method:: proc init()
-
 .. class:: BitArray64
 
    BitArray64 is an array of boolean values stored packed together as 64 bit words. All boolean values are mapped one-to-one to a bit value in memory. 
@@ -39,9 +32,17 @@ or
       :arg locales: What nodes to distibute the values over
       
 
+   .. method:: proc init(values: [] uint(64), size: bit64Index)
+
+      Create a bit array from a given set of values. The input values are used directly in the bit array. Values are not copied into this BitArray64 instance.
+      
+      :arg values: The bit array packed as 64 bit integers.
+      :arg size: How many vlaues there are
+      
+
    .. method:: proc any(): bool
 
-      Tests all the values with or.
+      Test if any of the values are true
       
       :returns: `true` if any of the values are true
       :rtype: `bool`
@@ -49,7 +50,7 @@ or
 
    .. method:: proc all(): bool
 
-      Tests all the values with and.
+      Test if all the values are true
       
       :returns: `true` if any of the values are true
       :rtype: `bool`
@@ -61,7 +62,7 @@ or
       
       :arg idx: The index in the bitarray to look up.
       
-      :throws Bit64RangeError: If `idx` is outside the range [1..size).
+      :throws BitRangeError: If `idx` is outside the range [1..size).
       
       :return: value at `idx`
       :rtype: `bool`
@@ -76,7 +77,8 @@ or
 
       Count the number of values set to true.
       
-      :returns: The count.
+      :returns: The count
+      :rtype: `int`
       
 
    .. method:: proc set(idx: bit64Index, value: bool) throws
@@ -86,7 +88,7 @@ or
       :arg idx: The index of the value to mutate.
       :arg value: The value to set at `idx`.
       
-      :throws Bit64RangeError: if the idx value is outside the range [0, size).
+      :throws BitRangeError: if the idx value is outside the range [0, size).
       
 
    .. method:: proc size()
@@ -114,24 +116,30 @@ or
 
       Compares parwise the values of the two bit arrays for equality.
       
+      :arg lhs: left hand bit array
+      :arg rhs: right hand bit array
+      
       :returns: if the bits in the arrays are equal
       :rtype: `list`
       
 
    .. method:: proc type !=(lhs: BitArray64, rhs: BitArray64)
 
-      Compares parwise the values of the two bit arrays for in equality.
+      Compares parwise the values of the two bit arrays for inequality
+      
+      :arg lhs: left hand bit array
+      :arg rhs: right hand bit array
       
       :returns: if the bits in the arrays are equal
-      :rtype: `list`
+      :rtype: `BitArray64`
       
 
    .. method:: proc type =(ref lhs: BitArray64, rhs: BitArray64)
 
       Copies the values from an rhs bit array.
       
-      :arg lhs: the operator to assign
-      :arg rhs: The bit array to copy
+      :arg lhs: the left hand bit array to assign
+      :arg rhs: The right hand array to copy
       
 
    .. method:: proc type ^(lhs: BitArray64, rhs: BitArray64)
@@ -141,6 +149,7 @@ or
       
       :arg lhs: this bit array
       :arg rhs: bit array to perform xor with
+      
       :returns: The results
       :rtype: `BitArray64`
       
@@ -159,8 +168,8 @@ or
       Perform the and operation on the values in this bit array with the values in another bit array.
       If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
       
-      :lhs: this bit array
-      :rhs: bit array to perform and with
+      :arg lhs: this bit array
+      :arg rhs: bit array to perform and with
       
       :returns: the results
       :rtype: `BitArray64`
@@ -169,25 +178,29 @@ or
    .. method:: proc type &=(ref lhs: BitArray64, rhs: BitArray64): BitArray64
 
       Perform the and operation on the values in this bit array with the values in another bit array.
-      If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
+      `lhs` is updated with the result of the operation.
       
-      :lhs: this bit array
-      :rhs: bit array to perform and with
+      :arg lhs: this bit array
+      :arg rhs: bit array to perform and with
       
 
    .. method:: proc type |(lhs: BitArray64, rhs: BitArray64): BitArray64
 
       Perform the or operation on the values in this bit array with the values in another bit array.
       
-      :lhs: this bit array
-      :rhs: bit array to perform or with
+      :arg lhs: this bit array
+      :arg rhs: bit array to perform or with
+      
+      :returns: A copy of the values from `lhs` or `rhs`
+      :rtype: BitArray32
       
 
    .. method:: proc type |=(ref lhs: BitArray64, rhs: BitArray64)
 
       Perform the or operation on the values in this bit array with the values in another bit array.
+       `lhs` is updated with the result of the operation.
       
-      :lhs: this bit array
-      :rhs: bit array to perform or with
+      :arg lhs: this bit array
+      :arg rhs: bit array to perform or with
       
 

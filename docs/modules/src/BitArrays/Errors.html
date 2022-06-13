@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Internal &mdash; chpldoc 0.0.1 documentation</title>
+  <title>Errors &mdash; chpldoc 0.0.1 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -45,12 +45,12 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../BitArrays.html">BitArrays</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="BitArrays32.html">BitArrays32</a></li>
 <li class="toctree-l2"><a class="reference internal" href="BitArrays64.html">BitArrays64</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Internal</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Errors</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="BitArrays32.html">BitArrays32</a></li>
 <li class="toctree-l1"><a class="reference internal" href="BitArrays64.html">BitArrays64</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Internal</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Errors</a></li>
 </ul>
 
         </div>
@@ -68,9 +68,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../BitArrays.html">BitArrays</a> &raquo;</li>
-      <li>Internal</li>
+      <li>Errors</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../../_sources/modules/src/BitArrays/Internal.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../../_sources/modules/src/BitArrays/Errors.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -78,20 +78,26 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <span class="target" id="module-Internal"></span><div class="section" id="internal">
-<h1>Internal<a class="headerlink" href="#internal" title="Permalink to this headline">¶</a></h1>
+  <span class="target" id="module-Errors"></span><div class="section" id="errors">
+<h1>Errors<a class="headerlink" href="#errors" title="Permalink to this headline">¶</a></h1>
 <p><strong>Usage</strong></p>
-<div class="highlight-chapel notranslate"><div class="highlight"><pre><span></span><span class="k">use</span> <span class="nx">BitArrays</span><span class="p">.</span><span class="nx">Internal</span><span class="p">;</span>
+<div class="highlight-chapel notranslate"><div class="highlight"><pre><span></span><span class="k">use</span> <span class="nx">BitArrays</span><span class="p">.</span><span class="nx">Errors</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>or</p>
-<div class="highlight-chapel notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nx">BitArrays</span><span class="p">.</span><span class="nx">Internal</span><span class="p">;</span>
+<div class="highlight-chapel notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nx">BitArrays</span><span class="p">.</span><span class="nx">Errors</span><span class="p">;</span>
 </pre></div>
 </div>
-<dl class="chpl function">
-<dt class="sig sig-object chpl" id="Internal.reverse8">
-<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">reverse8</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">value:</span> <span class="pre">uint(8)</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Internal.reverse8" title="Permalink to this definition">¶</a></dt>
+<dl class="chpl class">
+<dt class="sig sig-object chpl" id="Errors.BitRangeError">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">BitRangeError</span></span><span class="pre">:</span> <span class="pre">IllegalArgumentError</span><a class="headerlink" href="#Errors.BitRangeError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception thrown when indexing the bit arrays outside the range of values the bit array</p>
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="Errors.BitRangeError.init">
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Errors.BitRangeError.init" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 </div>
 
@@ -105,7 +111,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2015.</p>
+    <p>&#169; Copyright 2015, Andreas Dreyer Hysing.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

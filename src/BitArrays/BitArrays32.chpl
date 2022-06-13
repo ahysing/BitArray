@@ -2,8 +2,9 @@ module BitArrays32 {
   use AllLocalesBarriers;
   use BitOps;
   use BlockDist;
-  use super.Internal;
   use CopyAggregation;
+  use super.Errors;
+  use super.Internal;
 
   type bit32Index = int;
 
@@ -15,13 +16,6 @@ module BitArrays32 {
 
   pragma "no doc"
   const packSize : bit32Index = 32;
-
-  /* Exception thrown when indexing the bit arrays outside the range of values the bit array */
-  class Bit32RangeError : IllegalArgumentError {
-    proc init() {
-      super.init("idx is out of range");
-    }
-  }
 
   pragma "no doc"
   proc _createReminderMaskFromSizeAndReminder(size : bit32Index, hasRemaining : bool) {
@@ -64,12 +58,15 @@ module BitArrays32 {
       this.values = values;
     }
 
-    /* Create a bit array from a given set of values. The input values are used directly in the bit array. Values are not copied into the class BitArray32 instance.
+    /* Create a bit array from a given set of values. The input values are copied inte the bit array.
 
        :arg values: The bit array.
      */
-    proc init(values : [] uint(32), size : bit32Index) {
+    proc init(const ref values : [] uint(32), size : bit32Index) {
       this.complete();
+      assert(!values.isAssociative());
+      assert(!values.isSparse());
+      assert(values.isRectangular());
       // Compare sizes from blocks of 32 bits and given size.
       // Make sure the the number of bits in a block fits size or size + 1
       assert(findNumberOfBlocks(values) / 2 == (size / packSize) / 2);
@@ -77,11 +74,11 @@ module BitArrays32 {
       this.bitDomain = values.domain;
       this.bitSize = size;
       this.hasRemaining = hasRemaining;
-      this.values = values;
+      this.values = reshape(values, values.domain);
     }
 
     pragma "no doc"
-    proc _bitshiftLeftNBits(shift : bit32Index) {
+    proc _bitshiftLeftNBits(shift : integral) {
       assert(shift >= 0 && shift < packSize);
       var mainMask = this._createMainMask(shift);
       var rollOverMask = this._createShiftRolloverMask(shift);
@@ -100,7 +97,7 @@ module BitArrays32 {
     }
 
     pragma "no doc"
-    proc _bitshiftLeft(shift : bit32Index) {
+    proc _bitshiftLeft(shift : integral) {
       if shift % packSize == 0 && shift > 0 {
         this._bitshiftLeft32Bits();
         var nextShift = shift - packSize;
@@ -114,7 +111,7 @@ module BitArrays32 {
     }
 
     pragma "no doc"
-    proc _bitshiftRight(shift : uint) {
+    proc _bitshiftRight(shift : integral) {
       if shift % packSize == 0 && shift > 0 {
         this._bitshiftRight32Bits();
         var nextShift = shift - packSize;
@@ -128,8 +125,14 @@ module BitArrays32 {
     }
 
     pragma "no doc"
-    proc _createMainMask(shift : int) : uint(32) {
-      return ((1 << shift) - 1) : uint(32);
+    proc _createMainMask(shift : integral) : uint(32) {
+      return ((1 << shift:int(32)) - 1) : uint(32);
+    }
+
+    pragma "no doc"
+    proc _createShiftRolloverMask(shift : integral) : uint(32) {
+      const one = 1 : uint(32);
+      return allOnes - ((one << shift:int(32)) - 1) : uint(32);
     }
 
     pragma "no doc"
@@ -137,13 +140,7 @@ module BitArrays32 {
       return _createReminderMaskFromSizeAndReminder(this.bitSize, this.hasRemaining);
     }
 
-    pragma "no doc"
-    proc _createShiftRolloverMask(shift : int) : uint(32) {
-      const one = 1 : uint(32);
-      return allOnes - ((one << shift) - 1) : uint(32);
-    }
-
-    /* Tests all the values with and.
+    /* Test if all the values are true
 
        :returns: `true` if all the values are `true`
        :rtype: `bool`
@@ -152,7 +149,7 @@ module BitArrays32 {
       return unsignedAll(this.hasRemaining, packSize, this.size(), this.values);
     }
 
-    /* Tests all the values with or.
+    /* Test if any of the values are true
 
       :returns: `true` if any of the values are `true`
       :rtype: `bool`
@@ -169,11 +166,11 @@ module BitArrays32 {
        :returns: value at `idx`
        :rtype: `bool`
 
-       :throws Bit32RangeError: If `idx` is outside the range [1..size).
+       :throws BitRangeError: If `idx` is outside the range [1..size).
     */
     proc at(idx : bit32Index) : bool throws {
       if idx >= this.size() then
-        throw new Bit32RangeError();
+        throw new BitRangeError();
       return unsignedAt(packSize, this.values, idx);
     }
 
@@ -197,7 +194,7 @@ module BitArrays32 {
     /* Count the number of values set to `true`.
 
        :returns: The count.
-       :rtype: `uint(32)`
+       :rtype: `int`
      */
     proc popcount() : uint(32) {
       return _popcount(values);
@@ -216,12 +213,14 @@ module BitArrays32 {
 
     pragma "no doc"
     proc _bitshiftLeft32Bits() {
-      var sub = this.values.domain[this.values.first + 1..];
-      forall i in sub with (var aggregator = new SrcAggregator(uint(32))) do
-        aggregator.copy(this.values[i], this.values[i - 1]);
-
-      on this.values[this.values.domain.first] do
-       this.values[this.values.domain.first] = 0;
+      var D = this.values.domain;
+      var destination : [D] uint(32) = 0;
+      var DExceptFirst = D[(this.values.first + 1)..this.values.last];
+      forall (i, j) in zip(DExceptFirst, D) with (var aggregator = new SrcAggregator(uint(32))) {
+        aggregator.copy(destination[i], this.values[j]);
+        aggregator.flush();
+        aggregator.copy(this.values[i], destination[i]);
+      }
     }
 
     pragma "no doc"
@@ -242,7 +241,7 @@ module BitArrays32 {
     }
 
     pragma "no doc"
-    proc _rotateLeftNBits(shiftNow : int) {
+    proc _rotateLeftNBits(shiftNow : integral) {
       var lastValue = BitOps.rotl(this.values[this.values.domain.last], shiftNow);
       var firstValue = BitOps.rotl(this.values[this.values.domain.first], shiftNow);
 
@@ -267,7 +266,7 @@ module BitArrays32 {
     }
 
     pragma "no doc"
-    proc _rotateRightNBits(shiftNow : int) {
+    proc _rotateRightNBits(shiftNow : integral) {
       var firstValue : uint(32);
       var lastValue : uint(32);
       on this.values[this.values.domain.last] {
@@ -299,7 +298,7 @@ module BitArrays32 {
 
        :arg shift: number of bits to rotate
     */
-    proc rotateLeft(shift : int) {
+    proc rotateLeft(shift : integral) {
       if shift > 0 && shift % packSize == 0 {
         this._rotateLeftWholeBlock();
         this.rotateLeft(shift - packSize);
@@ -311,7 +310,7 @@ module BitArrays32 {
     }
 
     pragma "no doc"
-    proc _rotateRightWholeBlock(shift : int) {
+    proc _rotateRightWholeBlock(shift : integral) {
       var firstValue : uint(32);
       on this.values[this.values.domain.last] do
         firstValue = this.values[this.values.domain.first];
@@ -328,16 +327,18 @@ module BitArrays32 {
 
     pragma "no doc"
     proc _bitshiftRight32Bits() {
-      var sub = this.values.domain[..this.values.last - 1];
-      forall i in sub with (var aggregator = new SrcAggregator(uint(32))) do
-        aggregator.copy(this.values[i], this.values[i + 1]);
-
-      on this.values[this.values.domain.last] do
-        this.values[this.values.domain.last] = 0;
+      var destination : [this.values.domain] uint(32);
+      var DExceptLast = this.values.domain[..this.values.last - 1];
+      forall i in DExceptLast with (var aggregator = new SrcAggregator(uint(32))) {
+        aggregator.copy(destination[i], this.values[i+1]);
+        aggregator.flush();
+        aggregator.copy(this.values[i], destination[i]);
+      }
+      this.values[this.values.last] = 0;
     }
 
     pragma "no doc"
-    proc _bitshiftRightNBits(shift : bit32Index) {
+    proc _bitshiftRightNBits(shift : integral) {
       assert(shift >= 0 && shift < packSize);
       // TODO: rewrite this
       var mainMask = this._createMainMask(shift);
@@ -360,7 +361,7 @@ module BitArrays32 {
 
        :arg shift: number of bits to rotate
     */
-    proc rotateRight(shift : int) {
+    proc rotateRight(shift : integral) {
       if shift > 0 && shift % packSize == 0 {
         this._rotateRightWholeBlock(shift);
         this.rotateRight(shift - packSize);
@@ -378,11 +379,11 @@ module BitArrays32 {
        :arg idx: The index of the value to mutate.
        :arg value: The value to set at `idx`.
 
-       :throws Bit32RangeError: if the idx value is outside the range [0, size).
+       :throws BitRangeError: if the idx value is outside the range [0, size).
      */
     proc set(idx : bit32Index, value : bool) throws {
       if idx >= this.size() then
-        throw new Bit32RangeError();
+        throw new BitRangeError();
       unsignedSet(packSize, this.values, idx, value);
     }
 
@@ -465,6 +466,9 @@ module BitArrays32 {
 
     /* Compares parwise the values of the two bit arrays for equality.
 
+       :arg lhs: left hand bit array
+       :arg rhs: right hand bit array
+
        :returns: if the bits in the arrays are equal
        :rtype: `list`
      */
@@ -472,7 +476,7 @@ module BitArrays32 {
       return lhs.values == rhs.values;
     }
 
-    /*  Compares parwise the values of the two bit arrays for in equality.
+    /*  Compares parwise the values of the two bit arrays for inequality
 
        :returns: if the bits in the arrays are equal
        :rtype: `list`
@@ -518,8 +522,9 @@ module BitArrays32 {
        :returns: A copy of the values shifted `shift` positions to the right.
        :rtype: `BitArray32`
      */
-    operator <<(shift : uint) : BitArray32 {
-      var bitArray : BitArray32 = this;
+    operator <<(lhs : BitArray32, shift : integral) : BitArray32 {
+      var values = reshape(lhs.values, lhs.values.domain);
+      var bitArray : BitArray32 = new BitArray32(values, lhs.size());
       bitArray <<= shift;
       return bitArray;
     }
@@ -528,8 +533,8 @@ module BitArrays32 {
 
        :arg shift: the number of values to shift.
      */
-    operator <<=(shift : bit32Index) {
-      this._bitshiftLeft(shift);
+    operator <<=(ref lhs : BitArray32, shift : integral) {
+      lhs._bitshiftLeft(shift);
     }
 
     /* Shift the values `shift` positions to the left. Missing left values are padded with `false` values.
@@ -539,7 +544,7 @@ module BitArrays32 {
        :returns: a copy of the values shifted `shift` positions to the left.
        :rtype: `BitArray32`
      */
-    operator >>(shift : uint) : BitArray32 {
+    operator >>(shift : integral) : BitArray32 {
       var bitArray : BitArray32 = this;
       bitArray >>= shift;
       return bitArray;
@@ -549,7 +554,7 @@ module BitArrays32 {
 
        :arg shift: the number of values to shift.
      */
-    operator >>=(shift : bit32Index) {
+    operator >>=(shift : integral) {
       this._bitshiftRight(shift);
     }
 
@@ -585,10 +590,10 @@ module BitArrays32 {
     /* Perform the and operation on the values in this bit array with the values in another bit array.
        If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
 
-       :lhs: this bit array
-       :rhs: bit array to perform and with
+       :arg lhs: this bit array
+       :arg rhs: bit array to perform and with
 
-       :returns: the results
+       :returns: the result of `lhs` or `rhs`
        :rtype: `BitArray32`
      */
     operator &(lhs : BitArray32, rhs : BitArray32) : BitArray32 {
@@ -600,8 +605,8 @@ module BitArrays32 {
     /* Perform the and operation on the values in this bit array with the values in another bit array.
        If one of the two bit arrays has different size then indices fitting the shortes bit array are compared.
 
-       :lhs: this bit array
-       :rhs: bit array to perform and with
+       :arg lhs: this bit array
+       :arg rhs: bit array to perform and with
      */
     operator &=(ref lhs : BitArray32, rhs : BitArray32) : BitArray32 {
       lhs.values &= rhs.values;
@@ -609,8 +614,11 @@ module BitArrays32 {
 
     /* Perform the or operation on the values in this bit array with the values in another bit array.
 
-       :lhs: this bit array
-       :rhs: bit array to perform or with
+       :arg lhs: this bit array
+       :arg rhs: bit array to perform or with
+
+       :returns: The result of `lhs` or `rhs`
+       :rtype: `BitArray32`
      */
     operator |(lhs : BitArray32, rhs : BitArray32) : BitArray32 {
       var values = lhs.values | rhs.values;
@@ -620,8 +628,8 @@ module BitArrays32 {
 
     /* Perform the or operation on the values in this bit array with the values in another bit array.
 
-      :lhs: this bit array
-      :rhs: bit array to perform or with
+      :arg lhs: this bit array
+      :arg rhs: bit array to perform or with
     */
     operator |=(ref lhs : BitArray32, rhs : BitArray32) {
       lhs.values |= rhs.values;
