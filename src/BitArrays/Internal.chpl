@@ -74,6 +74,14 @@ module Internal {
   }
 
   pragma "no doc"
+  proc _popcount2(values) {
+    var v = values;
+    forall i in values.domain do
+      v[i] = BitOps.popcount(values[i]);
+    return + reduce v;
+  }
+
+  pragma "no doc"
   inline proc reverse64(value : uint(64)) {
     var result : uint(64) = 0;
     var idx : uint(64);

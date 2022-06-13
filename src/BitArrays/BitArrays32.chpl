@@ -5,7 +5,7 @@ module BitArrays32 {
   use CopyAggregation;
   use super.Errors;
   use super.Internal;
-
+  use Sort;
   type bit32Index = int;
 
   pragma "no doc"
@@ -230,19 +230,10 @@ module BitArrays32 {
 
     pragma "no doc"
     proc _rotateLeftWholeBlock() {
-      var lastValue : uint(32) = 0;
-      on this.values[this.values.domain.first] do
-        lastValue = this.values[this.values.domain.last];
-
-      var D = this.values.domain[this.values.domain.first + 1..];
-      var DBefore = this.values.domain[..this.values.domain.last - 1];
-      // Copy the value value into the value at index
-      forall (i, j) in zip(D, DBefore) with (var aggregator = new SrcAggregator(uint(32))) do
-        aggregator.copy(this.values[i], this.values[j]);
-
-      // Copy the last value into the first value
-      on this.values[this.values.domain.first] do
-        this.values[this.values.domain.first] = lastValue;
+      var D = this.values.domain;
+      for i in D do
+        this.values[i] <=> this.values[i + 1];
+      this.values[D.first] <=> this.values[D.last];
     }
 
     pragma "no doc"
@@ -316,30 +307,27 @@ module BitArrays32 {
 
     pragma "no doc"
     proc _rotateRightWholeBlock(shift : integral) {
-      var firstValue : uint(32);
-      on this.values[this.values.domain.last] do
-        firstValue = this.values[this.values.domain.first];
-      var D = this.values.domain[..this.values.domain.last - 1];
-      var DAfter = this.values.domain[this.values.domain.first..];
-      // Copy the value value into the value at index
-      forall (i, j) in zip(D, DAfter) with (var aggregator = new SrcAggregator(uint(32))) do
-        aggregator.copy(this.values[i], this.values[j]);
-
-      // Copy the last value into the first value
-      on this.values[this.values.domain.last] do
-        this.values[this.values.domain.last] = firstValue;
+      var D = this.values.domain;
+      var DReverse = {D.last..D.first};
+      for i in DReverse do
+        this.values[i] <=> this.values[i + 1];
+      this.values[D.first] <=> this.values[D.last];
     }
 
     pragma "no doc"
     proc _bitshiftRight32Bits() {
-      var destination : [this.values.domain] uint(32);
-      var DExceptLast = this.values.domain[..this.values.last - 1];
-      forall i in DExceptLast with (var aggregator = new SrcAggregator(uint(32))) {
-        aggregator.copy(destination[i], this.values[i+1]);
-        aggregator.flush();
-        aggregator.copy(this.values[i], destination[i]);
-      }
-      this.values[this.values.last] = 0;
+      var D = this.values.domain;
+
+      var DExceptEdges : sparse subdomain(D) = D[(D.first)..(D.last - 1)];
+      var destination : [D] this.values.eltType;
+
+      for i in DExceptEdges do
+        destination[i] = this.values[i + 1];
+      destination[D.first] = this.values[D.first + 1]; //TODOs
+
+      this.values[D.last] = 0;
+      for i in DExceptEdges do
+        this.values[i] = destination[i];
     }
 
     pragma "no doc"
