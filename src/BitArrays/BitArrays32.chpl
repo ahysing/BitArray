@@ -5,7 +5,7 @@ module BitArrays32 {
   use CopyAggregation;
   use super.Errors;
   use super.Internal;
-  use Sort;
+
   type bit32Index = int;
 
   pragma "no doc"
@@ -84,44 +84,54 @@ module BitArrays32 {
       var mainMask = this._createMainMask(shift);
       var rollOverMask = this._createShiftRolloverMask(shift);
 
-      var lastValue = this.values[this.values.domain.first];
+      var D = this.values.domain;
 
-      var D = this.values.domain[this.values.domain.first + 1..];
-      var DBefore = this.values.domain[..this.values.domain.last - 1];
-      // Copy the value value into the value at index
-      forall (i, iBefore) in zip(D, DBefore) with (var aggregator = new SrcAggregator(uint(32))) {
-        aggregator.copy(this.values[i], ((this.values[i] << shift) & mainMask) | ((this.values[iBefore] << shift) & rollOverMask));
+      var DExceptEdges : sparse subdomain(D) = D[(D.first + 1)..(D.last)];
+      var destination : [D] this.values.eltType;
+
+      for i in DExceptEdges {
+        // this.values[i], ((this.values[i] << shift) & mainMask) | ((this.values[iBefore] << shift) & rollOverMask));
+        destination[i] = ((this.values[i] << shift) & mainMask) | ((this.values[i - 1] << shift) & rollOverMask);
       }
 
-      on Locales[this.values.domain.first] do
-        this.values[this.values.domain.first] = ((this.values[this.values.domain.first] << shift) & mainMask) | ((lastValue << shift) & rollOverMask);
+      if D.last != D.first {
+        destination[D.last - 1] = ((this.values[D.last - 1] << shift) & mainMask) | ((this.values[D.last - 2] << shift) & rollOverMask);
+      }
+
+      this.values[D.first] = 0;
+      for i in DExceptEdges do
+        this.values[i] = destination[i];
     }
 
     pragma "no doc"
     proc _bitshiftLeft(shift : integral) {
-      if shift % packSize == 0 && shift > 0 {
-        this._bitshiftLeft32Bits();
-        var nextShift = shift - packSize;
-        this._bitshiftLeft(nextShift);
-      } else if shift > 0 {
-        var shiftNow = shift % packSize;
-        this._bitshiftLeftNBits(shiftNow);
-        var nextShift = shift - shiftNow;
-        this._bitshiftLeft(nextShift);
+      if (!this.values.isEmpty()) {
+        if shift % packSize == 0 && shift > 0 {
+          this._bitshiftLeft32Bits();
+          var nextShift = shift - packSize;
+          this._bitshiftLeft(nextShift);
+        } else if shift > 0 {
+          var shiftNow = shift % packSize;
+          this._bitshiftLeftNBits(shiftNow);
+          var nextShift = shift - shiftNow;
+          this._bitshiftLeft(nextShift);
+        }
       }
     }
 
     pragma "no doc"
     proc _bitshiftRight(shift : integral) {
-      if shift % packSize == 0 && shift > 0 {
-        this._bitshiftRight32Bits();
-        var nextShift = shift - packSize;
-        this._bitshiftRight(nextShift);
-      } else if shift > 0 {
-        var shiftNow = shift % packSize;
-        this._bitshiftRightNBits(shiftNow);
-        var nextShift = shift - shiftNow;
-        this._bitshiftRight(nextShift);
+      if (!this.values.isEmpty()) {
+        if shift % packSize == 0 && shift > 0 {
+          this._bitshiftRight32Bits();
+          var nextShift = shift - packSize;
+          this._bitshiftRight(nextShift);
+        } else if shift > 0 {
+          var shiftNow = shift % packSize;
+          this._bitshiftRightNBits(shiftNow);
+          var nextShift = shift - shiftNow;
+          this._bitshiftRight(nextShift);
+        }
       }
     }
 
@@ -229,11 +239,13 @@ module BitArrays32 {
     }
 
     pragma "no doc"
-    proc _rotateLeftWholeBlock() {
+    proc _rotateRightWholeBlock() {
       var D = this.values.domain;
-      for i in D do
+      var DExceptLast = D[(D.first)..(D.last - 1)];
+      for i in DExceptLast do
         this.values[i] <=> this.values[i + 1];
-      this.values[D.first] <=> this.values[D.last];
+      if findNumberOfBlocks(this.values) > 2 then
+        this.values[D.first] <=> this.values[D.last];
     }
 
     pragma "no doc"
@@ -295,23 +307,26 @@ module BitArrays32 {
        :arg shift: number of bits to rotate
     */
     proc rotateLeft(shift : integral) {
-      if shift > 0 && shift % packSize == 0 {
-        this._rotateLeftWholeBlock();
-        this.rotateLeft(shift - packSize);
-      } else if shift > 0 {
-        var shiftNow = shift % packSize;
-        this._rotateLeftNBits(shiftNow);
-        this.rotateLeft(shift - shiftNow);
+      if (!this.values.isEmpty()) {
+        if shift > 0 && shift % packSize == 0 {
+          this._rotateLeftWholeBlock();
+          this.rotateLeft(shift - packSize);
+        } else if shift > 0 {
+          var shiftNow = shift % packSize;
+          this._rotateLeftNBits(shiftNow);
+          this.rotateLeft(shift - shiftNow);
+        }
       }
     }
 
     pragma "no doc"
-    proc _rotateRightWholeBlock(shift : integral) {
+    proc _rotateLeftWholeBlock() {
       var D = this.values.domain;
-      var DReverse = {D.last..D.first};
-      for i in DReverse do
-        this.values[i] <=> this.values[i + 1];
-      this.values[D.first] <=> this.values[D.last];
+      var DExceptFirstReverse = {(D.last)..(D.first + 1)};
+      for i in DExceptFirstReverse do
+        this.values[i] <=> this.values[i - 1];
+      if findNumberOfBlocks(this.values) > 2 then
+        this.values[D.first] <=> this.values[D.last];
     }
 
     pragma "no doc"
@@ -355,13 +370,15 @@ module BitArrays32 {
        :arg shift: number of bits to rotate
     */
     proc rotateRight(shift : integral) {
-      if shift > 0 && shift % packSize == 0 {
-        this._rotateRightWholeBlock(shift);
-        this.rotateRight(shift - packSize);
-      } else if shift > 0 {
-        var shiftNow = shift % packSize;
-        this._rotateRightNBits(shiftNow);
-        this.rotateRight(shift - shiftNow);
+      if (!this.values.isEmpty()) {
+        if shift > 0 && shift % packSize == 0 {
+          this._rotateRightWholeBlock();
+          this.rotateRight(shift - packSize);
+        } else if shift > 0 {
+          var shiftNow = shift % packSize;
+          this._rotateRightNBits(shiftNow);
+          this.rotateRight(shift - shiftNow);
+        }
       }
     }
 

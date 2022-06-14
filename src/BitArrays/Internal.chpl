@@ -24,7 +24,7 @@ module Internal {
   ];
 
   pragma "no doc"
-  inline proc findNumberOfBlocks(values) {
+  inline proc findNumberOfBlocks(const ref values : []) {
     return values.domain.last - values.domain.first + 1;
   }
 

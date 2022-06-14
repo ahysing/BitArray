@@ -8,7 +8,7 @@ proc Internal_unsignedAll_inputIs128Bits_valuesAreTrue(test: borrowed Test) thro
     values[0] = ~0 : uint(64);
     values[1] = ~0 : uint(64);
     var result = unsignedAll(false, packSize, size, values);
-    test.skip(reason="Failing test. work in progress...");
+
     test.assertTrue(result);
 }
 
