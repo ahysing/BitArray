@@ -80,7 +80,7 @@ module BitArrays32 {
 
     pragma "no doc"
     proc _bitshiftLeftNBits(shift : integral) {
-      assert(shift >= 0 && shift < packSize);
+      assert(shift > 0 && shift < packSize);
       var mainMask = this._createMainMask(shift);
       var rollOverMask = this._createShiftRolloverMask(shift);
 
@@ -106,7 +106,7 @@ module BitArrays32 {
     pragma "no doc"
     proc _bitshiftLeft(shift : integral) {
       if (!this.values.isEmpty()) {
-        if shift % packSize == 0 && shift > 0 {
+        if shift > 0 && shift % packSize == 0 {
           this._bitshiftLeft32Bits();
           var nextShift = shift - packSize;
           this._bitshiftLeft(nextShift);
@@ -122,7 +122,7 @@ module BitArrays32 {
     pragma "no doc"
     proc _bitshiftRight(shift : integral) {
       if (!this.values.isEmpty()) {
-        if shift % packSize == 0 && shift > 0 {
+        if shift > 0 && shift % packSize == 0 {
           this._bitshiftRight32Bits();
           var nextShift = shift - packSize;
           this._bitshiftRight(nextShift);
@@ -219,7 +219,7 @@ module BitArrays32 {
         this.values[i] = reverse32(this.values[i]);
 
       if this.hasRemaining then
-        this._bitshiftLeftNBits(this.bitSize % packSize);
+        this._bitshiftRightNBits(packSize - (this.bitSize % packSize));
     }
 
     pragma "no doc"
@@ -241,11 +241,12 @@ module BitArrays32 {
     pragma "no doc"
     proc _rotateRightWholeBlock() {
       var D = this.values.domain;
-      var DExceptLast = D[(D.first)..(D.last - 1)];
-      for i in DExceptLast do
-        this.values[i] <=> this.values[i + 1];
-      if findNumberOfBlocks(this.values) > 2 then
-        this.values[D.first] <=> this.values[D.last];
+      var DExceptFirst = {(D.first)..(D.last - 1)};
+      for i in DExceptFirst {
+        var temp = this.values[i + 1];
+        this.values[i + 1] = this.values[i];
+        this.values[i] = temp;
+      }
     }
 
     pragma "no doc"
@@ -272,7 +273,14 @@ module BitArrays32 {
         this.values[this.values.domain.last] = (lastValue & mainMask) | (firstValue & rollOverMask);
       }
     }
-
+    /*
+    var DExceptFirst = {(D.first)..(D.last - 1)};
+      for i in DExceptFirst {
+        var temp = this.values[i + 1];
+        this.values[i + 1] = this.values[i];
+        this.values[i] = temp;
+      }
+      */
     pragma "no doc"
     proc _rotateRightNBits(shiftNow : integral) {
       var firstValue : uint(32);
@@ -322,11 +330,12 @@ module BitArrays32 {
     pragma "no doc"
     proc _rotateLeftWholeBlock() {
       var D = this.values.domain;
-      var DExceptFirstReverse = {(D.last)..(D.first + 1)};
-      for i in DExceptFirstReverse do
-        this.values[i] <=> this.values[i - 1];
-      if findNumberOfBlocks(this.values) > 2 then
-        this.values[D.first] <=> this.values[D.last];
+      var DExceptFirst = {(D.first)..(D.last - 1)};
+      var last = this.values[D.last];
+      for i in DExceptFirst by -1 {
+        this.values[i + 1] = this.values[i];
+      }
+      this.values[D.first] = last;
     }
 
     pragma "no doc"
@@ -347,8 +356,8 @@ module BitArrays32 {
 
     pragma "no doc"
     proc _bitshiftRightNBits(shift : integral) {
-      assert(shift >= 0 && shift < packSize);
-      // TODO: rewrite this
+      assert(shift > 0 && shift < packSize);
+
       var mainMask = this._createMainMask(shift);
       var rollOverMask = this._createShiftRolloverMask(shift);
 

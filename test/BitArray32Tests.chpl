@@ -81,12 +81,16 @@ proc BitArray32_reverse_at2(test: borrowed Test) throws {
   test.assertTrue(bitArray.at(29));
 }
 
-proc BitArray32_reverse_sizeIs33_at0(test: borrowed Test) throws {
+proc BitArray32_reverse_bitIsSetAt0_sizeIs33(test: borrowed Test) throws {
   var bitArray = new BitArray32(33);
   bitArray.set(0, true);
+
   bitArray.reverse();
 
-  test.assertTrue(bitArray.at(32));
+  var expected = new BitArray32(33);
+  expected.values[0] = 0;
+  expected.values[1] = 1;
+  test.assertEqual(expected.values, bitArray.values);
 }
 
 
@@ -107,7 +111,7 @@ proc BitArray32__rotateLeftWholeBlock_sizeIs64(test: borrowed Test) throws {
 
   bitArray._rotateLeftWholeBlock();
 
-  var expected = new BitArray32(32);
+  var expected = new BitArray32(64);
   expected.values[0] = 1;
   expected.values[1] = 0;
   test.assertEqual(expected.values, bitArray.values);
@@ -146,6 +150,34 @@ proc BitArray32__rotateLeftWholeBlock_sizeIs128(test: borrowed Test) throws {
   test.assertEqual(expected.values, bitArray.values);
 }
 
+
+proc BitArray32__rotateLeftWholeBlock_sizeIs256(test: borrowed Test) throws {
+  var bitArray = new BitArray32(256);
+  bitArray.values[0] = 0;
+  bitArray.values[1] = 1;
+  bitArray.values[2] = 2;
+  bitArray.values[3] = 3;
+  bitArray.values[4] = 4;
+  bitArray.values[5] = 5;
+  bitArray.values[6] = 6;
+  bitArray.values[7] = 7;
+
+  bitArray._rotateLeftWholeBlock();
+
+  var expected = new BitArray32(256);
+
+  expected.values[0] = 7;
+  expected.values[1] = 0;
+  expected.values[2] = 1;
+  expected.values[3] = 2;
+  expected.values[4] = 3;
+  expected.values[5] = 4;
+  expected.values[6] = 5;
+  expected.values[7] = 6;
+
+  test.assertEqual(expected.values, bitArray.values);
+}
+
 proc BitArray32_rotateLeft_inputIs1(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
   bitArray.values[bitArray.values.domain.first] = 1;
@@ -179,18 +211,30 @@ proc BitArray32_rotateLeft_inputIs2_LastBitIsSet_ResultShouldRollBitOver(test: b
 
 proc BitArray32_rotateLeft_inputIs1_SizeIs64_LastBitIsSet_ResultShouldRollBitOver(test: borrowed Test) throws {
   var bitArray = new BitArray32(64);
+  bitArray.values[0] = 0;
   bitArray.values[1] = 0b10000000000000000000000000000000;
+
   bitArray.rotateLeft(1);
 
-  test.assertEqual(bitArray.values[0], 0b00000000000000000000000000000001);
+  var expected = new BitArray32(64);
+  expected.values[0] = 0b00000000000000000000000000000001;
+  expected.values[1] = 0;
+
+  test.assertEqual(expected.values, bitArray.values);
 }
 
 proc BitArray32_rotateLeft_inputIs2_SizeIs64_LastBitIsSet_ResultShouldRollBitOver(test: borrowed Test) throws {
   var bitArray = new BitArray32(64);
+  bitArray.values[0] = 0;
   bitArray.values[1] = 0b10000000000000000000000000000000;
+
   bitArray.rotateLeft(2);
 
-  test.assertEqual(bitArray.values[0], 0b00000000000000000000000000000010);
+  var expected = new BitArray32(64);
+  expected.values[0] = 0b00000000000000000000000000000001;
+  expected.values[1] = 0;
+
+  test.assertEqual(expected.values, bitArray.values);
 }
 
 
@@ -204,7 +248,10 @@ proc BitArray32__rotateRightWholeBlock_sizeIs32(test: borrowed Test) throws {
 
   bitArray._rotateRightWholeBlock();
 
-  test.assertEqual(0, bitArray.values[0]);
+  var expected = new BitArray32(32);
+  expected.values[0] = 0;
+
+  test.assertEqual(expected.values, bitArray.values);
 }
 
 
@@ -250,6 +297,32 @@ proc BitArray32__rotateRightWholeBlock_sizeIs128(test: borrowed Test) throws {
   expected.values[1] = 2;
   expected.values[2] = 3;
   expected.values[3] = 0;
+  test.assertEqual(expected.values, bitArray.values);
+}
+
+proc BitArray32__rotateRightWholeBlock_sizeIs256(test: borrowed Test) throws {
+  var bitArray = new BitArray32(256);
+  bitArray.values[0] = 0;
+  bitArray.values[1] = 1;
+  bitArray.values[2] = 2;
+  bitArray.values[3] = 3;
+  bitArray.values[4] = 4;
+  bitArray.values[5] = 5;
+  bitArray.values[6] = 6;
+  bitArray.values[7] = 7;
+
+  bitArray._rotateRightWholeBlock();
+
+  var expected = new BitArray32(256);
+  expected.values[0] = 1;
+  expected.values[1] = 2;
+  expected.values[2] = 3;
+  expected.values[3] = 4;
+  expected.values[4] = 5;
+  expected.values[5] = 6;
+  expected.values[6] = 7;
+  expected.values[7] = 0;
+
   test.assertEqual(expected.values, bitArray.values);
 }
 
