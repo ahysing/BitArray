@@ -38,12 +38,18 @@ clean-docs:
 SOURCES = $(wildcard src/*.chpl) $(wildcard src/*/*.chpl)
 SOURCES := $(filter-out src/BitArrays/Internal.chpl,$(SOURCES))
 
+
+YEAR := $(shell date +'%Y')
+./docs/.$(YEAR):
+	touch ./docs/.$(YEAR)
+
 INDEX := ./docs/index.html
 $(INDEX): $(SOURCES)
 	chpldoc $(SOURCES) -o docs/ --author "Andreas Dreyer Hysing"
+	find ./docs -name '*.html' -exec sed -i '' 's/ Copyright 2015/ Copyright $(YEAR)/g' {} \;
 
 NOJERKYLL := ./docs/.nojerkyll
 $(NOJERKYLL):
 	touch $(NOJERKYLL)
 
-docs: $(INDEX) $(NOJERKYLL)
+docs: $(INDEX) $(NOJERKYLL) ./docs/.$(YEAR)
