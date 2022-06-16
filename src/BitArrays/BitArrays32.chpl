@@ -107,7 +107,7 @@ module BitArrays32 {
     proc _bitshiftLeft(shift : integral) {
       if (!this.values.isEmpty()) {
         if shift > 0 && shift % packSize == 0 {
-          this._bitshiftLeft32Bits();
+          this._bitshiftLeftWholeBlock();
           var nextShift = shift - packSize;
           this._bitshiftLeft(nextShift);
         } else if shift > 0 {
@@ -223,19 +223,51 @@ module BitArrays32 {
     }
 
     pragma "no doc"
-    proc _bitshiftLeft32Bits() {
+    proc _generalBitshiftLeftWholeBlockSerial(ref values : [], D : domain) {
+      var DExceptFirst = {(D.first)..(D.last - 1)};
+      for i in DExceptFirst by -1 {
+        values[i + 1] = values[i];
+      }
+      values[D.first] = 0;
+    }
+
+    pragma "no doc"
+    proc _bitshiftLeftWholeBlockSerial() {
+      this._generalBitshiftLeftWholeBlockSerial(this.values, this.values.domain);
+    }
+
+    pragma "no doc"
+    proc _bitshiftLeftWholeBlockParallell() {
       var D = this.values.domain;
+      var localesSize = this.values.targetLocales().size;
+      var F : domain(2) = {1..localesSize, 0..countSubdomains(values)};
+      var storedValue : [F] this.values.eltType;
+      for loc in D.targetLocales() {
+        var i = 0;
+        for sub in D.localSubdomains(loc) {
+          storedValue[(loc.id, i)] = if D.contains(sub.first - 1) then this.values[sub.first - 1] else 0 : this.values.eltType;
+          i += 1;
+        }
+      }
 
-      var DExceptEdges : sparse subdomain(D) = D[(D.first + 1)..(D.last)];
-      var destination : [D] this.values.eltType;
+      // example got from https://chapel-lang.org/docs/users-guide/locality/onClauses.html
+      coforall loc in D.targetLocales() do
+        on loc do
+          for sub in D.localSubdomains(loc) do
+            this._generalBitshiftLeftWholeBlockSerial(this.values, sub);
 
-      for i in DExceptEdges do
-        destination[i] = this.values[i - 1];
-      destination[D.last - 1] = this.values[D.last - 2];
+      for loc in D.targetLocales() {
+        var i = 0;
+        for sub in D.localSubdomains(loc) {
+          this.values[sub.first] = storedValue[(loc.id, i)];
+          i += 1;
+        }
+      }
+    }
 
-      this.values[D.first] = 0;
-      for i in DExceptEdges do
-        this.values[i] = destination[i];
+    pragma "no doc"
+    proc _bitshiftLeftWholeBlock() {
+      this._bitshiftLeftWholeBlockParallell();
     }
 
     pragma "no doc"

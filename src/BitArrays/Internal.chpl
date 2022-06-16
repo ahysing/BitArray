@@ -171,4 +171,20 @@ module Internal {
     else if !value && (block & mask) != 0 then
       values[pageIdx] = block ^ mask;
   }
+
+  proc countSubdomains(const ref values :[] ?t) : int {
+    var targetLocs = reshape(values.targetLocales(), {1..values.targetLocales().size});
+    var subdomains : [targetLocs.domain] int;
+    forall idx in targetLocs.domain {
+      for i in values.localSubdomains(targetLocs[idx]).size do
+        subdomains[idx] += 1;
+    }
+
+    var maxVal = 0;
+    for val in subdomains do
+      if val > maxVal then
+        maxVal = val;
+
+    return maxVal;
+  }
 }
