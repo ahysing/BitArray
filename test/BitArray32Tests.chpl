@@ -968,10 +968,10 @@ proc BitArray32__bitshiftLeftNBits_sizeIs128(test: borrowed Test) throws {
   bitArray._bitshiftLeftNBits(1);
 
   var expected = new BitArray32(128);
-  expected.values[0] = 3;
-  expected.values[1] = 0;
-  expected.values[2] = 1;
-  expected.values[3] = 2;
+  expected.values[0] = 0;
+  expected.values[1] = 2;
+  expected.values[2] = 4;
+  expected.values[3] = 6;
   test.assertEqual(expected.values, bitArray.values);
 }
 
