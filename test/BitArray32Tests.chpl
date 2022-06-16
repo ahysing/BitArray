@@ -141,7 +141,6 @@ proc BitArray32__rotateLeftWholeBlock_sizeIs128(test: borrowed Test) throws {
 
   bitArray._rotateLeftWholeBlock();
 
-
   var expected = new BitArray32(128);
   expected.values[0] = 3;
   expected.values[1] = 0;
@@ -206,7 +205,6 @@ proc BitArray32_rotateLeft_inputIs2_LastBitIsSet_ResultShouldRollBitOver(test: b
 
   test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b00000000000000000000000000000010);
 }
-
 
 proc BitArray32_rotateLeft_inputIs1_SizeIs64_LastBitIsSet_ResultShouldRollBitOver(test: borrowed Test) throws {
   var bitArray = new BitArray32(64);
@@ -401,47 +399,47 @@ proc BitArray32_rotateRight_inputIs2_SizeIs64_LastBitIsSet_ResultShouldRollBitOv
 
 
 
-proc BitArray32__createShiftRolloverMask_sizeIsOne(test: borrowed Test) throws {
+proc BitArray32__createMainMask_sizeIsOne(test: borrowed Test) throws {
   var bitarray = new BitArray32(1 : uint(32));
-  var reminderMask = bitarray._createShiftRolloverMask(1);
+  var reminderMask = bitarray._createMainMask(1);
   test.assertEqual(reminderMask, 0b11111111111111111111111111111110);
 }
 
 
-proc BitArray32__createShiftRolloverMask_sizeIsTwo(test: borrowed Test) throws {
+proc BitArray32__createMainMask_sizeIsTwo(test: borrowed Test) throws {
   var bitarray = new BitArray32(2 : uint(32));
-  var reminderMask = bitarray._createShiftRolloverMask(2);
+  var reminderMask = bitarray._createMainMask(2);
   test.assertEqual(reminderMask, 0b11111111111111111111111111111100);
 }
 
-proc BitArray32__createShiftRolloverMask_sizeIsThree(test: borrowed Test) throws {
+proc BitArray32__createMainMask_sizeIsThree(test: borrowed Test) throws {
   var bitarray = new BitArray32(3 : uint(32));
-  var reminderMask = bitarray._createShiftRolloverMask(3);
+  var reminderMask = bitarray._createMainMask(3);
   test.assertEqual(reminderMask, 0b11111111111111111111111111111000);
 }
 
-proc BitArray32__createShiftRolloverMask_sizeIsFour(test: borrowed Test) throws {
+proc BitArray32__createMainMask_sizeIsFour(test: borrowed Test) throws {
   var bitarray = new BitArray32(4 : uint(32));
-  var reminderMask = bitarray._createShiftRolloverMask(4);
+  var reminderMask = bitarray._createMainMask(4);
   test.assertEqual(reminderMask, 0b11111111111111111111111111110000);
 }
 
-proc BitArray32__createShiftRolloverMask_sizeIsFive(test: borrowed Test) throws {
+proc BitArray32__createMainMask_sizeIsFive(test: borrowed Test) throws {
   var bitarray = new BitArray32(5 : uint(32));
-  var reminderMask = bitarray._createShiftRolloverMask(5);
+  var reminderMask = bitarray._createMainMask(5);
   test.assertEqual(reminderMask, 0b11111111111111111111111111100000);
 }
 
-proc BitArray32__createShiftRolloverMask_sizeIsSeven(test: borrowed Test) throws {
+proc BitArray32__createMainMask_sizeIsSeven(test: borrowed Test) throws {
   var bitarray = new BitArray32(7 : uint(32));
-  var reminderMask = bitarray._createShiftRolloverMask(7);
+  var reminderMask = bitarray._createMainMask(7);
   test.assertEqual(reminderMask, 0b11111111111111111111111110000000);
 }
 
 
-proc BitArray32__createShiftRolloverMask_sizeIsThirtyOne(test: borrowed Test) throws {
+proc BitArray32__createMainMask_sizeIsThirtyOne(test: borrowed Test) throws {
   var bitarray = new BitArray32(32 : uint(32));
-  var reminderMask = bitarray._createShiftRolloverMask(31);
+  var reminderMask = bitarray._createMainMask(31);
   test.assertEqual(reminderMask, 0b10000000000000000000000000000000);
 }
 
@@ -450,47 +448,47 @@ proc BitArray32__createShiftRolloverMask_sizeIsThirtyOne(test: borrowed Test) th
 
 
 
-proc BitArray32__createMainMask_sizeIsOne(test: borrowed Test) throws {
+proc BitArray32__createShiftRolloverMask_sizeIsOne(test: borrowed Test) throws {
   var bitarray = new BitArray32(1 : uint(32));
-  var reminderMask = bitarray._createMainMask(1);
+  var reminderMask = bitarray._createShiftRolloverMask(1);
   test.assertEqual(reminderMask, 0b00000000000000000000000000000001);
 }
 
 
-proc BitArray32__createMainMask_sizeIsTwo(test: borrowed Test) throws {
+proc BitArray32__createShiftRolloverMask_sizeIsTwo(test: borrowed Test) throws {
   var bitarray = new BitArray32(2 : uint(32));
-  var reminderMask = bitarray._createMainMask(2);
+  var reminderMask = bitarray._createShiftRolloverMask(2);
   test.assertEqual(reminderMask, 0b00000000000000000000000000000011);
 }
 
-proc BitArray32__createMainMask_sizeIsThree(test: borrowed Test) throws {
+proc BitArray32__createShiftRolloverMask_sizeIsThree(test: borrowed Test) throws {
   var bitarray = new BitArray32(3 : uint(32));
-  var reminderMask = bitarray._createMainMask(3);
+  var reminderMask = bitarray._createShiftRolloverMask(3);
   test.assertEqual(reminderMask, 0b00000000000000000000000000000111);
 }
 
-proc BitArray32__createMainMask_sizeIsFour(test: borrowed Test) throws {
+proc BitArray32__createShiftRolloverMask_sizeIsFour(test: borrowed Test) throws {
   var bitarray = new BitArray32(4 : uint(32));
-  var reminderMask = bitarray._createMainMask(4);
+  var reminderMask = bitarray._createShiftRolloverMask(4);
   test.assertEqual(reminderMask, 0b00000000000000000000000000001111);
 }
 
-proc BitArray32__createMainMask_sizeIsFive(test: borrowed Test) throws {
+proc BitArray32__createShiftRolloverMask_sizeIsFive(test: borrowed Test) throws {
   var bitarray = new BitArray32(5 : uint(32));
-  var reminderMask = bitarray._createMainMask(5);
+  var reminderMask = bitarray._createShiftRolloverMask(5);
   test.assertEqual(reminderMask, 0b00000000000000000000000000011111);
 }
 
-proc BitArray32__createMainMask_sizeIsSeven(test: borrowed Test) throws {
+proc BitArray32__createShiftRolloverMask_sizeIsSeven(test: borrowed Test) throws {
   var bitarray = new BitArray32(7 : uint(32));
-  var reminderMask = bitarray._createMainMask(7);
+  var reminderMask = bitarray._createShiftRolloverMask(7);
   test.assertEqual(reminderMask, 0b00000000000000000000000001111111);
 }
 
 
-proc BitArray32__createMainMask_sizeIsThirtyOne(test: borrowed Test) throws {
+proc BitArray32__createShiftRolloverMask_sizeIsThirtyOne(test: borrowed Test) throws {
   var bitarray = new BitArray32(32 : uint(32));
-  var reminderMask = bitarray._createMainMask(31);
+  var reminderMask = bitarray._createShiftRolloverMask(31);
   test.assertEqual(reminderMask, 0b01111111111111111111111111111111);
 }
 
@@ -884,14 +882,6 @@ proc BitArray32_xorEquals_inputisTrueatIndex1and2_outputIsTrue(test: borrowed Te
   test.assertTrue(bitArrayA.any());
 }
 
-proc BitArray32__bitshiftLeftWholeBlock_sizeIs1(test: borrowed Test) throws {
-  var bitArray = new BitArray32(1);
-
-  bitArray._bitshiftLeftWholeBlock();
-
-  test.assertTrue(true);
-}
-
 proc BitArray32__bitshiftLeftWholeBlock_inputIsLower32BitsSet_sizeIs64(test: borrowed Test) throws {
   var bitArray = new BitArray32(64);
   bitArray.values[0] = 0b11111111111111111111111111111111 : uint(32);
@@ -959,11 +949,65 @@ proc BitArray32__bitshiftLeftWholeBlock_sizeIs256(test: borrowed Test) throws {
   test.assertEqual(expected.values, bitArray.values);
 }
 
+proc BitArray32_bitshiftLeftNBits_inputIs2(test: borrowed Test) throws {
+  var bitArray = new BitArray32(32);
+  bitArray.set(0, true);
+  bitArray._bitshiftLeftNBits(2);
+  test.assertEqual(0b00000000000000000000000000000100, bitArray.values[0]);
+}
+
+
+
+proc BitArray32__bitshiftLeftNBits_sizeIs128(test: borrowed Test) throws {
+  var bitArray = new BitArray32(128);
+  bitArray.values[0] = 0;
+  bitArray.values[1] = 1;
+  bitArray.values[2] = 2;
+  bitArray.values[3] = 3;
+
+  bitArray._bitshiftLeftNBits(1);
+
+  var expected = new BitArray32(128);
+  expected.values[0] = 3;
+  expected.values[1] = 0;
+  expected.values[2] = 1;
+  expected.values[3] = 2;
+  test.assertEqual(expected.values, bitArray.values);
+}
+
+proc BitArray32__bitshiftLeftNBits_sizeIs256(test: borrowed Test) throws {
+  var bitArray = new BitArray32(256);
+  bitArray.values[0] = 0;
+  bitArray.values[1] = 1;
+  bitArray.values[2] = 2;
+  bitArray.values[3] = 3;
+  bitArray.values[4] = 4;
+  bitArray.values[5] = 5;
+  bitArray.values[6] = 6;
+  bitArray.values[7] = 7;
+
+  bitArray._bitshiftLeftNBits(1);
+
+  var expected = new BitArray32(256);
+
+  expected.values[0] = 0;
+  expected.values[1] = 2;
+  expected.values[2] = 4;
+  expected.values[3] = 6;
+  expected.values[4] = 8;
+  expected.values[5] = 10;
+  expected.values[6] = 12;
+  expected.values[7] = 14;
+
+  test.assertEqual(expected.values, bitArray.values);
+}
+
+
 proc BitArray32_operatorShiftLeft_inputIs2(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
   bitArray.set(0, true);
   var result = bitArray << 2;
-  test.assertEqual(0b00000000000000000000000000000100, bitArray.values[0]);
+  test.assertEqual(0b00000000000000000000000000000100, result.values[0]);
 }
 
 
