@@ -684,13 +684,71 @@ proc BitArray32_these_inputHas65Values_OutputHas65Values(test: borrowed Test) th
   test.assertEqual(steps, 65);
 }
 
+proc BitArray32_bitshiftLeftNBits(test : borrowed Test) throws {
+  var bitArray = new BitArray32(256);
+  // all these values ha 1 as the least signifficat bit.
+  // When shifting 1 bit to the right we expect the 1 bit to end up as the most signifcant bit
+  // in the number AKA index above.
+  bitArray.values[0] = 1 + 2147483648;
+  bitArray.values[1] = 2 + 2147483648;
+  bitArray.values[2] = 4 + 2147483648;
+  bitArray.values[3] = 8 + 2147483648;
+  bitArray.values[4] = 16 + 2147483648;
+  bitArray.values[5] = 32 + 2147483648;
+  bitArray.values[6] = 64 + 2147483648;
+  bitArray.values[7] = 128 + 2147483648;
+
+  bitArray._bitshiftLeftNBits(1);
+
+  var expected = new BitArray32(256);
+  expected.values[0] = 2 + 0;
+  expected.values[1] = 4 + 1;
+  expected.values[2] = 8 + 1;
+  expected.values[3] = 16 + 1;
+  expected.values[4] = 32 + 1;
+  expected.values[5] = 64 + 1;
+  expected.values[6] = 128 + 1;
+  expected.values[7] = 256 + 1;
+
+  test.assertEqual(expected.values, bitArray.values);
+}
+
+
+proc BitArray32_bitshiftRightNBits(test : borrowed Test) throws {
+  var bitArray = new BitArray32(256);
+  // all these values ha 1 as the least signifficat bit.
+  // When shifting 1 bit to the right we expect the 1 bit to end up as the most signifcant bit
+  // in the number AKA index below.
+  bitArray.values[0] = 1;
+  bitArray.values[1] = 3;
+  bitArray.values[2] = 5;
+  bitArray.values[3] = 9;
+  bitArray.values[4] = 17;
+  bitArray.values[5] = 33;
+  bitArray.values[6] = 65;
+  bitArray.values[7] = 129;
+
+  bitArray._bitshiftRightNBits(1);
+
+  var expected = new BitArray32(256);
+  expected.values[0] = 0 + 2147483648;
+  expected.values[1] = 1 + 2147483648;
+  expected.values[2] = 2 + 2147483648;
+  expected.values[3] = 4 + 2147483648;
+  expected.values[4] = 8 + 2147483648;
+  expected.values[5] = 16 + 2147483648;
+  expected.values[6] = 32 + 2147483648;
+  expected.values[7] = 64 + 0;
+
+  test.assertEqual(expected.values, bitArray.values);
+}
+
 proc BitArray32_set(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
   bitArray.set(0, true);
 
   test.assertEqual(bitArray.values[0], 0b00000000000000000000000000000001);
 }
-
 
 proc BitArray32_set_inputIsTrueAtIndexOne(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
@@ -1002,6 +1060,25 @@ proc BitArray32__bitshiftLeftNBits_sizeIs256(test: borrowed Test) throws {
   test.assertEqual(expected.values, bitArray.values);
 }
 
+// TODO
+proc BitArray32__bitshiftLeftNBits_inputIs31_sizeIs128(test: borrowed Test) throws {
+  var bitArray = new BitArray32(128);
+  bitArray.values[0] = 0;
+  bitArray.values[1] = 1;
+  bitArray.values[2] = 2;
+  bitArray.values[3] = 0;
+
+  bitArray._bitshiftLeftNBits(31);
+
+  var expected = new BitArray32(128);
+
+  expected.values[0] = 0;
+  expected.values[1] = 0b10000000000000000000000000000000;
+  expected.values[2] = 0b00000000000000000000000000000000;
+  expected.values[3] = 0b00000000000000000000000000000001;
+
+  test.assertEqual(expected.values, bitArray.values);
+}
 
 proc BitArray32_operatorShiftLeft_inputIs2(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);

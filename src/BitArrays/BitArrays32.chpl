@@ -81,25 +81,16 @@ module BitArrays32 {
     pragma "no doc"
     proc _bitshiftLeftNBits(shift : integral) {
       assert(shift > 0 && shift < packSize);
-      var mainMask = this._createMainMask(shift);
-      var rollOverMask = this._createShiftRolloverMask(shift);
 
       var D = this.values.domain;
-
-      var DExceptFirst : sparse subdomain(D) = {(D.first + 1)..(D.last)};
-      var destination : [D] this.values.eltType;
-
-      forall i in DExceptFirst {
-        destination[i] = ((this.values[i] << shift) & mainMask) | ((this.values[i - 1] << shift) & rollOverMask);
-      }
-
-      if D.last != D.first {
-        destination[D.last - 1] = ((this.values[D.last - 1] << shift) & mainMask) | ((this.values[D.last - 2] << shift) & rollOverMask);
-      }
-
-      this.values[D.first] = 0;
-      for i in DExceptFirst do
-        this.values[i] = destination[i];
+      var DExceptFirst = {(D.first + 1)..(D.last)};
+      // var destination : [D] this.values.eltType;
+      var reverseShift = packSize - shift;
+      for i in DExceptFirst by -1 do
+        this.values[i] = (this.values[i] << shift) | (this.values[i - 1] >> reverseShift);
+      this.values[D.first] = (this.values[D.first] << shift);
+      // for i in D do
+      //  this.values[i] = destination[i];
     }
 
     pragma "no doc"
@@ -296,7 +287,7 @@ module BitArrays32 {
       var lastValue = BitOps.rotl(this.values[D.last], shiftNow);
       var firstValue = BitOps.rotl(this.values[D.first], shiftNow);
 
-      var DExceptLast = {D.first..(D.last - 1)};
+      var DExceptLast = {(D.first)..(D.last - 1)};
       var destination : [D] this.values.eltType;
       for i in DExceptLast {
         var mainMask = this._createMainMaskRight(shiftNow);
@@ -409,20 +400,16 @@ module BitArrays32 {
     proc _bitshiftRightNBits(shift : integral) {
       assert(shift > 0 && shift < packSize);
 
-      var mainMask = this._createMainMask(shift);
-      var rollOverMask = this._createShiftRolloverMask(shift);
-
-      var lastValue = this.values[this.values.domain.first];
-
-      var D = this.values.domain[this.values.domain.first + 1..];
-      var DBefore = this.values.domain[..this.values.domain.last - 1];
+      var D = this.values.domain;
+      var DExceptLast = {(D.first)..(D.last - 1)};
       // Copy the value value into the value at index
-      forall (i, iBefore) in zip(D, DBefore) with (var aggregator = new SrcAggregator(uint(32))) {
-        aggregator.copy(this.values[i], ((this.values[i] << shift) & mainMask) | ((this.values[iBefore] << shift) & rollOverMask));
-      }
-
-      on Locales[this.values.domain.first] do
-        this.values[this.values.domain.first] = ((this.values[this.values.domain.first] << shift) & mainMask) | ((lastValue << shift) & rollOverMask);
+      // var destination : [D] this.values.eltType;
+      var reverseShift = packSize - shift;
+      for i in DExceptLast do
+        this.values[i] = (this.values[i] >> shift) | (this.values[i + 1] << reverseShift);
+      this.values[D.last] = (this.values[D.last] >> shift);
+      // forall i in D do
+      //  this.values[i] = destination[i];
     }
 
     /* Rotate all the values to the right. Let values falling out on one side reappear on the right side.

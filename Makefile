@@ -5,7 +5,7 @@ test:
 DEBUGGER := lldb
 .PHONY: debug-test
 debug-test:
-	mason test --no-run --show -- -g --specialize --fast
+	mason test --no-run --show -- -g
 	./target/test/BitArray32Tests --$(DEBUGGER)
 	./target/test/BitArray64Tests --$(DEBUGGER)
 	./target/test/InternalTests --$(DEBUGGER)
