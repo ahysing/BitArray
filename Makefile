@@ -18,10 +18,10 @@ build:
 debug:
 	CHPL_TARGET_CPU=native mason build --show --force -- -g --specialize --fast
 
-FUNC :=unsignedAll
+FUNCTION?=unsignedAll
 .PHONY: print-ir
 print-ir:
-	CHPL_TARGET_CPU=native mason build --show --force -- --specialize --fast --llvm-print-ir $(FUNC) --llvm-print-ir-stage full
+	CHPL_TARGET_CPU=native mason build --show --force -- --specialize --fast --llvm-print-ir $(FUNCTION) --llvm-print-ir-stage full
 
 .PHONY: run
 run:

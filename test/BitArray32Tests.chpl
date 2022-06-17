@@ -190,6 +190,27 @@ proc BitArray32_rotateLeft_inputIs31(test: borrowed Test) throws {
   test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b10000000000000000000000000000000);
 }
 
+proc BitArray32_rotateLeft_valueIsTwo_inputIs31(test: borrowed Test) throws {
+  var bitArray = new BitArray32(32);
+  bitArray.values[bitArray.values.domain.first] = 2;
+  bitArray.rotateLeft(31);
+  test.assertEqual(0b00000000000000000000000000000001, bitArray.values[bitArray.values.domain.first]);
+}
+
+proc BitArray32_rotateLeft_valueIsTwo_inputIs1(test: borrowed Test) throws {
+  var bitArray = new BitArray32(32);
+  bitArray.values[bitArray.values.domain.first] = 2;
+  bitArray.rotateLeft(1);
+  test.assertEqual(0b00000000000000000000000000000100, bitArray.values[bitArray.values.domain.first]);
+}
+
+proc BitArray32_rotateLeft_valueIsTwo_inputIs2(test: borrowed Test) throws {
+  var bitArray = new BitArray32(32);
+  bitArray.values[bitArray.values.domain.first] = 2;
+  bitArray.rotateLeft(2);
+  test.assertEqual(0b00000000000000000000000000001000, bitArray.values[bitArray.values.domain.first]);
+}
+
 proc BitArray32_rotateLeft_inputIs1_LastBitIsSet_ResultShouldRollBitOver(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
   bitArray.values[bitArray.values.domain.first] = 0b10000000000000000000000000000000;
@@ -228,7 +249,7 @@ proc BitArray32_rotateLeft_inputIs2_SizeIs64_LastBitIsSet_ResultShouldRollBitOve
   bitArray.rotateLeft(2);
 
   var expected = new BitArray32(64);
-  expected.values[0] = 0b00000000000000000000000000000001;
+  expected.values[0] = 0b00000000000000000000000000000010;
   expected.values[1] = 0;
 
   test.assertEqual(expected.values, bitArray.values);
@@ -297,6 +318,23 @@ proc BitArray32__rotateRightWholeBlock_sizeIs128(test: borrowed Test) throws {
   test.assertEqual(expected.values, bitArray.values);
 }
 
+proc BitArray32__rotateRightWholeBlock_inputIsOneToFour_sizeIs128(test: borrowed Test) throws {
+  var bitArray = new BitArray32(128);
+  bitArray.values[0] = 1;
+  bitArray.values[1] = 2;
+  bitArray.values[2] = 3;
+  bitArray.values[3] = 4;
+
+  bitArray._rotateRightWholeBlock();
+
+  var expected = new BitArray32(128);
+  expected.values[0] = 2;
+  expected.values[1] = 3;
+  expected.values[2] = 4;
+  expected.values[3] = 1;
+  test.assertEqual(expected.values, bitArray.values);
+}
+
 proc BitArray32__rotateRightWholeBlock_sizeIs256(test: borrowed Test) throws {
   var bitArray = new BitArray32(256);
   bitArray.values[0] = 0;
@@ -323,6 +361,13 @@ proc BitArray32__rotateRightWholeBlock_sizeIs256(test: borrowed Test) throws {
   test.assertEqual(expected.values, bitArray.values);
 }
 
+proc BitArray32_rotateRightNbits_valueIsOne_inputIs1(test: borrowed Test) throws {
+  var bitArray = new BitArray32(32);
+  bitArray.values[bitArray.values.domain.first] = 1;
+  bitArray._rotateRightNBits(1);
+  test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b10000000000000000000000000000000);
+}
+
 proc BitArray32_rotateRight_valueIsOne_inputIs1(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
   bitArray.values[bitArray.values.domain.first] = 1;
@@ -337,18 +382,18 @@ proc BitArray32_rotateRight_valueIsOne_inputIs31(test: borrowed Test) throws {
   test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b00000000000000000000000000000010);
 }
 
-proc BitArray32_rotateRight_valueIsTwpp_inputIs1(test: borrowed Test) throws {
+proc BitArray32_rotateRight_valueIsTwo_inputIs1(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
-  bitArray.values[bitArray.values.domain.first] = 2;
+  bitArray.values[0] = 2;
   bitArray.rotateRight(1);
-  test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b00000000000000000000000000000001);
+  test.assertEqual(bitArray.values[0], 0b00000000000000000000000000000001);
 }
 
 proc BitArray32_rotateRight_valueIsTwo_inputIs31(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
   bitArray.values[bitArray.values.domain.first] = 2;
   bitArray.rotateRight(31);
-  test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b00000000000000000000000000000100);
+  test.assertEqual(0b00000000000000000000000000000100, bitArray.values[bitArray.values.domain.first]);
 }
 
 proc BitArray32_rotateRight_valueIsTwo_inputIs32(test: borrowed Test) throws {
@@ -358,37 +403,34 @@ proc BitArray32_rotateRight_valueIsTwo_inputIs32(test: borrowed Test) throws {
   test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b00000000000000000000000000000010);
 }
 
-proc BitArray32_rotateRight_inputIs1_LastBitIsSet_ResultShouldRollBitOver(test: borrowed Test) throws {
+proc BitArray32_rotateRight_inputIs1_firstBitIsSet_ResultShouldRollBitOver(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
-  bitArray.values[bitArray.values.domain.first] = 0b10000000000000000000000000000000;
+  bitArray.values[0] = 0b00000000000000000000000000000001;
   bitArray.rotateRight(1);
 
-  test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b00000000000000000000000000000001);
+  test.assertEqual(bitArray.values[0], 0b10000000000000000000000000000000);
 }
 
-proc BitArray32_rotateRight_inputIs2_LastBitIsSet_ResultShouldRollBitOver(test: borrowed Test) throws {
+proc BitArray32_rotateRight_inputIs2_firstBitIsSet_ResultShouldRollBitOver(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
-  bitArray.values[bitArray.values.domain.first] = 0b10000000000000000000000000000000;
+  bitArray.values[bitArray.values.domain.first] = 0b00000000000000000000000000000001;
+
   bitArray.rotateRight(2);
 
-  test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b00000000000000000000000000000010);
+  test.assertEqual(bitArray.values[bitArray.values.domain.first], 0b01000000000000000000000000000000);
 }
 
 
-proc BitArray32_rotateRight_inputIs1_SizeIs64_LastBitIsSet_ResultShouldRollBitOver(test: borrowed Test) throws {
+proc BitArray32_rotateRight_inputIs1_SizeIs64_firstBitIsSet_ResultShouldRollBitOver(test: borrowed Test) throws {
   var bitArray = new BitArray32(64);
-  bitArray.values[1] = 0b10000000000000000000000000000000;
+  bitArray.values[0] = 0b00000000000000000000000000000001;
+
   bitArray.rotateRight(1);
 
-  test.assertEqual(bitArray.values[0], 0b00000000000000000000000000000001);
-}
+  var expected = new BitArray32(64);
+  expected.values[1] = 0b10000000000000000000000000000000;
 
-proc BitArray32_rotateRight_inputIs2_SizeIs64_LastBitIsSet_ResultShouldRollBitOver(test: borrowed Test) throws {
-  var bitArray = new BitArray32(64);
-  bitArray.values[1] = 0b10000000000000000000000000000000;
-  bitArray.rotateRight(2);
-
-  test.assertEqual(bitArray.values[0], 0b00000000000000000000000000000010);
+  test.assertEqual(expected.values, bitArray.values);
 }
 
 
@@ -396,50 +438,61 @@ proc BitArray32_rotateRight_inputIs2_SizeIs64_LastBitIsSet_ResultShouldRollBitOv
 
 
 
-
-
-
-proc BitArray32__createMainMask_sizeIsOne(test: borrowed Test) throws {
+proc BitArray32__createMainMaskRight_sizeIsOne(test: borrowed Test) throws {
   var bitarray = new BitArray32(1 : uint(32));
-  var reminderMask = bitarray._createMainMask(1);
+  var reminderMask = bitarray._createMainMaskRight(1);
+  test.assertEqual(reminderMask, 0b01111111111111111111111111111111);
+}
+
+
+proc BitArray32__createMainMaskRight_sizeIsTwo(test: borrowed Test) throws {
+  var bitarray = new BitArray32(1 : uint(32));
+  var reminderMask = bitarray._createMainMaskRight(2);
+  test.assertEqual(reminderMask, 0b00111111111111111111111111111111);
+}
+
+
+proc BitArray32__createMainMaskToLeft_sizeIsOne(test: borrowed Test) throws {
+  var bitarray = new BitArray32(1 : uint(32));
+  var reminderMask = bitarray._createMainMaskToLeft(1);
   test.assertEqual(reminderMask, 0b11111111111111111111111111111110);
 }
 
 
-proc BitArray32__createMainMask_sizeIsTwo(test: borrowed Test) throws {
+proc BitArray32__createMainMaskToLeft_sizeIsTwo(test: borrowed Test) throws {
   var bitarray = new BitArray32(2 : uint(32));
-  var reminderMask = bitarray._createMainMask(2);
+  var reminderMask = bitarray._createMainMaskToLeft(2);
   test.assertEqual(reminderMask, 0b11111111111111111111111111111100);
 }
 
-proc BitArray32__createMainMask_sizeIsThree(test: borrowed Test) throws {
+proc BitArray32__createMainMaskToLeft_sizeIsThree(test: borrowed Test) throws {
   var bitarray = new BitArray32(3 : uint(32));
-  var reminderMask = bitarray._createMainMask(3);
+  var reminderMask = bitarray._createMainMaskToLeft(3);
   test.assertEqual(reminderMask, 0b11111111111111111111111111111000);
 }
 
-proc BitArray32__createMainMask_sizeIsFour(test: borrowed Test) throws {
+proc BitArray32__createMainMaskToLeft_sizeIsFour(test: borrowed Test) throws {
   var bitarray = new BitArray32(4 : uint(32));
-  var reminderMask = bitarray._createMainMask(4);
+  var reminderMask = bitarray._createMainMaskToLeft(4);
   test.assertEqual(reminderMask, 0b11111111111111111111111111110000);
 }
 
-proc BitArray32__createMainMask_sizeIsFive(test: borrowed Test) throws {
+proc BitArray32__createMainMaskToLeft_sizeIsFive(test: borrowed Test) throws {
   var bitarray = new BitArray32(5 : uint(32));
-  var reminderMask = bitarray._createMainMask(5);
+  var reminderMask = bitarray._createMainMaskToLeft(5);
   test.assertEqual(reminderMask, 0b11111111111111111111111111100000);
 }
 
-proc BitArray32__createMainMask_sizeIsSeven(test: borrowed Test) throws {
+proc BitArray32__createMainMaskToLeft_sizeIsSeven(test: borrowed Test) throws {
   var bitarray = new BitArray32(7 : uint(32));
-  var reminderMask = bitarray._createMainMask(7);
+  var reminderMask = bitarray._createMainMaskToLeft(7);
   test.assertEqual(reminderMask, 0b11111111111111111111111110000000);
 }
 
 
-proc BitArray32__createMainMask_sizeIsThirtyOne(test: borrowed Test) throws {
+proc BitArray32__createMainMaskToLeft_sizeIsThirtyOne(test: borrowed Test) throws {
   var bitarray = new BitArray32(32 : uint(32));
-  var reminderMask = bitarray._createMainMask(31);
+  var reminderMask = bitarray._createMainMaskToLeft(31);
   test.assertEqual(reminderMask, 0b10000000000000000000000000000000);
 }
 
@@ -792,7 +845,6 @@ proc BitArray32_ampersandEquals(test: borrowed Test) throws {
   bitArrayA &= bitArrayB;
   test.assertFalse(bitArrayA.any());
 }
-
 
 proc BitArray32_ampersandEquals_bitAtIndexOneIsTrue(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);

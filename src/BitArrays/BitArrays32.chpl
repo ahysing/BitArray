@@ -126,14 +126,15 @@ module BitArrays32 {
     }
 
     pragma "no doc"
-    proc _createMainMask(shift : integral) : uint(32) {
+    proc _createMainMaskToLeft(shift : integral) : uint(32) {
       const one = 1 : uint(32);
       return allOnes - ((one << shift:int(32)) - 1) : uint(32);
     }
 
     pragma "no doc"
     proc _createMainMaskRight(shift : integral) : uint(32) {
-      return _createMainMask(packSize - shift);
+      const one = 1 : uint(32);
+      return allOnes - ((one << shift:int(32)) - 1) : uint(32);
     }
 
     pragma "no doc"
@@ -282,33 +283,23 @@ module BitArrays32 {
     }
 
     pragma "no doc"
-    proc _rotateLeftNBits(shiftNow : integral) {
+    proc _rotateLeftNBits(shift : integral) {
+      assert(shift > 0 && shift < packSize);
+
       var D = this.values.domain;
-      var lastValue = BitOps.rotl(this.values[D.last], shiftNow);
-      var firstValue = BitOps.rotl(this.values[D.first], shiftNow);
+      var DExceptFirst = {(D.first + 1)..(D.last)};
 
-      var DExceptLast = {(D.first)..(D.last - 1)};
-      var destination : [D] this.values.eltType;
-      for i in DExceptLast {
-        var mainMask = this._createMainMaskRight(shiftNow);
-        var rollOverMask = this._createShiftRolloverMaskRight(shiftNow);
+      var reverseShift = packSize - shift;
+      var lastValue = this.values[D.last] >> reverseShift;
 
-        // Rotate the value by `shift` bits
-        var value = BitOps.rotl(this.values[i], shiftNow);
-        var valueAfter = BitOps.rotl(this.values[i + 1], shiftNow);
-        // Copy `shift` bits from the value before into the value at index
-        destination[i] = (value & mainMask) | (valueAfter & rollOverMask);
-      }
+      forall i in DExceptFirst do
+        this.values[i] = BitOps.rotl(this.values[i], shift);
 
-      for i in DExceptLast {
-        this.values[i] = destination[i];
-      }
-
-      on this.values[this.values.domain.last] {
-        var mainMask = this._createMainMask(shiftNow);
-        var rollOverMask = this._createShiftRolloverMask(shiftNow);
-        this.values[this.values.domain.last] = (lastValue & mainMask) | (firstValue & rollOverMask);
-      }
+      var mainMask = this._createMainMaskToLeft(shift);
+      var rollOverMask = this._createShiftRolloverMask(shift);
+      for i in DExceptFirst by -1 do
+        this.values[i] = (this.values[i] & mainMask) | (this.values[i - 1] & rollOverMask);
+      this.values[D.first] = (this.values[D.first] << shift) | lastValue;
     }
     /*
     var DExceptLast = {(D.first)..(D.last - 1)};
@@ -319,37 +310,23 @@ module BitArrays32 {
       }
       */
     pragma "no doc"
-    proc _rotateRightNBits(shiftNow : integral) {
+    proc _rotateRightNBits(shift : integral) {
+      assert(shift > 0 && shift < packSize);
+
       var D = this.values.domain;
-      var firstValue : uint(32);
-      var lastValue : uint(32);
-      on this.values[D.last] {
-        firstValue = BitOps.rotr(this.values[D.first], shiftNow);
-        lastValue = BitOps.rotr(this.values[D.last], shiftNow);
-      }
+      var DExceptLast = {(D.first)..(D.last - 1)};
 
-      var DExceptFirst = {(D.first + 1)..D.last};
-      var destination : [D] this.values.eltType;
-      for i in DExceptFirst {
-        var mainMask = this._createMainMaskRight(shiftNow);
-        var rollOverMask = this._createShiftRolloverMaskRight(shiftNow);
+      var reverseShift = packSize - shift;
+      var firstValue = this.values[D.first] << reverseShift;
 
-        // Rotate the value by `shift` bits
-        var value = BitOps.rotr(this.values[i], shiftNow);
-        var valueBefore = BitOps.rotr(this.values[i - 1], shiftNow);
-        // Copy `shift` bits from the value before into the value at index
-        destination[i] = (value & mainMask) | (valueBefore & rollOverMask);
-      }
+      forall i in DExceptLast do
+        this.values[i] = BitOps.rotr(this.values[i], shift);
 
-      for i in DExceptFirst {
-        this.values[i] = destination[i];
-      }
-
-      on this.values[this.values.domain.last] {
-        var mainMask = this._createMainMaskRight(shiftNow);
-        var rollOverMask = this._createShiftRolloverMaskRight(shiftNow);
-        this.values[this.values.domain.last] = (lastValue & mainMask) | (firstValue & rollOverMask);
-      }
+      var mainMask = this._createMainMaskRight(shift);
+      var rollOverMask = this._createShiftRolloverMaskRight(shift);
+      for i in DExceptLast do
+        this.values[i] = (this.values[i] & mainMask) | (this.values[i + 1] & rollOverMask);
+      this.values[D.last] = (this.values[D.last] >> shift) | firstValue;
     }
 
     /* Rotate all the values to the left. Let values falling out on one side reappear on the left side.
