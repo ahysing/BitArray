@@ -10,19 +10,39 @@ proc Internal_unsignedAll_inputIs128Bits_valuesAreTrue(test: borrowed Test) thro
   test.assertTrue(result);
 }
 
-proc Internal_unsignedAll_inputIs127Bits_valuesAreTrue(test: borrowed Test) throws {
-  const size = 128;
+proc Internal_unsignedAll_inputIs65Bits_valuesAreTrue(test: borrowed Test) throws {
+  const size = 64;
   const packSize = 64;
-  var values = [~0 : uint(64), ~0 : uint(64), ~0 : uint(64)  - (1 << 63) : uint(64)];
-  var result = unsignedAll(false, packSize, size, values);
+  const hasRemaining = size % packSize == 0;
+  var values = [~0 : uint(64), 0b1 : uint(64)];
+  var result = unsignedAll(hasRemaining, packSize, size, values);
   test.assertTrue(result);
+}
+
+proc Internal_unsignedAll_inputIs127Bits_valuesAreTrue(test: borrowed Test) throws {
+  const size = 127;
+  const packSize = 64;
+  const hasRemaining = size % packSize == 0;
+  var values = [~0 : uint(64), 0x7FFFFFFFFFFFFFFF : uint(64)];
+  var result = unsignedAll(hasRemaining, packSize, size, values);
+  test.assertTrue(result);
+}
+
+proc Internal_unsignedAll_inputIs127Bits_valuesAreTrueInFirstBlock_valuesAreFalseInSecondBlock(test: borrowed Test) throws {
+  const size = 127;
+  const packSize = 64;
+  const hasRemaining = size % packSize == 0;
+  var values = [~0 : uint(64), ~0 : uint(64), 0 : uint(64)];
+  var result = unsignedAll(hasRemaining, packSize, size, values);
+  test.assertFalse(result);
 }
 
 proc Internal_unsignedAll_inputIs128Bits_valuesAreZeroThenOne(test: borrowed Test) throws {
   const size = 128;
   const packSize = 64;
-  var values = [~0 : uint(64), ~0 : uint(64)];
-  var result = unsignedAll(false, packSize, size, values);
+  const hasRemaining = size % packSize == 0;
+  var values = [~1 : uint(64), ~0 : uint(64)];
+  var result = unsignedAll(hasRemaining, packSize, size, values);
   test.assertFalse(result);
 }
 
@@ -30,18 +50,18 @@ proc Internal_unsignedAll_inputIs3Bits_valuesAreZeroThenOne(test: borrowed Test)
   const size = 3;
   var values : [0..0]uint(64);
   const packSize = 64;
+  const hasRemaining = size % packSize == 0;
   values[0] = 0b111 : uint(64);
-  var result = unsignedAll(true, packSize, size, values);
+  var result = unsignedAll(hasRemaining, packSize, size, values);
   test.assertTrue(result);
 }
 
 proc Internal_unsignedAll_inputIs66its_valuesAreZeroThenOne(test: borrowed Test) throws {
   const size = 65;
-  var values : [0..size]uint(64);
   const packSize = 64;
-  values[0] = 0xAAAAAAAAAAAAAAAA : uint(64);
-  values[1] = 0xA : uint(64);
-  var result = unsignedAll(false, packSize, size, values);
+  const hasRemaining = size % packSize == 0;
+  var values = [ 0xAAAAAAAAAAAAAAAA : uint(64), 0xA : uint(64)];
+  var result = unsignedAll(hasRemaining, packSize, size, values);
   test.assertFalse(result);
 }
 // The following tests were made with a set of tests

@@ -37,16 +37,16 @@ module Internal {
     var result : atomic bool = true;
 
     if hasRemaining then {
-      var dom : subdomain(D) = {(D.first)..(D.last - 1)};
-      forall i in dom do
-        result.compareAndSwap(changeIfOldValueIsTrue, values[i] == ones);
-      result.compareAndSwap(changeIfOldValueIsTrue, BitOps.popcount(values[D.last]) == size % packSize);
+      if D.first != D.last {
+        forall i in {(D.first)..(D.last - 1)} do
+          result.compareAndSwap(changeIfOldValueIsTrue, values[i] == ones);
+      }
+      return result.read() && values[D.last] == ((1 << (size % packSize) - 1) : values.eltType);
     } else {
       forall i in D do
         result.compareAndSwap(changeIfOldValueIsTrue, values[i] == ones);
+      return result.read();
     }
-
-    return result.read();
   }
 
   pragma "no doc"
