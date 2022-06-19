@@ -29,22 +29,23 @@ module Internal {
   }
 
   pragma "no doc"
-  proc unsignedAll(hasRemaining : bool, const packSize, size, values) {
-    var _expectedOldValueTrue = true;
-    var result : atomic bool = true;
-    if hasRemaining then {
-      var last = values.domain.last;
-      var dom : subdomain(values.domain) = values.domain[..(last-1)];
-      var result : atomic bool = true;
-      forall i in dom do
-        result.compareAndSwap(_expectedOldValueTrue, BitOps.popcount(values[i]) == packSize);
+  proc unsignedAll(hasRemaining : bool, const packSize, size, values : []) {
+    var changeIfOldValueIsTrue = true;
+    var ones = ~0 : values.eltType;
 
-      var lastValues = values[last];
-      result.compareAndSwap(_expectedOldValueTrue, BitOps.popcount(lastValues) == size % packSize);
+    var D = values.domain;
+    var result : atomic bool = true;
+
+    if hasRemaining then {
+      var dom : subdomain(D) = {(D.first)..(D.last - 1)};
+      forall i in dom do
+        result.compareAndSwap(changeIfOldValueIsTrue, values[i] == ones);
+      result.compareAndSwap(changeIfOldValueIsTrue, BitOps.popcount(values[D.last]) == size % packSize);
     } else {
-      forall i in values.domain do
-        result.compareAndSwap(_expectedOldValueTrue, BitOps.popcount(values[i]) == packSize);
+      forall i in D do
+        result.compareAndSwap(changeIfOldValueIsTrue, values[i] == ones);
     }
+
     return result.read();
   }
 

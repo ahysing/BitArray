@@ -134,12 +134,12 @@ module BitArrays32 {
     pragma "no doc"
     proc _createMainMaskRight(shift : integral) : uint(32) {
       var x = packSize - shift;
-      return ((1 << x) - 1):uint(32);
+      return ((1 << x) - 1) : uint(32);
     }
 
     pragma "no doc"
     proc _createShiftRolloverMask(shift : integral) : uint(32) {
-      return ((1 << shift:int(32)) - 1) : uint(32);
+      return ((1 << shift) - 1) : uint(32);
     }
 
     pragma "no doc"
