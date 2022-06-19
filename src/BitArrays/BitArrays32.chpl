@@ -133,8 +133,8 @@ module BitArrays32 {
 
     pragma "no doc"
     proc _createMainMaskRight(shift : integral) : uint(32) {
-      const one = 1 : uint(32);
-      return allOnes - ((one << shift:int(32)) - 1) : uint(32);
+      var x = packSize - shift;
+      return ((1 << x) - 1):uint(32);
     }
 
     pragma "no doc"
