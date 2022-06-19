@@ -29,7 +29,7 @@ module Internal {
   }
 
   pragma "no doc"
-  proc unsignedAll(hasRemaining : bool, const packSize, size, values : []) {
+  proc unsignedAll(hasRemaining : bool, packSize : internal, size : integral, values : []) {
     var changeIfOldValueIsTrue = true;
     var ones = ~0 : values.eltType;
 
@@ -37,10 +37,9 @@ module Internal {
     var result : atomic bool = true;
 
     if hasRemaining then {
-      if D.first != D.last {
+      if D.first != D.last then
         forall i in {(D.first)..(D.last - 1)} do
           result.compareAndSwap(changeIfOldValueIsTrue, values[i] == ones);
-      }
       return result.read() && values[D.last] == ((1 << (size % packSize) - 1) : values.eltType);
     } else {
       forall i in D do

@@ -11,7 +11,7 @@ proc Internal_unsignedAll_inputIs128Bits_valuesAreTrue(test: borrowed Test) thro
 }
 
 proc Internal_unsignedAll_inputIs65Bits_valuesAreTrue(test: borrowed Test) throws {
-  const size = 64;
+  const size = 65;
   const packSize = 64;
   const hasRemaining = size % packSize == 0;
   var values = [~0 : uint(64), 0b1 : uint(64)];
@@ -56,11 +56,11 @@ proc Internal_unsignedAll_inputIs3Bits_valuesAreZeroThenOne(test: borrowed Test)
   test.assertTrue(result);
 }
 
-proc Internal_unsignedAll_inputIs66its_valuesAreZeroThenOne(test: borrowed Test) throws {
-  const size = 65;
+proc Internal_unsignedAll_inputIs66its_valuesEndsWithThree(test: borrowed Test) throws {
+  const size = 66;
   const packSize = 64;
   const hasRemaining = size % packSize == 0;
-  var values = [ 0xAAAAAAAAAAAAAAAA : uint(64), 0xA : uint(64)];
+  var values = [ 0xAAAAAAAAAAAAAAAA : uint(64), 3 : uint(64)];
   var result = unsignedAll(hasRemaining, packSize, size, values);
   test.assertFalse(result);
 }
