@@ -80,15 +80,6 @@ module BitArrays64 {
       return reverse64(value);
     }
 
-    /* Test if any of the values are true
-
-      :returns: `true` if any of the values are true
-      :rtype: `bool`
-    */
-    proc any() : bool {
-      unsignedAny(this.values);
-    }
-
     /* Test if all the values are true
 
       :returns: `true` if any of the values are true
@@ -96,6 +87,15 @@ module BitArrays64 {
     */
     proc all() : bool {
       return unsignedAll(this.values, packSize, this.size());
+    }
+
+    /* Test if any of the values are true
+
+      :returns: `true` if any of the values are true
+      :rtype: `bool`
+    */
+    proc any() : bool {
+      unsignedAny(this.values);
     }
 
     /* Looks up value at `idx`.
@@ -113,6 +113,15 @@ module BitArrays64 {
       return unsignedAt(packSize, this.values, idx);
     }
 
+    /* Compares two bit arrays by values.
+
+       :returns: `true` if the two bit arrays has identical values.
+       :rtype: `bool`
+     */
+    proc equals(rhs : BitArray64) : bool {
+      return this.bitSize == rhs.bitSize && this.bitDomain == rhs.bitDomain && this.hasRemaining == rhs.hasRemaining && this.values.equals(rhs.values);
+    }
+
     /* Set all the values to `true`.
      */
     proc fill() {
@@ -126,8 +135,19 @@ module BitArrays64 {
        :returns: The count
        :rtype: `int`
      */
-    proc popcount() : bit64Index {
+    proc popcount() {
       return _popcount(values);
+    }
+
+    /* Reverse the ordering of the values. The last value becomes the first value. The second last value becomes the second first value. And so on.
+     */
+    proc reverse() {
+      this.values.reverse();
+      forall i in this.values.domain do
+        this.values[i] = reverse32(this.values[i]);
+
+      if this.hasRemaining then
+        this._bitshiftRightNBits(packSize - (this.bitSize % packSize));
     }
 
     /* Set the value at a given index.

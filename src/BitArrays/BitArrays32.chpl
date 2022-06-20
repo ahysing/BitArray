@@ -208,7 +208,7 @@ module BitArrays32 {
        :returns: The count.
        :rtype: `int`
      */
-    proc popcount() : uint(32) {
+    proc popcount() {
       return _popcount(values);
     }
 

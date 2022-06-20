@@ -40,17 +40,17 @@ or
       :arg size: How many vlaues there are
       
 
-   .. method:: proc any(): bool
+   .. method:: proc all(): bool
 
-      Test if any of the values are true
+      Test if all the values are true
       
       :returns: `true` if any of the values are true
       :rtype: `bool`
       
 
-   .. method:: proc all(): bool
+   .. method:: proc any(): bool
 
-      Test if all the values are true
+      Test if any of the values are true
       
       :returns: `true` if any of the values are true
       :rtype: `bool`
@@ -68,17 +68,30 @@ or
       :rtype: `bool`
       
 
+   .. method:: proc equals(rhs: BitArray64): bool
+
+      Compares two bit arrays by values.
+      
+      :returns: `true` if the two bit arrays has identical values.
+      :rtype: `bool`
+      
+
    .. method:: proc fill()
 
       Set all the values to `true`.
       
 
-   .. method:: proc popcount(): bit64Index
+   .. method:: proc popcount()
 
       Count the number of values set to true.
       
       :returns: The count
       :rtype: `int`
+      
+
+   .. method:: proc reverse()
+
+      Reverse the ordering of the values. The last value becomes the first value. The second last value becomes the second first value. And so on.
       
 
    .. method:: proc set(idx: bit64Index, value: bool) throws

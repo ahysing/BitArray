@@ -80,7 +80,7 @@ or
       Set all the values to `true`.
       
 
-   .. method:: proc popcount(): uint(32)
+   .. method:: proc popcount()
 
       Count the number of values set to `true`.
       
