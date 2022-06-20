@@ -95,7 +95,7 @@ module BitArrays64 {
       :rtype: `bool`
     */
     proc all() : bool {
-      return unsignedAll(this.hasRemaining, packSize, this.size(), this.values);
+      return unsignedAll(this.values, packSize, this.size());
     }
 
     /* Looks up value at `idx`.

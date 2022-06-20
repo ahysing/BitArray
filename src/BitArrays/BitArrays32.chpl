@@ -46,7 +46,7 @@ module BitArrays32 {
      */
     proc init(size : bit32Index, targetLocales=Locales) {
       this.complete();
-      var hasRemaining = (size % packSize) != 0;
+      var hasRemaining = size % packSize != 0;
       var sizeAsInt : bit32Index = getNumberOfBlocks(hasRemaining, packSize, size);
       var lastIdx = sizeAsInt - 1;
       var Space = {0..lastIdx};
@@ -158,7 +158,7 @@ module BitArrays32 {
        :rtype: `bool`
      */
     proc all() : bool {
-      return unsignedAll(this.hasRemaining, packSize, this.size(), this.values);
+      return unsignedAll(this.values, packSize, this.size());
     }
 
     /* Test if any of the values are true

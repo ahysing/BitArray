@@ -27,20 +27,26 @@ module Internal {
   inline proc findNumberOfBlocks(const ref values : []) {
     return values.domain.last - values.domain.first + 1;
   }
+  pragma "no doc"
+  proc _lastBlockIsFull(values : [], reminder : integral) {
+    var D = values.domain;
+    return values[D.last] == ((1 << reminder) - 1) : values.eltType;
+  }
 
   pragma "no doc"
-  proc unsignedAll(hasRemaining : bool, packSize : internal, size : integral, values : []) {
+  proc unsignedAll(values : [], packSize : integral, size : integral) {
     var changeIfOldValueIsTrue = true;
     var ones = ~0 : values.eltType;
 
     var D = values.domain;
     var result : atomic bool = true;
-
+    var reminder = size % packSize;
+    var hasRemaining = reminder != 0;
     if hasRemaining then {
       if D.first != D.last then
         forall i in {(D.first)..(D.last - 1)} do
           result.compareAndSwap(changeIfOldValueIsTrue, values[i] == ones);
-      return result.read() && values[D.last] == ((1 << (size % packSize) - 1) : values.eltType);
+      return result.read() && _lastBlockIsFull(values, reminder);
     } else {
       forall i in D do
         result.compareAndSwap(changeIfOldValueIsTrue, values[i] == ones);
