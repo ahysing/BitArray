@@ -72,10 +72,10 @@ module Internal {
   }
 
   pragma "no doc"
-  proc _popcount(values) {
-    var count : atomic uint(32) = 0;
+  proc _popcount(values) : int {
+    var count : atomic int = 0;
     forall i in values.domain do
-      count.unorderedAdd(BitOps.popcount(values[i]));
+      count.unorderedAdd(BitOps.popcount(values[i]) : int);
     return count.read();
   }
 

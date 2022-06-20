@@ -1,11 +1,35 @@
 use UnitTest;
 use BitArrays.Internal;
 
+proc Internal_lastBlockIsFull(test: borrowed Test) throws {
+  const size = 1;
+  const packSize = 64;
+  var values = [1 : uint(64)];
+  var reminder = 1;
+
+  var result = _lastBlockIsFull(values, reminder);
+
+  test.assertTrue(result);
+
+}
+
+proc Internal_lastBlockIsFull_inputIs3(test: borrowed Test) throws {
+  const size = 1;
+  const packSize = 64;
+  var values = [3 : uint(64)];
+  var reminder = 2;
+
+  var result = _lastBlockIsFull(values, reminder);
+
+  test.assertTrue(result);
+
+}
+
 proc Internal_unsignedAll_inputIs128Bits_valuesAreTrue(test: borrowed Test) throws {
   const size = 128;
   const packSize = 64;
   var values = [~0 : uint(64), ~0 : uint(64)];
-  var result = unsignedAll(false, packSize, size, values);
+  var result = unsignedAll(values, packSize, size);
 
   test.assertTrue(result);
 }
@@ -15,7 +39,7 @@ proc Internal_unsignedAll_inputIs65Bits_valuesAreTrue(test: borrowed Test) throw
   const packSize = 64;
   const hasRemaining = size % packSize == 0;
   var values = [~0 : uint(64), 0b1 : uint(64)];
-  var result = unsignedAll(hasRemaining, packSize, size, values);
+  var result = unsignedAll(values, packSize, size);
   test.assertTrue(result);
 }
 
@@ -24,7 +48,7 @@ proc Internal_unsignedAll_inputIs127Bits_valuesAreTrue(test: borrowed Test) thro
   const packSize = 64;
   const hasRemaining = size % packSize == 0;
   var values = [~0 : uint(64), 0x7FFFFFFFFFFFFFFF : uint(64)];
-  var result = unsignedAll(hasRemaining, packSize, size, values);
+  var result = unsignedAll(values, packSize, size);
   test.assertTrue(result);
 }
 
@@ -33,7 +57,7 @@ proc Internal_unsignedAll_inputIs127Bits_valuesAreTrueInFirstBlock_valuesAreFals
   const packSize = 64;
   const hasRemaining = size % packSize == 0;
   var values = [~0 : uint(64), ~0 : uint(64), 0 : uint(64)];
-  var result = unsignedAll(hasRemaining, packSize, size, values);
+  var result = unsignedAll(values, packSize, size);
   test.assertFalse(result);
 }
 
@@ -42,7 +66,7 @@ proc Internal_unsignedAll_inputIs128Bits_valuesAreZeroThenOne(test: borrowed Tes
   const packSize = 64;
   const hasRemaining = size % packSize == 0;
   var values = [~1 : uint(64), ~0 : uint(64)];
-  var result = unsignedAll(hasRemaining, packSize, size, values);
+  var result = unsignedAll(values, packSize, size);
   test.assertFalse(result);
 }
 
@@ -52,7 +76,7 @@ proc Internal_unsignedAll_inputIs3Bits_valuesAreZeroThenOne(test: borrowed Test)
   const packSize = 64;
   const hasRemaining = size % packSize == 0;
   values[0] = 0b111 : uint(64);
-  var result = unsignedAll(hasRemaining, packSize, size, values);
+  var result = unsignedAll(values, packSize, size);
   test.assertTrue(result);
 }
 
@@ -61,9 +85,31 @@ proc Internal_unsignedAll_inputIs66its_valuesEndsWithThree(test: borrowed Test) 
   const packSize = 64;
   const hasRemaining = size % packSize == 0;
   var values = [ 0xAAAAAAAAAAAAAAAA : uint(64), 3 : uint(64)];
-  var result = unsignedAll(hasRemaining, packSize, size, values);
+  var result = unsignedAll(values, packSize, size);
   test.assertFalse(result);
 }
+
+proc Internal_popcount_inputIsAllOnes(test : borrowed Test) throws {
+  var values = [~0: uint(64)];
+  var actual = _popcount(values);
+  var expected = 64;
+  test.assertEqual(expected, actual);
+}
+
+proc Internal_popcount_inputIsAllZeros(test : borrowed Test) throws {
+  var values = [0: uint(64)];
+  var actual = _popcount(values);
+  var expected = 0;
+  test.assertEqual(expected, actual);
+}
+
+proc Internal_popcount_inputIsAllOnes_32bit(test : borrowed Test) throws {
+  var values = [~0: uint(32)];
+  var actual = _popcount(values);
+  var expected = 32;
+  test.assertEqual(expected, actual);
+}
+
 // The following tests were made with a set of tests
 /*
 for i in {0..255}
