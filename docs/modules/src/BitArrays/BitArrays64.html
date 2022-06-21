@@ -423,7 +423,7 @@ If one of the two bit arrays has different size then indices fitting the shortes
 <dd class="field-even"><p>A copy of the values from <cite>lhs</cite> or <cite>rhs</cite></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>BitArray32</p>
+<dd class="field-odd"><p>BitArray64</p>
 </dd>
 </dl>
 </dd></dl>
@@ -441,6 +441,46 @@ If one of the two bit arrays has different size then indices fitting the shortes
 <li><p><strong>lhs</strong> – this bit array</p></li>
 <li><p><strong>rhs</strong> – bit array to perform or with</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArrays64.BitArray64.-=">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">-=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray64</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray64</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays64.BitArray64.-=" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Perform the minus operation on the values in this bit array with the values in another bit array.</dt><dd><p>The result is all the values in <cite>lhs</cite> which are not present in <cite>rhs</cite>.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lhs</strong> – this bit array</p></li>
+<li><p><strong>rhs</strong> – bit array to perform minus with</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArrays64.BitArray64.-">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">-</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lhs:</span> <span class="pre">BitArray64</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray64</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays64.BitArray64.-" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Perform the minus operation on the values in this bit array with the values in another bit array.</dt><dd><p>The result is all the values in <cite>lhs</cite> which are not present in <cite>rhs</cite>.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lhs</strong> – this bit array</p></li>
+<li><p><strong>rhs</strong> – bit array to perform minus with</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The result of <cite>lhs</cite> - <cite>rhs</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>BitArray64</cite></p>
 </dd>
 </dl>
 </dd></dl>

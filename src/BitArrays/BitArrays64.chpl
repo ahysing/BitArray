@@ -8,7 +8,7 @@ module BitArrays64 {
   type bit64Index = int;
 
   pragma "no doc"
-  const allOnes : uint(64) = 0b1111111111111111111111111111111111111111111111111111111111111111;
+  const allOnes : uint(64) = ~0 : uint(64);
 
   pragma "no doc"
   const one : uint(64) = 1;
@@ -343,7 +343,7 @@ module BitArrays64 {
        :arg rhs: bit array to perform or with
 
        :returns: A copy of the values from `lhs` or `rhs`
-       :rtype: BitArray32
+       :rtype: BitArray64
      */
     operator |(lhs : BitArray64, rhs : BitArray64) : BitArray64 {
       var values = lhs.values | rhs.values;
@@ -359,6 +359,31 @@ module BitArrays64 {
     */
     operator |=(ref lhs : BitArray64, rhs : BitArray64) {
       lhs.values |= rhs.values;
+    }
+
+    /* Perform the minus operation on the values in this bit array with the values in another bit array.
+      The result is all the values in `lhs` which are not present in `rhs`.
+
+      :arg lhs: this bit array
+      :arg rhs: bit array to perform minus with
+    */
+    operator -=(ref lhs : BitArray64, rhs : BitArray64) {
+      lhs.values = lhs.values & !rhs.values;
+    }
+
+    /* Perform the minus operation on the values in this bit array with the values in another bit array.
+      The result is all the values in `lhs` which are not present in `rhs`.
+
+      :arg lhs: this bit array
+      :arg rhs: bit array to perform minus with
+
+      :returns: The result of `lhs` - `rhs`
+      :rtype: `BitArray64`
+    */
+    operator -(lhs : BitArray64, rhs : BitArray64) {
+      var D = lhs.values.domain;
+      var values : [D] lhs.values.eltType = lhs.values & !rhs.values;
+      return new BitArray64(values, lhs.size());
     }
   }
 }

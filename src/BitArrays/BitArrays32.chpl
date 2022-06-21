@@ -242,38 +242,44 @@ module BitArrays32 {
       this._generalBitshiftLeftWholeBlockSerial(this.values, this.values.domain);
     }
 
-    pragma "no doc"
-    proc _bitshiftLeftWholeBlockParallell() {
-      var D = this.values.domain;
-      var localesSize = this.values.targetLocales().size;
-      var F : domain(2) = {1..localesSize, 0..countSubdomains(values)};
-      var storedValue : [F] this.values.eltType;
-      for loc in D.targetLocales() {
-        var i = 0;
-        for sub in D.localSubdomains(loc) {
-          storedValue[(loc.id, i)] = if D.contains(sub.first - 1) then this.values[sub.first - 1] else 0 : this.values.eltType;
-          i += 1;
-        }
-      }
-
-      // example got from https://chapel-lang.org/docs/users-guide/locality/onClauses.html
-      coforall loc in D.targetLocales() do
-        on loc do
-          for sub in D.localSubdomains(loc) do
-            this._generalBitshiftLeftWholeBlockSerial(this.values, sub);
-
-      for loc in D.targetLocales() {
-        var i = 0;
-        for sub in D.localSubdomains(loc) {
-          this.values[sub.first] = storedValue[(loc.id, i)];
-          i += 1;
-        }
-      }
-    }
+//     pragma "no doc"
+//     proc _bitshiftLeftWholeBlockParallell() {
+//       var D = this.values.domain;
+//       var localesSize = this.values.targetLocales().size;
+//       var F : domain(2) = {1..localesSize, 0..countSubdomains(values)};
+//       var storedValue : [F] this.values.eltType;
+//       for loc in D.targetLocales() {
+//         var i = 0;
+//         for sub in D.localSubdomains(loc) {
+//           /* TODO
+//           /Users/andreas.dreyer.hysing/code/BitArray/src/BitArrays/BitArrays32.chpl:254: error: halt reached - array index out of bounds
+//           note: index was (0, 0) but array bounds are (1..1, 0..1)
+//           note: out of bounds in dimension 0 because index 0 is not in 1..1
+//           BitArray32Tests was compiled with optimization - stepping may behave oddly; variables may not be available.
+//           */
+//           storedValue[(loc.id, i)] = if D.contains(sub.first - 1) then this.values[sub.first - 1] else 0 : this.values.eltType;
+//           i += 1;
+//         }
+//       }
+// 
+//       // example got from https://chapel-lang.org/docs/users-guide/locality/onClauses.html
+//       coforall loc in D.targetLocales() do
+//         on loc do
+//           for sub in D.localSubdomains(loc) do
+//             this._generalBitshiftLeftWholeBlockSerial(this.values, sub);
+// 
+//       for loc in D.targetLocales() {
+//         var i = 0;
+//         for sub in D.localSubdomains(loc) {
+//           this.values[sub.first] = storedValue[(loc.id, i)];
+//           i += 1;
+//         }
+//       }
+//     }
 
     pragma "no doc"
     proc _bitshiftLeftWholeBlock() {
-      this._bitshiftLeftWholeBlockParallell();
+      this._bitshiftLeftWholeBlockSerial();
     }
 
     pragma "no doc"
@@ -663,8 +669,7 @@ module BitArrays32 {
       :arg rhs: bit array to perform minus with
     */
     operator -=(ref lhs : BitArray32, rhs : BitArray32) {
-      for i in lhs.domain do
-        lhs[i] = lhs.values[i] && !rhs.values[i];
+      lhs.values = lhs.values & !rhs.values;
     }
 
     /* Perform the minus operation on the values in this bit array with the values in another bit array.
@@ -678,9 +683,7 @@ module BitArrays32 {
     */
     operator -(lhs : BitArray32, rhs : BitArray32) {
       var D = lhs.values.domain;
-      var values : [D] lhs.values.eltType;
-      for i in lhs.domain do
-        values[i] = lhs.values[i] && !rhs.values[i];
+      var values : [D] lhs.values.eltType = lhs.values & !rhs.values;
       return new BitArray32(values, lhs.size());
     }
   }

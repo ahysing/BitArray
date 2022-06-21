@@ -82,31 +82,31 @@ module Internal {
   pragma "no doc"
   inline proc reverse64(value : uint(64)) {
     var result : uint(64) = 0;
-    var idx : int(64);
+    var idx : uint(32);
 
-    idx = value : int(64) & 0xff;
-    result = (eightBitReversed[idx]) << 56;
+    idx = (value & 0xff) : uint(32);
+    result = eightBitReversed[idx] : uint(64) << 56;
 
-    idx = (value >> 8) : int(64) & 0xff;
-    result |= (eightBitReversed[idx]) << 48;
+    idx = ((value >> 8) & 0xff) : uint(32);
+    result |= eightBitReversed[idx] : uint(64) << 48;
 
-    idx = (value >> 16) : int(64) & 0xff;
-    result |= (eightBitReversed[idx]) << 40;
+    idx = ((value >> 16) & 0xff) : uint(32);
+    result |= eightBitReversed[idx] : uint(64) << 40;
 
-    idx = (value >> 24) : int(64) & 0xff;
-    result |= (eightBitReversed[idx]) << 32;
+    idx = ((value >> 24) & 0xff) : uint(32);
+    result |= eightBitReversed[idx] : uint(64) << 32;
 
-    idx = (value >> 32) : int(64) & 0xff;
-    result |= (eightBitReversed[idx]) << 24;
+    idx = ((value >> 32) & 0xff) : uint(32);
+    result |= eightBitReversed[idx] << 24;
 
-    idx = (value >> 40) : int(64) & 0xff;
-    result |= (eightBitReversed[idx]) << 16;
+    idx = ((value >> 40) & 0xff) : uint(32);
+    result |= eightBitReversed[idx] << 16;
 
-    idx = (value >> 48) : int(64) & 0xff;
-    result |= (eightBitReversed[idx]) << 8;
+    idx = ((value >> 48) & 0xff) : uint(32);
+    result |= eightBitReversed[idx] << 8;
 
-    idx = (value >> 56) : int(64) & 0xff;
-    result |= (eightBitReversed[idx]);
+    idx = ((value >> 56) & 0xff) : uint(32);
+    result |= eightBitReversed[idx];
 
     return result;
   }

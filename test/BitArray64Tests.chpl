@@ -56,4 +56,15 @@ proc BitArray64_reverse(test: borrowed Test) throws {
   test.assertEqual(expected.values, bitArray.values);
 }
 
+proc BitArray64_reverse_inputSizeIs63(test: borrowed Test) throws {
+  var bitArray = new BitArray64(63);
+  bitArray.values[0] = 0b0101001100110000111100001111000000000000000000000000000000000000;
+
+  bitArray.reverse();
+
+  var expected = new BitArray64(63);
+  expected.values[0] = 0b0000000000000000000000000000000000000111100001111000011001100101;
+  test.assertEqual(expected.values, bitArray.values);
+}
+
 UnitTest.main();

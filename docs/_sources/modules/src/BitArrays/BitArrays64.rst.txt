@@ -216,7 +216,7 @@ or
       :arg rhs: bit array to perform or with
       
       :returns: A copy of the values from `lhs` or `rhs`
-      :rtype: BitArray32
+      :rtype: BitArray64
       
 
    .. method:: proc type |=(ref lhs: BitArray64, rhs: BitArray64)
@@ -226,5 +226,26 @@ or
       
       :arg lhs: this bit array
       :arg rhs: bit array to perform or with
+      
+
+   .. method:: proc type -=(ref lhs: BitArray64, rhs: BitArray64)
+
+      Perform the minus operation on the values in this bit array with the values in another bit array.
+       The result is all the values in `lhs` which are not present in `rhs`.
+      
+      :arg lhs: this bit array
+      :arg rhs: bit array to perform minus with
+      
+
+   .. method:: proc type -(lhs: BitArray64, rhs: BitArray64)
+
+      Perform the minus operation on the values in this bit array with the values in another bit array.
+       The result is all the values in `lhs` which are not present in `rhs`.
+      
+      :arg lhs: this bit array
+      :arg rhs: bit array to perform minus with
+      
+      :returns: The result of `lhs` - `rhs`
+      :rtype: `BitArray64`
       
 
