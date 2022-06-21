@@ -48,8 +48,8 @@ $(INDEX): $(SOURCES)
 	chpldoc $(SOURCES) -o docs/ --author "Andreas Dreyer Hysing"
 	find ./docs -name '*.html' -exec sed -i '' 's/ Copyright 2015/ Copyright $(YEAR)/g' {} \;
 
-NOJERKYLL := ./docs/.nojerkyll
-$(NOJERKYLL):
-	touch $(NOJERKYLL)
+NOJEKYLL := ./docs/.nojekyll
+$(NOJEKYLL):
+	touch $(NOJEKYLL)
 
-docs: $(INDEX) $(NOJERKYLL) ./docs/.$(YEAR)
+docs: $(INDEX) $(NOJEKYLL) ./docs/.$(YEAR)
