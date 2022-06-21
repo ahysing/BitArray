@@ -1,4 +1,6 @@
-/* BitArrays is a library for effective storage of boolean values in arrays. */
+/* BitArrays is a library for effective compact of boolean values.
+   The classes provided comes with  fast set operations such and, or, not minus.
+*/
 module BitArrays {
   // Note to self: https://chapel-lang.org/docs/technotes/module_include.html?highlight=modules
   include module BitArrays32;

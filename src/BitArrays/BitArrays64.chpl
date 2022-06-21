@@ -16,7 +16,7 @@ module BitArrays64 {
   pragma "no doc"
   const packSize : bit64Index = 64;
 
-  /* BitArray64 is an array of boolean values stored packed together as 64 bit words. All boolean values are mapped one-to-one to a bit value in memory. */
+  /* BitArray64 is an array of boolean values packed together as 64 bit words. All boolean values are mapped one-to-one to a bit in a 64 bit unsigned integer. */
   class BitArray64 {
     pragma "no doc"
     var bitDomain : domain(rank=1, idxType=bit64Index, stridable=false);
@@ -50,11 +50,14 @@ module BitArrays64 {
     }
 
 
-    /* Create a bit array from a given set of values. The input values are used directly in the bit array. Values are not copied into this BitArray64 instance.
+    /* Create a bit array from a given set of values.
+       * The input values must be a rectangular 1-dimensional array.
+       * The input values must not be a sparse array.
+       * The input values must not be an associative array.
 
-       :arg values: The bit array packed as 64 bit integers.
-       :arg size: How many vlaues there are
-     */
+       :arg values: The valuess in the bit array stored as 64 bit integers.  If the size does is not a multiple of 32 then one extra value must be added to contain the reminder bits.
+       :arg size: The number of individual bits in the bit array.
+    */
     proc init(values : [] uint(64), size : bit64Index) {
       this.complete();
       // Compare sizes from blocks of 64 bits and given size.
@@ -80,7 +83,7 @@ module BitArrays64 {
       return reverse64(value);
     }
 
-    /* Test if all the values are true
+    /* Test if all the values are `true`.
 
       :returns: `true` if any of the values are true
       :rtype: `bool`
@@ -98,7 +101,7 @@ module BitArrays64 {
       unsignedAny(this.values);
     }
 
-    /* Looks up value at `idx`.
+    /* Look up value at index `idx`.
 
        :arg idx: The index in the bitarray to look up.
 
@@ -169,8 +172,8 @@ module BitArrays64 {
 
     /* Set the value at a given index.
 
-       :arg idx: The index of the value to mutate.
-       :arg value: The value to set at `idx`.
+       :arg idx: The index of the value.
+       :arg value: The value to set.
 
        :throws BitRangeError: if the idx value is outside the range [0, size).
      */
@@ -215,7 +218,7 @@ module BitArrays64 {
       }
     }
 
-    /* Iterate  over the index of all the values which are over `true`.
+    /* Iterate  over the index of all the values that are `true`.
 
       :yields: The index of a `true` value
       :yields type: `int`
