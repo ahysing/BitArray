@@ -45,4 +45,15 @@ proc BitArray64_these_inputHas65Values_OutputHas65Values(test: borrowed Test) th
   test.assertEqual(steps, 65);
 }
 
+proc BitArray64_reverse(test: borrowed Test) throws {
+  var bitArray = new BitArray64(64);
+  bitArray.values[0] = 0b0101001100110000111100001111000000000000000000000000000000000000;
+
+  bitArray.reverse();
+
+  var expected = new BitArray64(64);
+  expected.values[0] = 0b0000000000000000000000000000000000001111000011110000110011001010;
+  test.assertEqual(expected.values, bitArray.values);
+}
+
 UnitTest.main();

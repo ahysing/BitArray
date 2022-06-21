@@ -139,12 +139,29 @@ module BitArrays64 {
       return _popcount(values);
     }
 
+
+    pragma "no doc"
+    proc _bitshiftRightNBits(shift : integral) {
+      assert(shift > 0 && shift < packSize);
+
+      var D = this.values.domain;
+      var DExceptLast = {(D.first)..(D.last - 1)};
+      // Copy the value value into the value at index
+      // var destination : [D] this.values.eltType;
+      var reverseShift = packSize - shift;
+      for i in DExceptLast do
+        this.values[i] = (this.values[i] >> shift) | (this.values[i + 1] << reverseShift);
+      this.values[D.last] = (this.values[D.last] >> shift);
+      // forall i in D do
+      //  this.values[i] = destination[i];
+    }
+
     /* Reverse the ordering of the values. The last value becomes the first value. The second last value becomes the second first value. And so on.
      */
     proc reverse() {
       this.values.reverse();
       forall i in this.values.domain do
-        this.values[i] = reverse32(this.values[i]);
+        this.values[i] = reverse64(this.values[i]);
 
       if this.hasRemaining then
         this._bitshiftRightNBits(packSize - (this.bitSize % packSize));
@@ -174,9 +191,9 @@ module BitArrays64 {
 
     /* Iterate over all the values.
 
-       :yields: All the values
-       :yields type: bool
-     */
+      :yields: All the values
+      :yields type: bool
+    */
     iter these() {
       const packSizeMinusOne = packSize - 1;
       if this.hasRemaining {
@@ -198,12 +215,28 @@ module BitArrays64 {
       }
     }
 
+    /* Iterate  over the index of all the values which are over `true`.
+
+      :yields: The index of a `true` value
+      :yields type: `int`
+    */
+    iter trueIndicies() {
+      var D = this.values.domain;
+      for i in D {
+        var block = this.values[i];
+        while block != 0 {
+          var czt = BitOps.ctz(block);
+          yield (i * packSize) + czt;
+          block ^= 1 << czt;
+        }
+      }
+    }
+
     /* Set all the values to `false`.
      */
     proc unfill() {
       this.values = 0;
     }
-
 
     /* Compares parwise the values of the two bit arrays for equality.
 

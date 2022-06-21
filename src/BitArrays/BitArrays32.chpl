@@ -436,59 +436,41 @@ module BitArrays32 {
        :yields type: bool
      */
     iter these() {
-      const mask32 = [
-        0b00000000000000000000000000000001 : uint(32),
-        0b00000000000000000000000000000010 : uint(32),
-        0b00000000000000000000000000000100 : uint(32),
-        0b00000000000000000000000000001000 : uint(32),
-        0b00000000000000000000000000010000 : uint(32),
-        0b00000000000000000000000000100000 : uint(32),
-        0b00000000000000000000000001000000 : uint(32),
-        0b00000000000000000000000010000000 : uint(32),
-        0b00000000000000000000000100000000 : uint(32),
-        0b00000000000000000000001000000000 : uint(32),
-        0b00000000000000000000010000000000 : uint(32),
-        0b00000000000000000000100000000000 : uint(32),
-        0b00000000000000000001000000000000 : uint(32),
-        0b00000000000000000010000000000000 : uint(32),
-        0b00000000000000000100000000000000 : uint(32),
-        0b00000000000000001000000000000000 : uint(32),
-        0b00000000000000010000000000000000 : uint(32),
-        0b00000000000000100000000000000000 : uint(32),
-        0b00000000000001000000000000000000 : uint(32),
-        0b00000000000010000000000000000000 : uint(32),
-        0b00000000000100000000000000000000 : uint(32),
-        0b00000000001000000000000000000000 : uint(32),
-        0b00000000010000000000000000000000 : uint(32),
-        0b00000000100000000000000000000000 : uint(32),
-        0b00000001000000000000000000000000 : uint(32),
-        0b00000010000000000000000000000000 : uint(32),
-        0b00000100000000000000000000000000 : uint(32),
-        0b00001000000000000000000000000000 : uint(32),
-        0b00010000000000000000000000000000 : uint(32),
-        0b00100000000000000000000000000000 : uint(32),
-        0b01000000000000000000000000000000 : uint(32),
-        0b10000000000000000000000000000000 : uint(32)
-      ];
-
+      var D = this.values.domain;
       const packSizeMinusOne = packSize - 1;
       if this.hasRemaining {
-        var last = this.values.domain.last;
-        var lastMinusOne = last - 1;
+        var lastMinusOne = D.last - 1;
         if lastMinusOne >= 0 {
-          var wholeBlocksDomain : subdomain(this.values.domain) = this.values.domain[..lastMinusOne];
+          var wholeBlocksDomain : subdomain(D) = {D.first..(D.last - 1)};
           for i in wholeBlocksDomain do
             foreach j in {0..packSizeMinusOne} do
-              yield this.values[i] & mask32[j] != 0;
+              yield this.values[i] & 1 << j != 0;
         }
-        var lastBlock = this.values[last];
-        var reminderSize = this.bitSize % packSize - 1;
+
+        var reminderSize = this.size() % packSize;
         foreach j in {0..reminderSize} do
-          yield lastBlock & mask32[j] != 0;
+          yield this.values[D.last] & 1 << j != 0;
       } else {
         for block in this.values do
           foreach j in {0..packSizeMinusOne} do
-            yield block & mask32[j] != 0;
+            yield block & 1 << j != 0;
+      }
+    }
+
+    /* Iterate  over the index of all the values which are over `true`.
+
+      :yields: The index of a `true` value
+      :yields type: `int`
+    */
+    iter trueIndicies() {
+      var D = this.values.domain;
+      for i in D {
+        var block = this.values[i];
+        while block != 0 {
+          var czt = BitOps.ctz(block);
+          yield (i * packSize) + czt;
+          block ^= 1 << czt;
+        }
       }
     }
 

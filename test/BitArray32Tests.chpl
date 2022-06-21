@@ -46,7 +46,7 @@ proc BitArray32_any_sizeIs33_inputIs33Trues(test: borrowed Test) throws {
   test.assertTrue(bitArray.any());
 }
 
-proc BitArray32_reverse(test: borrowed Test) throws {
+proc BitArray32_reverse_outputIsNotNil(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);
   bitArray.reverse();
   test.assertTrue(bitArray != nil);
@@ -93,6 +93,18 @@ proc BitArray32_reverse_bitIsSetAt0_sizeIs33(test: borrowed Test) throws {
   test.assertEqual(expected.values, bitArray.values);
 }
 
+proc BitArray32_reverse(test: borrowed Test) throws {
+  var bitArray = new BitArray32(64);
+  bitArray.values[0] = 0b01010011001100001111000011110000;
+  bitArray.values[1] = 0b00000000000000000000000000000000;
+
+  bitArray.reverse();
+
+  var expected = new BitArray32(64);
+  expected.values[0] = 0b00000000000000000000000000000000;
+  expected.values[1] = 0b00001111000011110000110011001010;
+  test.assertEqual(expected.values, bitArray.values);
+}
 
 proc BitArray32__rotateLeftWholeBlock_sizeIs32(test: borrowed Test) throws {
   var bitArray = new BitArray32(32);

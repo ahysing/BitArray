@@ -133,6 +133,14 @@ or
       :yields type: bool
       
 
+   .. itermethod:: iter trueIndicies()
+
+      Iterate  over the index of all the values which are over `true`.
+      
+      :yields: The index of a `true` value
+      :yields type: `int`
+      
+
    .. method:: proc unfill()
 
       Set all the values to `false`.
