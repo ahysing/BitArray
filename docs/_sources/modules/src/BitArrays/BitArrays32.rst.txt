@@ -21,12 +21,13 @@ or
 
 .. class:: BitArray32
 
-   BitArray32 is an array of boolean values stored packed together as 32 bit words. All boolean values are mapped one-to-one to a bit value in memory. 
+   BitArray32 is an array of boolean values stored packed together as 32 bit words. All boolean values are mapped one-to-one to a bit in a 32 bit integer. 
 
 
    .. method:: proc init(size: bit32Index, targetLocales = Locales)
 
       Create a bit array of a given size.
+      The values are distributed across locales with a `Block` distribution.
       
       :arg size: The size of the bit array
       :arg locales: What nodes to distibute the values over
@@ -34,14 +35,18 @@ or
 
    .. method:: proc init(const ref values: [] uint(32), size: bit32Index)
 
-      Create a bit array from a given set of values. The input values are copied inte the bit array.
+      Create a bit array from a given set of values.
+      * The input values must be a rectangular 1-dimensional array.
+      * The input values must not be a sparse array.
+      * The input values must not be an associative array.
       
-      :arg values: The bit array.
+      :arg values: The valuess in the bit array stored as 32 bit integers.  If the size does is not a multiple of 32 then one extra value must be added to contain the reminder bits.
+      :arg size: The number of individual bits in the bit array.
       
 
    .. method:: proc all(): bool
 
-      Test if all the values are true
+      Test if all the values are `true`.
       
       :returns: `true` if all the values are `true`
       :rtype: `bool`
@@ -57,7 +62,7 @@ or
 
    .. method:: proc at(idx: bit32Index): bool throws
 
-      Looks up value at `idx`.
+      Look up value at index `idx`.
       
       :arg idx: The index in the bitarray to look up.
       
@@ -95,14 +100,14 @@ or
 
    .. method:: proc rotateLeft(shift: integral)
 
-      Rotate all the values to the left. Let values falling out on one side reappear on the left side.
+      Rotate all the values to the left. Values wrap around to the other side.
       
       :arg shift: number of bits to rotate
       
 
    .. method:: proc rotateRight(shift: integral)
 
-      Rotate all the values to the right. Let values falling out on one side reappear on the right side.
+      Rotate all the values to the right. Values wrap around to the other side.
       
       :arg shift: number of bits to rotate
       
@@ -111,8 +116,8 @@ or
 
       Set the value at a given index.
       
-      :arg idx: The index of the value to mutate.
-      :arg value: The value to set at `idx`.
+      :arg idx: The index of the value.
+      :arg value: The value to set.
       
       :throws BitRangeError: if the idx value is outside the range [0, size).
       
@@ -135,7 +140,7 @@ or
 
    .. itermethod:: iter trueIndicies()
 
-      Iterate  over the index of all the values which are over `true`.
+      Iterate  over the index of all the values that are `true`.
       
       :yields: The index of a `true` value
       :yields type: `int`
@@ -161,15 +166,18 @@ or
 
       Compares parwise the values of the two bit arrays for inequality
       
+      :arg lhs: left hand bit array
+      :arg rhs: right hand bit array
+      
       :returns: if the bits in the arrays are equal
       :rtype: `list`
       
 
    .. method:: proc type =(ref lhs: BitArray32, rhs: BitArray32)
 
-      Copies the values from an rhs bit array.
+      Copies the values from a bit array.
       
-      :arg lhs: the operator to assign
+      :arg lhs: the bit array to assign
       :arg rhs: The bit array to copy
       
 
@@ -177,7 +185,7 @@ or
 
       Nagation operator. Turn all `true` values into `false` values. Turn all `false` values into `true` values.
       
-      :returns: The results
+      :returns: A copy of this bit array negated.
       :rtype: `BitArray32`
       
 
@@ -187,7 +195,7 @@ or
       
       :arg shift: the number of values to shift.
       
-      :returns: A copy of the values shifted `shift` positions to the right.
+      :returns: A copy of the values shifted to the right.
       :rtype: `BitArray32`
       
 
@@ -222,6 +230,7 @@ or
       
       :arg lhs: this bit array
       :arg rhs: bit array to perform xor with
+      
       :returns: The results
       :rtype: `BitArray32`
       
@@ -273,5 +282,26 @@ or
       
       :arg lhs: this bit array
       :arg rhs: bit array to perform or with
+      
+
+   .. method:: proc type -=(ref lhs: BitArray32, rhs: BitArray32)
+
+      Perform the minus operation on the values in this bit array with the values in another bit array.
+       The result is all the values in `lhs` which are not present in `rhs`.
+      
+      :arg lhs: this bit array
+      :arg rhs: bit array to perform minus with
+      
+
+   .. method:: proc type -(lhs: BitArray32, rhs: BitArray32)
+
+      Perform the minus operation on the values in this bit array with the values in another bit array.
+       The result is all the values in `lhs` which are not present in `rhs`.
+      
+      :arg lhs: this bit array
+      :arg rhs: bit array to perform minus with
+      
+      :returns: The result of `lhs` - `rhs`
+      :rtype: `BitArray32`
       
 

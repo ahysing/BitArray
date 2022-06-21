@@ -1,7 +1,7 @@
 .. default-domain:: chpl
 
 .. module:: BitArrays
-   :synopsis: BitArrays is a library for effective storage of boolean values in arrays. 
+   :synopsis: BitArrays is a library for effective compact of boolean values.
 
 BitArrays
 =========
@@ -26,5 +26,6 @@ or
 
    BitArrays/*
 
-BitArrays is a library for effective storage of boolean values in arrays. 
+BitArrays is a library for effective compact of boolean values.
+The classes provided comes with  fast set operations such and, or, not minus.
 

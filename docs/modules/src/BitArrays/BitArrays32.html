@@ -97,11 +97,12 @@
 <dl class="chpl class">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32">
 <em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">BitArray32</span></span><a class="headerlink" href="#BitArrays32.BitArray32" title="Permalink to this definition">¶</a></dt>
-<dd><p>BitArray32 is an array of boolean values stored packed together as 32 bit words. All boolean values are mapped one-to-one to a bit value in memory.</p>
+<dd><p>BitArray32 is an array of boolean values stored packed together as 32 bit words. All boolean values are mapped one-to-one to a bit in a 32 bit integer.</p>
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.init">
 <em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">size:</span> <span class="pre">bit32Index</span></em>, <em class="sig-param"><span class="pre">targetLocales</span> <span class="pre">=</span> <span class="pre">Locales</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.init" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a bit array of a given size.</p>
+<dd><p>Create a bit array of a given size.
+The values are distributed across locales with a <cite>Block</cite> distribution.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments</dt>
 <dd class="field-odd"><ul class="simple">
@@ -115,10 +116,16 @@
 <dl class="chpl method">
 <dt class="sig sig-object chpl">
 <em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">const</span> <span class="pre">ref</span> <span class="pre">values:</span> <span class="pre">[]</span> <span class="pre">uint(32)</span></em>, <em class="sig-param"><span class="pre">size:</span> <span class="pre">bit32Index</span></em><span class="sig-paren">)</span></dt>
-<dd><p>Create a bit array from a given set of values. The input values are copied inte the bit array.</p>
+<dd><p>Create a bit array from a given set of values.
+* The input values must be a rectangular 1-dimensional array.
+* The input values must not be a sparse array.
+* The input values must not be an associative array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments</dt>
-<dd class="field-odd"><p><strong>values</strong> – The bit array.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> – The valuess in the bit array stored as 32 bit integers.  If the size does is not a multiple of 32 then one extra value must be added to contain the reminder bits.</p></li>
+<li><p><strong>size</strong> – The number of individual bits in the bit array.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -126,7 +133,7 @@
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.all">
 <em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="pre">:</span> <span class="pre">bool</span><a class="headerlink" href="#BitArrays32.BitArray32.all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test if all the values are true</p>
+<dd><p>Test if all the values are <cite>true</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><cite>true</cite> if all the values are <cite>true</cite></p>
@@ -154,7 +161,7 @@
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.at">
 <em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">idx:</span> <span class="pre">bit32Index</span></em><span class="sig-paren">)</span><span class="pre">:</span> <span class="pre">bool</span> <span class="pre">throws</span><a class="headerlink" href="#BitArrays32.BitArray32.at" title="Permalink to this definition">¶</a></dt>
-<dd><p>Looks up value at <cite>idx</cite>.</p>
+<dd><p>Look up value at index <cite>idx</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments</dt>
 <dd class="field-odd"><p><strong>idx</strong> – The index in the bitarray to look up.</p>
@@ -214,7 +221,7 @@
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.rotateLeft">
 <em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">rotateLeft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift:</span> <span class="pre">integral</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.rotateLeft" title="Permalink to this definition">¶</a></dt>
-<dd><p>Rotate all the values to the left. Let values falling out on one side reappear on the left side.</p>
+<dd><p>Rotate all the values to the left. Values wrap around to the other side.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments</dt>
 <dd class="field-odd"><p><strong>shift</strong> – number of bits to rotate</p>
@@ -225,7 +232,7 @@
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.rotateRight">
 <em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">rotateRight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">shift:</span> <span class="pre">integral</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.rotateRight" title="Permalink to this definition">¶</a></dt>
-<dd><p>Rotate all the values to the right. Let values falling out on one side reappear on the right side.</p>
+<dd><p>Rotate all the values to the right. Values wrap around to the other side.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments</dt>
 <dd class="field-odd"><p><strong>shift</strong> – number of bits to rotate</p>
@@ -240,8 +247,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Arguments</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>idx</strong> – The index of the value to mutate.</p></li>
-<li><p><strong>value</strong> – The value to set at <cite>idx</cite>.</p></li>
+<li><p><strong>idx</strong> – The index of the value.</p></li>
+<li><p><strong>value</strong> – The value to set.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Throws</dt>
@@ -281,7 +288,7 @@
 <dl class="chpl itermethod">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.trueIndicies">
 <em class="property"><span class="pre">iter</span> </em><span class="sig-name descname"><span class="pre">trueIndicies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.trueIndicies" title="Permalink to this definition">¶</a></dt>
-<dd><p>Iterate  over the index of all the values which are over <cite>true</cite>.</p>
+<dd><p>Iterate  over the index of all the values that are <cite>true</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Yields</dt>
 <dd class="field-odd"><p>The index of a <cite>true</cite> value</p>
@@ -323,11 +330,17 @@
 <em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">!=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lhs:</span> <span class="pre">BitArray32</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.!=" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compares parwise the values of the two bit arrays for inequality</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>if the bits in the arrays are equal</p>
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lhs</strong> – left hand bit array</p></li>
+<li><p><strong>rhs</strong> – right hand bit array</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><cite>list</cite></p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>if the bits in the arrays are equal</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>list</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -335,11 +348,11 @@
 <dl class="chpl method">
 <dt class="sig sig-object chpl" id="BitArrays32.BitArray32.=">
 <em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray32</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.=" title="Permalink to this definition">¶</a></dt>
-<dd><p>Copies the values from an rhs bit array.</p>
+<dd><p>Copies the values from a bit array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>lhs</strong> – the operator to assign</p></li>
+<li><p><strong>lhs</strong> – the bit array to assign</p></li>
 <li><p><strong>rhs</strong> – The bit array to copy</p></li>
 </ul>
 </dd>
@@ -352,7 +365,7 @@
 <dd><p>Nagation operator. Turn all <cite>true</cite> values into <cite>false</cite> values. Turn all <cite>false</cite> values into <cite>true</cite> values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The results</p>
+<dd class="field-odd"><p>A copy of this bit array negated.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><cite>BitArray32</cite></p>
@@ -369,7 +382,7 @@
 <dd class="field-odd"><p><strong>shift</strong> – the number of values to shift.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A copy of the values shifted <cite>shift</cite> positions to the right.</p>
+<dd class="field-even"><p>A copy of the values shifted to the right.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><cite>BitArray32</cite></p>
@@ -518,6 +531,46 @@ If one of the two bit arrays has different size then indices fitting the shortes
 <li><p><strong>lhs</strong> – this bit array</p></li>
 <li><p><strong>rhs</strong> – bit array to perform or with</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArrays32.BitArray32.-=">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">-=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray32</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.-=" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Perform the minus operation on the values in this bit array with the values in another bit array.</dt><dd><p>The result is all the values in <cite>lhs</cite> which are not present in <cite>rhs</cite>.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lhs</strong> – this bit array</p></li>
+<li><p><strong>rhs</strong> – bit array to perform minus with</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArrays32.BitArray32.-">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">-</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lhs:</span> <span class="pre">BitArray32</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays32.BitArray32.-" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Perform the minus operation on the values in this bit array with the values in another bit array.</dt><dd><p>The result is all the values in <cite>lhs</cite> which are not present in <cite>rhs</cite>.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lhs</strong> – this bit array</p></li>
+<li><p><strong>rhs</strong> – bit array to perform minus with</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The result of <cite>lhs</cite> - <cite>rhs</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>BitArray32</cite></p>
 </dd>
 </dl>
 </dd></dl>
