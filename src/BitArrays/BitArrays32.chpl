@@ -543,12 +543,17 @@ module BitArrays32 {
 
     /* Shift the values `shift` values to the right. Missing right values are padded with `false` values.
 
-       :arg shift: the number of values to shift.
+      :arg shift: the number of values to shift.
 
-       :returns: A copy of the values shifted to the right.
-       :rtype: `BitArray32`
+      :returns: A copy of the values shifted to the right.
+      :rtype: `BitArray32`
+
+      :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
      */
     operator <<(lhs : BitArray32, shift : integral) : BitArray32 {
+      if shift > this.size() || shift < 0 then
+        throw new ShiftRangeError();
+
       var values = reshape(lhs.values, lhs.values.domain);
       var bitArray : BitArray32 = new BitArray32(values, lhs.size());
       bitArray <<= shift;
@@ -557,9 +562,14 @@ module BitArrays32 {
 
     /* Shift all the values to the right. Left values are padded with `false` values.
 
-       :arg shift: the number of values to shift.
+      :arg shift: the number of values to shift.
+
+      :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
      */
     operator <<=(ref lhs : BitArray32, shift : integral) {
+      if shift > this.size() || shift < 0 then
+        throw new ShiftRangeError();
+
       lhs._bitshiftLeft(shift);
     }
 
@@ -569,8 +579,13 @@ module BitArrays32 {
 
        :returns: a copy of the values shifted `shift` positions to the left.
        :rtype: `BitArray32`
+
+       :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
      */
     operator >>(shift : integral) : BitArray32 {
+      if shift > this.size() || shift < 0 then
+        throw new ShiftRangeError();
+
       var bitArray : BitArray32 = this;
       bitArray >>= shift;
       return bitArray;
@@ -579,8 +594,13 @@ module BitArrays32 {
     /* Shift all the values to the right. Left values are padded with `false` values.
 
        :arg shift: the number of values to shift.
+
+       :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
      */
     operator >>=(shift : integral) {
+      if shift > this.size() || shift < 0 then
+        throw new ShiftRangeError();
+
       this._bitshiftRight(shift);
     }
 

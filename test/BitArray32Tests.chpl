@@ -709,7 +709,7 @@ proc BitArray32_these_inputHas1Values_OutputHas1Values(test: borrowed Test) thro
   var steps = 0;
   for i in bitArray.these() do
     steps += 1;
-  test.assertEqual(steps, 1);
+  test.assertEqual(1, steps);
 }
 
 proc BitArray32_these_inputHas63Values_OutputHas63Values(test: borrowed Test) throws {

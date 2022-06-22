@@ -198,12 +198,16 @@ or
       :returns: A copy of the values shifted to the right.
       :rtype: `BitArray32`
       
+      :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
+      
 
    .. method:: proc type <<=(ref lhs: BitArray32, shift: integral)
 
       Shift all the values to the right. Left values are padded with `false` values.
       
       :arg shift: the number of values to shift.
+      
+      :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
       
 
    .. method:: proc type >>(shift: integral): BitArray32
@@ -215,12 +219,16 @@ or
       :returns: a copy of the values shifted `shift` positions to the left.
       :rtype: `BitArray32`
       
+      :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
+      
 
    .. method:: proc type >>=(shift: integral)
 
       Shift all the values to the right. Left values are padded with `false` values.
       
       :arg shift: the number of values to shift.
+      
+      :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
       
 
    .. method:: proc type ^(lhs: BitArray32, rhs: BitArray32)

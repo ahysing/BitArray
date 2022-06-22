@@ -24,3 +24,10 @@ or
 
    .. method:: proc init()
 
+.. class:: ShiftRangeError : IllegalArgumentError
+
+   Exception thrown when bitshifting the bit arrays outside the range of values the bit array 
+
+
+   .. method:: proc init()
+
