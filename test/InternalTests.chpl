@@ -508,4 +508,15 @@ proc Internal_reverse32_0b01111101011100001010001110101001(test: borrowed Test) 
 proc Internal_reverse32_0b01111110101110000101000110111101(test: borrowed Test) throws { test.assertEqual(reverse32(0b01111110101110000101000110111101 : uint(32)), 0b10111101100010100001110101111110 : uint(32)); }
 proc Internal_reverse32_0b01111111111111111111111111010001(test: borrowed Test) throws { test.assertEqual(reverse32(0b01111111111111111111111111010001 : uint(32)), 0b10001011111111111111111111111110 : uint(32)); }
 
+/*
+#!/bin/bash
+for i in $(seq -f '%1.0f' 1 21474836 2147483647)
+do
+    x=$(printf "ibase=10;obase=2;%d\n" $i | bc)
+    number=$(echo 0000000000000000000000000000000000000000000000000000000000000000$x | tail -c 65)
+    rev_number=$(echo $number | rev)
+    echo "proc Internal_reverse64_${number}(test: borrowed Test) throws { test.assertEqual(reverse64(0b${number}), 0b${rev_number}); }"
+done
+*/
+proc Internal_reverse64_0000000000000000000000000000000001111111111111111111111111010001(test: borrowed Test) throws { test.assertEqual(reverse64(0b0000000000000000000000000000000001111111111111111111111111010001), 0b1000101111111111111111111111111000000000000000000000000000000000); }
 UnitTest.main();

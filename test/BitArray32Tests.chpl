@@ -770,6 +770,43 @@ proc BitArray_trueIndicies(test: borrowed Test) throws {
   test.assertEqual(expected, result);
 }
 
+proc BitArray_trueIndicies_allValuesAreSet(test: borrowed Test) throws {
+  var bitArray = new BitArray32(8);
+  bitArray.fill();
+  var expected : domain((int, bool)) = [
+    (0, true),
+    (1, true),
+    (2, true),
+    (3, true),
+    (4, true),
+    (5, true),
+    (6, true),
+    (7, true),
+  ];
+  var result : domain((int, bool));
+  for (value, i) in zip(bitArray.these(), 0..) do
+    result += (i, value);
+  test.assertEqual(expected, result);
+}
+
+proc BitArray_trueIndicies_inputHas32Values_outputHas32Values(test: borrowed Test) throws {
+  var bitArray = new BitArray32(32);
+  var size = 0;
+  for bitArray.these() do
+    size += 1;
+  var expected = 32;
+  test.assertEqual(expected, size);
+}
+
+proc BitArray_trueIndicies_inputHas33Values_outputHas33Values(test: borrowed Test) throws {
+  var bitArray = new BitArray32(33);
+  var size = 0;
+  for bitArray.these() do
+    size += 1;
+  var expected = 33;
+  test.assertEqual(expected, size);
+}
+
 proc BitArray32_bitshiftLeftNBits(test : borrowed Test) throws {
   var bitArray = new BitArray32(256);
   // all these values ha 1 as the least signifficat bit.
@@ -798,7 +835,6 @@ proc BitArray32_bitshiftLeftNBits(test : borrowed Test) throws {
 
   test.assertEqual(expected.values, bitArray.values);
 }
-
 
 proc BitArray32_bitshiftRightNBits(test : borrowed Test) throws {
   var bitArray = new BitArray32(256);
