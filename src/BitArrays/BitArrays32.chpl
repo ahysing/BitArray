@@ -53,6 +53,11 @@ module BitArrays32 {
       var Space = {0..lastIdx};
       var bitDomain : domain(rank=1, idxType=bit32Index, stridable=false) dmapped Block(boundingBox=Space, targetLocales=targetLocales) = Space;
       var values : [bitDomain] uint(32);
+
+      assert(!values.isAssociative());
+      assert(!values.isSparse());
+      assert(values.isRectangular());
+
       this.bitDomain = bitDomain;
       this.bitSize = size;
       this.hasRemaining = hasRemaining;
@@ -67,15 +72,25 @@ module BitArrays32 {
        :arg values: The valuess in the bit array stored as 32 bit integers.  If the size does is not a multiple of 32 then one extra value must be added to contain the reminder bits.
        :arg size: The number of individual bits in the bit array.
      */
-    proc init(const ref values : [] uint(32), size : bit32Index) {
+    proc init(ref values : [] uint(32), size : bit32Index) {
       this.complete();
-      assert(!values.isAssociative());
-      assert(!values.isSparse());
-      assert(values.isRectangular());
+      if (values.isAssociative()) {
+        halt("ref values is associative");
+      }
+
+      if (values.isSparse()) {
+        halt("ref values is sparse");
+      }
+
+      if (!values.isRectangular()) {
+        halt("ref values is not rectangular");
+      }
 
       // Compare sizes from blocks of 32 bits and given size.
       // Make sure the the number of bits in a block fits size or size + 1
-      assert(findNumberOfBlocks(values) / 2 == (size / packSize) / 2);
+      if (findNumberOfBlocks(values) / 2 != (size / packSize) / 2) {
+        halt("Make sure the the number of bits in a block fits size or size + 1", size);
+      }
       var hasRemaining = (size % packSize) != 0;
       this.bitDomain = values.domain;
       this.bitSize = size;
