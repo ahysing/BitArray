@@ -307,9 +307,22 @@ module BitArrays64 {
        :arg rhs: bit array to perform xor with
      */
     operator ^=(ref lhs : BitArray64, rhs : BitArray64) {
-      lhs.values ^= rhs.values;
-      on lhs.values[lhs.values.domain.last] do
-        lhs.values[lhs.values.domain.last] &= lhs._createReminderMask();
+      if lhs.size() >= lhs.size() {
+        lhs.values ^= rhs.values;
+        on lhs.values[lhs.values.domain.last] do
+          lhs.values[lhs.values.domain.last] &= lhs._createReminderMask();
+      } else {
+        var first = rhs.values.domain.first;
+        var last = rhs.values.domain.last;
+        foreach (i, j) in zip(lhs.values.domain[first..last], rhs.values.domain) do
+          lhs.values = lhs.values[i] ^ rhs.values[j];
+
+        var lasti = first;
+        foreach (i, j) in zip(lhs.values.domain, rhs.values.domain) do
+          lasti = i;
+        on lhs.values[lasti] do
+          lhs.values[lasti] &= lhs._createReminderMask();
+      }
     }
 
     /* Perform the and operation on the values in this bit array with the values in another bit array.
@@ -322,9 +335,17 @@ module BitArrays64 {
        :rtype: `BitArray64`
      */
     operator &(lhs : BitArray64, rhs : BitArray64) : BitArray64 {
-      var values = lhs.values & rhs.values;
-      var size = if lhs.size() < rhs.size() then lhs.size() else rhs.size();
-      return new BitArray64(values, size);
+      if lhs.size() >= rhs.size() {
+        var result = lhs.values & rhs.values;
+        return new BitArray64(result, lhs.size());
+      } else {
+        var values : [lhs.values.domain] lhs.values.eltType;
+        var first = rhs.values.domain.first;
+        var last = rhs.values.domain.last;
+        foreach (i, j) in zip(lhs.values.domain[first..last], rhs.values.domain) do
+          values[i] = lhs.values[i] & rhs.values[j];
+        return new BitArray64(values, rhs.size());
+      }
     }
 
     /* Perform the and operation on the values in this bit array with the values in another bit array.
@@ -334,7 +355,14 @@ module BitArrays64 {
        :arg rhs: bit array to perform and with
      */
     operator &=(ref lhs : BitArray64, rhs : BitArray64) : BitArray64 {
-      lhs.values &= rhs.values;
+      if lhs.size() >= rhs.size() then
+        lhs.values &= rhs.values;
+      else {
+        var first = rhs.values.domain.first;
+        var last = rhs.values.domain.last;
+        foreach (i, j) in zip(lhs.values.domain[first..last], rhs.values.domain) do
+          lhs.values[i] = lhs.values[i] & rhs.values[j];
+      }
     }
 
     /* Perform the or operation on the values in this bit array with the values in another bit array.
