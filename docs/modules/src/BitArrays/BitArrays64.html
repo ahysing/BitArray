@@ -409,8 +409,8 @@ If one of the two bit arrays has different size then indices fitting the shortes
 </dd></dl>
 
 <dl class="chpl method">
-<dt class="sig sig-object chpl">
-<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">|(lhs:</span> <span class="pre">BitArray64,</span> <span class="pre">rhs:</span> <span class="pre">BitArray64):</span> <span class="pre">BitArray64</span></span></dt>
+<dt class="sig sig-object chpl" id="BitArrays64.BitArray64.+">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">+</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lhs:</span> <span class="pre">BitArray64</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray64</span></em><span class="sig-paren">)</span><span class="pre">:</span> <span class="pre">BitArray64</span><a class="headerlink" href="#BitArrays64.BitArray64.+" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform the or operation on the values in this bit array with the values in another bit array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Arguments</dt>
@@ -429,8 +429,8 @@ If one of the two bit arrays has different size then indices fitting the shortes
 </dd></dl>
 
 <dl class="chpl method">
-<dt class="sig sig-object chpl">
-<span class="sig-name descname"><span class="pre">proc</span> <span class="pre">type</span> <span class="pre">|=(ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray64,</span> <span class="pre">rhs:</span> <span class="pre">BitArray64)</span></span></dt>
+<dt class="sig sig-object chpl" id="BitArrays64.BitArray64.+=">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">+=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray64</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray64</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays64.BitArray64.+=" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>Perform the or operation on the values in this bit array with the values in another bit array.</dt><dd><p><cite>lhs</cite> is updated with the result of the operation.</p>
 </dd>
@@ -440,21 +440,6 @@ If one of the two bit arrays has different size then indices fitting the shortes
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lhs</strong> – this bit array</p></li>
 <li><p><strong>rhs</strong> – bit array to perform or with</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="chpl method">
-<dt class="sig sig-object chpl" id="BitArrays64.BitArray64.-=">
-<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">-=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray64</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray64</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays64.BitArray64.-=" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform the minus operation on the values in this bit array with the values in another bit array.
-The result is all the values in <cite>lhs</cite> which are not present in <cite>rhs</cite>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Arguments</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>lhs</strong> – this bit array</p></li>
-<li><p><strong>rhs</strong> – bit array to perform minus with</p></li>
 </ul>
 </dd>
 </dl>
@@ -477,6 +462,21 @@ The result is all the values in <cite>lhs</cite> which are not present in <cite>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><cite>BitArray64</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArrays64.BitArray64.-=">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">-=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray64</span></em>, <em class="sig-param"><span class="pre">rhs:</span> <span class="pre">BitArray64</span></em><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays64.BitArray64.-=" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform the minus operation on the values in this bit array with the values in another bit array.
+The result is all the values in <cite>lhs</cite> which are not present in <cite>rhs</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lhs</strong> – this bit array</p></li>
+<li><p><strong>rhs</strong> – bit array to perform minus with</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

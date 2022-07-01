@@ -13,31 +13,31 @@ jobs:
   build:
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: apt helper action
         uses: ryankurte/action-apt@v0.2.0
         with:
           packages: curl wget ca-certificates curl perl python3 python3-dev python-setuptools libgmp10 libgmp-dev locales bash make mawk file pkg-config git
       - name: Cache LLVM and Clang
         id: cache-llvm
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ./llvm
-          key: llvm-13
+          key: llvm-14
       - name: Install LLVM and Clang
         # You may pin to the exact commit or the version.
         # uses: KyleMayes/install-llvm-action@f0cccbdf563688c6e0f9273d4bc27a8c5278de85
         uses: KyleMayes/install-llvm-action@v1.5.3
         with:
           # The version of LLVM and Clang binaries to install.
-          version: 13
+          version: 14
           # Whether to accept unsupported LLVM and Clang versions.
           force-version: false
       - name: Create chapel directory
         run: |
           export PATH=$PATH:${{ ENV.LLVM_PATH }}/bin
-          export CHPL_VERSION=1.26.0
+          export CHPL_VERSION=1.27.0
           export CHPL_HOME=/opt/chapel/$CHPL_VERSION
 
           mkdir -p $CHPL_HOME
@@ -60,6 +60,3 @@ jobs:
           echo "------------ Run Tests -------------"
           echo
           make test -C ${GITHUB_WORKSPACE}
-      
-
-

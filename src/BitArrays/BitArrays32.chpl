@@ -261,13 +261,13 @@ module BitArrays32 {
 //           i += 1;
 //         }
 //       }
-// 
+//
 //       // example got from https://chapel-lang.org/docs/users-guide/locality/onClauses.html
 //       coforall loc in D.targetLocales() do
 //         on loc do
 //           for sub in D.localSubdomains(loc) do
 //             this._generalBitshiftLeftWholeBlockSerial(this.values, sub);
-// 
+//
 //       for loc in D.targetLocales() {
 //         var i = 0;
 //         for sub in D.localSubdomains(loc) {
@@ -550,8 +550,8 @@ module BitArrays32 {
 
       :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
      */
-    operator <<(lhs : BitArray32, shift : integral) : BitArray32 {
-      if shift > this.size() || shift < 0 then
+    operator <<(lhs : BitArray32, shift : integral) : BitArray32 throws {
+      if shift > lhs.size() || shift < 0 then
         throw new ShiftRangeError();
 
       var values = reshape(lhs.values, lhs.values.domain);
@@ -566,8 +566,8 @@ module BitArrays32 {
 
       :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
      */
-    operator <<=(ref lhs : BitArray32, shift : integral) {
-      if shift > this.size() || shift < 0 then
+    operator <<=(ref lhs : BitArray32, shift : integral) throws {
+      if shift > lhs.size() || shift < 0 then
         throw new ShiftRangeError();
 
       lhs._bitshiftLeft(shift);
@@ -582,8 +582,8 @@ module BitArrays32 {
 
        :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
      */
-    operator >>(shift : integral) : BitArray32 {
-      if shift > this.size() || shift < 0 then
+    operator >>(lhs : BitArray32, shift : integral) : BitArray32 throws {
+      if shift > lhs.size() || shift < 0 then
         throw new ShiftRangeError();
 
       var bitArray : BitArray32 = this;
@@ -597,7 +597,7 @@ module BitArrays32 {
 
        :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
      */
-    operator >>=(shift : integral) {
+    operator >>=(shift : integral) throws {
       if shift > this.size() || shift < 0 then
         throw new ShiftRangeError();
 
@@ -629,9 +629,22 @@ module BitArrays32 {
        :arg rhs: bit array to perform xor with
      */
     operator ^=(ref lhs : BitArray32, rhs : BitArray32) {
-      lhs.values ^= rhs.values;
-      on lhs.values[lhs.values.domain.last] do
-        lhs.values[lhs.values.domain.last] &= lhs._createReminderMask();
+      if lhs.size() >= lhs.size() {
+        lhs.values ^= rhs.values;
+        on lhs.values[lhs.values.domain.last] do
+          lhs.values[lhs.values.domain.last] &= lhs._createReminderMask();
+      } else {
+        var first = rhs.values.domain.first;
+        var last = rhs.values.domain.last;
+        foreach (i, j) in zip(lhs.values.domain[first..last], rhs.values.domain) do
+          lhs.values = lhs.values[i] ^ rhs.values[j];
+
+        var lasti = first;
+        foreach (i, j) in zip(lhs.values.domain, rhs.values.domain) do
+          lasti = i;
+        on lhs.values[lasti] do
+          lhs.values[lasti] &= lhs._createReminderMask();
+      }
     }
 
     /* Perform the and operation on the values in this bit array with the values in another bit array.
@@ -642,11 +655,19 @@ module BitArrays32 {
 
        :returns: the result of `lhs` or `rhs`
        :rtype: `BitArray32`
-     */
+    */
     operator &(lhs : BitArray32, rhs : BitArray32) : BitArray32 {
-      var values = lhs.values & rhs.values;
-      var size = if lhs.size() < rhs.size() then lhs.size() else rhs.size();
-      return new BitArray32(values, size);
+      if lhs.size() >= rhs.size() {
+        var result = lhs.values & rhs.values;
+        return new BitArray32(result, lhs.size());
+      } else {
+        var values : [lhs.values.domain] lhs.values.eltType;
+        var first = rhs.values.domain.first;
+        var last = rhs.values.domain.last;
+        foreach (i, j) in zip(lhs.values.domain[first..last], rhs.values.domain) do
+          values[i] = lhs.values[i] & rhs.values[j];
+        return new BitArray32(values, rhs.size());
+      }
     }
 
     /* Perform the and operation on the values in this bit array with the values in another bit array.
@@ -654,9 +675,16 @@ module BitArrays32 {
 
        :arg lhs: this bit array
        :arg rhs: bit array to perform and with
-     */
+    */
     operator &=(ref lhs : BitArray32, rhs : BitArray32) : BitArray32 {
-      lhs.values &= rhs.values;
+      if lhs.size() >= rhs.size() then
+        lhs.values &= rhs.values;
+      else {
+        var first = rhs.values.domain.first;
+        var last = rhs.values.domain.last;
+        foreach (i, j) in zip(lhs.values.domain[first..last], rhs.values.domain) do
+          lhs.values[i] = lhs.values[i] & rhs.values[j];
+      }
     }
 
     /* Perform the or operation on the values in this bit array with the values in another bit array.
@@ -666,8 +694,8 @@ module BitArrays32 {
 
        :returns: The result of `lhs` or `rhs`
        :rtype: `BitArray32`
-     */
-    operator |(lhs : BitArray32, rhs : BitArray32) : BitArray32 {
+    */
+    operator +(lhs : BitArray32, rhs : BitArray32) : BitArray32 {
       var values = lhs.values | rhs.values;
       var size = if lhs.size() < rhs.size() then lhs.size() else rhs.size();
       return new BitArray32(values, size);
@@ -678,18 +706,8 @@ module BitArrays32 {
       :arg lhs: this bit array
       :arg rhs: bit array to perform or with
     */
-    operator |=(ref lhs : BitArray32, rhs : BitArray32) {
+    operator +=(ref lhs : BitArray32, rhs : BitArray32) {
       lhs.values |= rhs.values;
-    }
-
-    /* Perform the minus operation on the values in this bit array with the values in another bit array.
-       The result is all the values in `lhs` which are not present in `rhs`.
-
-      :arg lhs: this bit array
-      :arg rhs: bit array to perform minus with
-    */
-    operator -=(ref lhs : BitArray32, rhs : BitArray32) {
-      lhs.values = lhs.values & !rhs.values;
     }
 
     /* Perform the minus operation on the values in this bit array with the values in another bit array.
@@ -705,6 +723,16 @@ module BitArrays32 {
       var D = lhs.values.domain;
       var values : [D] lhs.values.eltType = lhs.values & !rhs.values;
       return new BitArray32(values, lhs.size());
+    }
+
+    /* Perform the minus operation on the values in this bit array with the values in another bit array.
+       The result is all the values in `lhs` which are not present in `rhs`.
+
+      :arg lhs: this bit array
+      :arg rhs: bit array to perform minus with
+    */
+    operator -=(ref lhs : BitArray32, rhs : BitArray32) {
+      lhs.values = lhs.values & !rhs.values;
     }
   }
 }

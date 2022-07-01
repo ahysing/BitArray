@@ -876,52 +876,52 @@ proc BitArray32_pipe(test: borrowed Test) throws {
   var bitArrayB = new BitArray32(32);
   bitArrayA.set(1, true);
   bitArrayB.set(2, true);
-  var result = bitArrayA | bitArrayB;
+  var result = bitArrayA + bitArrayB;
   test.assertTrue(result.any());
 }
 
-proc BitArray32_pipe_bitAtIndexOneIsTrue(test: borrowed Test) throws {
+proc BitArray32_pluss_bitAtIndexOneIsTrue(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);
   var bitArrayB = new BitArray32(32);
   bitArrayA.set(1, true);
   bitArrayB.set(1, true);
-  var result = bitArrayA | bitArrayB;
+  var result = bitArrayA + bitArrayB;
   test.assertTrue(result.any());
 }
 
-proc BitArray32_pipeEquals(test: borrowed Test) throws {
+proc BitArray32_plussEquals(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);
   var bitArrayB = new BitArray32(32);
   bitArrayA.set(1, true);
   bitArrayB.set(2, true);
-  bitArrayA |= bitArrayB;
+  bitArrayA += bitArrayB;
   test.assertTrue(bitArrayA.any());
 }
 
 
-proc BitArray32_pipeEquals_bitAtIndexOneIsTrue(test: borrowed Test) throws {
+proc BitArray32_plussEquals_bitAtIndexOneIsTrue(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);
   var bitArrayB = new BitArray32(32);
   bitArrayA.set(1, true);
   bitArrayB.set(1, true);
-  bitArrayA |= bitArrayB;
+  bitArrayA += bitArrayB;
   test.assertTrue(bitArrayA.any());
 }
 
-proc BitArray32_pipe_inputisTrueatIndex1_outputIsTrueAtIndex1(test: borrowed Test) throws {
+proc BitArray32_pluss_inputisTrueatIndex1_outputIsTrueAtIndex1(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);
   var bitArrayB = new BitArray32(32);
   bitArrayA.set(1, true);
   bitArrayB.set(1, true);
-  var result = bitArrayA | bitArrayB;
+  var result = bitArrayA + bitArrayB;
   test.assertTrue(result.any());
 }
 
-proc BitArray32_pipeEquals_inputisTrueatIndex1_outputIsTrueAtIndex1(test: borrowed Test) throws {
+proc BitArray32_plussEquals_inputisTrueatIndex1_outputIsTrueAtIndex1(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);
   var bitArrayB = new BitArray32(32);
   bitArrayA.set(1, true);
-  bitArrayB |= bitArrayA;
+  bitArrayB += bitArrayA;
   test.assertTrue(bitArrayB.any());
 }
 

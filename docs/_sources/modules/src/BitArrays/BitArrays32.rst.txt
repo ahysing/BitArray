@@ -189,7 +189,7 @@ or
       :rtype: `BitArray32`
       
 
-   .. method:: proc type <<(lhs: BitArray32, shift: integral): BitArray32
+   .. method:: proc type <<(lhs: BitArray32, shift: integral): BitArray32 throws
 
       Shift the values `shift` values to the right. Missing right values are padded with `false` values.
       
@@ -201,7 +201,7 @@ or
       :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
       
 
-   .. method:: proc type <<=(ref lhs: BitArray32, shift: integral)
+   .. method:: proc type <<=(ref lhs: BitArray32, shift: integral) throws
 
       Shift all the values to the right. Left values are padded with `false` values.
       
@@ -210,7 +210,7 @@ or
       :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
       
 
-   .. method:: proc type >>(shift: integral): BitArray32
+   .. method:: proc type >>(lhs: BitArray32, shift: integral): BitArray32 throws
 
       Shift the values `shift` positions to the left. Missing left values are padded with `false` values.
       
@@ -222,7 +222,7 @@ or
       :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
       
 
-   .. method:: proc type >>=(shift: integral)
+   .. method:: proc type >>=(shift: integral) throws
 
       Shift all the values to the right. Left values are padded with `false` values.
       
@@ -273,7 +273,7 @@ or
       :arg rhs: bit array to perform and with
       
 
-   .. method:: proc type |(lhs: BitArray32, rhs: BitArray32): BitArray32
+   .. method:: proc type +(lhs: BitArray32, rhs: BitArray32): BitArray32
 
       Perform the or operation on the values in this bit array with the values in another bit array.
       
@@ -284,21 +284,12 @@ or
       :rtype: `BitArray32`
       
 
-   .. method:: proc type |=(ref lhs: BitArray32, rhs: BitArray32)
+   .. method:: proc type +=(ref lhs: BitArray32, rhs: BitArray32)
 
       Perform the or operation on the values in this bit array with the values in another bit array.
       
       :arg lhs: this bit array
       :arg rhs: bit array to perform or with
-      
-
-   .. method:: proc type -=(ref lhs: BitArray32, rhs: BitArray32)
-
-      Perform the minus operation on the values in this bit array with the values in another bit array.
-       The result is all the values in `lhs` which are not present in `rhs`.
-      
-      :arg lhs: this bit array
-      :arg rhs: bit array to perform minus with
       
 
    .. method:: proc type -(lhs: BitArray32, rhs: BitArray32)
@@ -311,5 +302,14 @@ or
       
       :returns: The result of `lhs` - `rhs`
       :rtype: `BitArray32`
+      
+
+   .. method:: proc type -=(ref lhs: BitArray32, rhs: BitArray32)
+
+      Perform the minus operation on the values in this bit array with the values in another bit array.
+       The result is all the values in `lhs` which are not present in `rhs`.
+      
+      :arg lhs: this bit array
+      :arg rhs: bit array to perform minus with
       
 
