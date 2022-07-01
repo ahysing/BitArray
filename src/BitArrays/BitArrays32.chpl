@@ -448,13 +448,13 @@ module BitArrays32 {
       if this.hasRemaining {
         var lastMinusOne = D.last - 1;
         if lastMinusOne >= 0 {
-          var wholeBlocksDomain : subdomain(D) = {D.first..(D.last - 1)};
+          var wholeBlocksDomain : subdomain(D) = {D.first..lastMinusOne};
           for i in wholeBlocksDomain do
             foreach j in {0..packSizeMinusOne} do
               yield this.values[i] & 1 << j != 0;
         }
 
-        var reminderSize = this.size() % packSize;
+        var reminderSize = this.size() % packSize - 1;
         foreach j in {0..reminderSize} do
           yield this.values[D.last] & 1 << j != 0;
       } else {
