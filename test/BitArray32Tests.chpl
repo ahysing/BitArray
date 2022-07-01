@@ -906,6 +906,24 @@ proc BitArray32_ampersand_bitAtIndexOneIsTrue(test: borrowed Test) throws {
   test.assertTrue(result.any());
 }
 
+proc BitArray32_ampersand_LeftIsSmallerThanRight(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(33);
+  bitArrayA.fill();
+  bitArrayB.fill();
+  var result = bitArrayA & bitArrayB;
+  test.assertFalse(result.all());
+}
+
+proc BitArray32_ampersand_RightIsSmallerThanLeft(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(33);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.fill();
+  bitArrayB.fill();
+  var result = bitArrayA & bitArrayB;
+  test.assertFalse(result.all());
+}
+
 proc BitArray32_ampersandEquals(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);
   var bitArrayB = new BitArray32(32);
