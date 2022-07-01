@@ -749,6 +749,27 @@ proc BitArray32_these_inputHas65Values_OutputHas65Values(test: borrowed Test) th
   test.assertEqual(steps, 65);
 }
 
+proc BitArray_trueIndicies(test: borrowed Test) throws {
+  var bitArray = new BitArray32(8);
+  bitArray.set(1, true);
+  bitArray.set(3, false);
+  bitArray.set(3, true);
+  var expected : domain((int, bool)) = [
+    (0, false),
+    (1, true),
+    (2, false),
+    (3, true),
+    (4, false),
+    (5, false),
+    (6, false),
+    (7, false),
+  ];
+  var result : domain((int, bool));
+  for (value, i) in zip(bitArray.these(), 0..) do
+    result += (i, value);
+  test.assertEqual(expected, result);
+}
+
 proc BitArray32_bitshiftLeftNBits(test : borrowed Test) throws {
   var bitArray = new BitArray32(256);
   // all these values ha 1 as the least signifficat bit.

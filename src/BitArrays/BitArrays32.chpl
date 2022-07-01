@@ -470,8 +470,7 @@ module BitArrays32 {
       :yields type: `int`
     */
     iter trueIndicies() {
-      var D = this.values.domain;
-      for i in D {
+      for i in this.values.domain {
         var block = this.values[i];
         while block != 0 {
           var czt = BitOps.ctz(block);
