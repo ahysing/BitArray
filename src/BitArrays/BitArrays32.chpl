@@ -676,12 +676,8 @@ module BitArrays32 {
         var result = lhs.values & rhs.values;
         return new BitArray32(result, lhs.size());
       } else {
-        var values : [lhs.values.domain] lhs.values.eltType;
-        var first = rhs.values.domain.first;
-        var last = rhs.values.domain.last;
-        foreach (i, j) in zip(lhs.values.domain[first..last], rhs.values.domain) do
-          values[i] = lhs.values[i] & rhs.values[j];
-        return new BitArray32(values, lhs.size());
+        var result = lhs.values & rhs.values;
+        return new BitArray32(result, hrs.size());
       }
     }
 
