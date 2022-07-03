@@ -920,6 +920,7 @@ proc BitArray32_ampersand_RightIsSmallerThanLeft(test: borrowed Test) throws {
   var bitArrayB = new BitArray32(32);
   bitArrayA.fill();
   bitArrayB.fill();
+  // TODO : halt reached - Make sure the number of bits 32 bit blocks * size or 32 bit blocks * size plus one block. (#blocks, size): (2, 32)
   var result = bitArrayA & bitArrayB;
   test.assertFalse(result.all());
 }

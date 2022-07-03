@@ -88,9 +88,10 @@ module BitArrays32 {
 
       // Compare sizes from blocks of 32 bits and given size.
       // Make sure the the number of bits in a block fits size or size + 1
-      if (findNumberOfBlocks(values) / 2 != (size / packSize) / 2) {
-        halt("Make sure the the number of bits in a block fits size or size + 1", size);
+      if (findNumberOfBlocks(values) != (size + (packSize - 1)) / packSize) {
+        halt("Make sure the number of bits 32 bit blocks * size or 32 bit blocks * size plus one block. (#blocks, size): (", findNumberOfBlocks(values), ", ", size, ")");
       }
+
       var hasRemaining = (size % packSize) != 0;
       this.bitDomain = values.domain;
       this.bitSize = size;
@@ -680,7 +681,7 @@ module BitArrays32 {
         var last = rhs.values.domain.last;
         foreach (i, j) in zip(lhs.values.domain[first..last], rhs.values.domain) do
           values[i] = lhs.values[i] & rhs.values[j];
-        return new BitArray32(values, rhs.size());
+        return new BitArray32(values, lhs.size());
       }
     }
 
