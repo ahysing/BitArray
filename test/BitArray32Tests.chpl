@@ -912,7 +912,7 @@ proc BitArray32_ampersand_LeftIsSmallerThanRight(test: borrowed Test) throws {
   bitArrayA.fill();
   bitArrayB.fill();
   var result = bitArrayA & bitArrayB;
-  test.assertFalse(result.all());
+  test.assertTrue(result.all());
 }
 
 proc BitArray32_ampersand_RightIsSmallerThanLeft(test: borrowed Test) throws {

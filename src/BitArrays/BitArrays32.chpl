@@ -672,13 +672,8 @@ module BitArrays32 {
        :rtype: `BitArray32`
     */
     operator &(lhs : BitArray32, rhs : BitArray32) : BitArray32 {
-      if lhs.size() >= rhs.size() {
-        var result = lhs.values & rhs.values;
-        return new BitArray32(result, lhs.size());
-      } else {
-        var result = lhs.values & rhs.values;
-        return new BitArray32(result, hrs.size());
-      }
+      var result = lhs.values & rhs.values;
+      return new BitArray32(result, lhs.size());
     }
 
     /* Perform the and operation on the values in this bit array with the values in another bit array.
@@ -688,14 +683,8 @@ module BitArrays32 {
        :arg rhs: bit array to perform and with
     */
     operator &=(ref lhs : BitArray32, rhs : BitArray32) : BitArray32 {
-      if lhs.size() >= rhs.size() then
-        lhs.values &= rhs.values;
-      else {
-        var first = rhs.values.domain.first;
-        var last = rhs.values.domain.last;
-        foreach (i, j) in zip(lhs.values.domain[first..last], rhs.values.domain) do
-          lhs.values[i] = lhs.values[i] & rhs.values[j];
-      }
+      lhs.values &= rhs.values;
+      lhs.bitSize = lhs.size();
     }
 
     /* Perform the or operation on the values in this bit array with the values in another bit array.
@@ -708,8 +697,7 @@ module BitArrays32 {
     */
     operator +(lhs : BitArray32, rhs : BitArray32) : BitArray32 {
       var values = lhs.values | rhs.values;
-      var size = if lhs.size() < rhs.size() then lhs.size() else rhs.size();
-      return new BitArray32(values, size);
+      return new BitArray32(values, lhs.size());
     }
 
     /* Perform the or operation on the values in this bit array with the values in another bit array.
@@ -719,6 +707,7 @@ module BitArrays32 {
     */
     operator +=(ref lhs : BitArray32, rhs : BitArray32) {
       lhs.values |= rhs.values;
+      lhs.bitSize = lhs.size();
     }
 
     /* Perform the minus operation on the values in this bit array with the values in another bit array.
