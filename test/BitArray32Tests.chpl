@@ -920,7 +920,6 @@ proc BitArray32_ampersand_RightIsSmallerThanLeft(test: borrowed Test) throws {
   var bitArrayB = new BitArray32(32);
   bitArrayA.fill();
   bitArrayB.fill();
-  // TODO : halt reached - Make sure the number of bits 32 bit blocks * size or 32 bit blocks * size plus one block. (#blocks, size): (2, 32)
   var result = bitArrayA & bitArrayB;
   test.assertFalse(result.all());
 }
@@ -941,6 +940,45 @@ proc BitArray32_ampersandEquals_bitAtIndexOneIsTrue(test: borrowed Test) throws 
   bitArrayB.set(1, true);
   bitArrayA &= bitArrayB;
   test.assertTrue(bitArrayA.any());
+}
+
+
+
+
+proc BitArray32_minus_LeftIsSmallerThanRight(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(33);
+  bitArrayA.fill();
+  bitArrayB.fill();
+  var result = bitArrayA - bitArrayB;
+  test.assertFalse(result.all());
+}
+
+proc BitArray32_minus_RightIsSmallerThanLeft(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(33);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.fill();
+  bitArrayB.fill();
+  var result = bitArrayA - bitArrayB;
+  test.assertTrue(result.all());
+}
+
+proc BitArray32_minusEquals(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.set(1, true);
+  bitArrayB.set(2, true);
+  bitArrayA -= bitArrayB;
+  test.assertTrue(bitArrayA.any());
+}
+
+proc BitArray32_minusEquals_bitAtIndexOneIsTrue(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.set(1, true);
+  bitArrayB.set(1, true);
+  bitArrayA -= bitArrayB;
+  test.assertFalse(bitArrayA.any());
 }
 
 
@@ -1001,7 +1039,7 @@ proc BitArray32_plussEquals_inputisTrueatIndex1_outputIsTrueAtIndex1(test: borro
   test.assertTrue(bitArrayB.any());
 }
 
-proc BitArray32_ampersand_inputisTrueatIndex1OnBothBitArrays_outputIsTrueAtIndex1(test: borrowed Test) throws {
+proc BitArray32_minus_inputisTrueatIndex1OnBothBitArrays_outputIsTrueAtIndex1(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);
   var bitArrayB = new BitArray32(32);
   bitArrayA.set(1, true);
@@ -1010,7 +1048,7 @@ proc BitArray32_ampersand_inputisTrueatIndex1OnBothBitArrays_outputIsTrueAtIndex
   test.assertTrue(result.any());
 }
 
-proc BitArray32_ampersand_inputisTrueatIndex1or2_outputIsFalse(test: borrowed Test) throws {
+proc BitArray32_minus_inputisTrueatIndex1or2_outputIsFalse(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);
   var bitArrayB = new BitArray32(32);
   bitArrayA.set(1, true);
