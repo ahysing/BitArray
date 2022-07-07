@@ -33,12 +33,12 @@ jobs:
         uses: KyleMayes/install-llvm-action@v1.5.3
         with:
           # The version of LLVM and Clang binaries to install.
-          version: 14
+          version: ${{ env.LLVM_VERSION }}
           # Whether to accept unsupported LLVM and Clang versions.
-          force-version: false
+          force-version: true
         env:
           LLVM_VERSION: LLVM_VERSION
-        if: ${{ ! cache-llvm.cache-hit }}
+        if: ${{ !steps.cache-llvm.outputs.cache-hit }}
       - name: Create chapel directory
         run: |
           export PATH=$PATH:${{ ENV.LLVM_PATH }}/bin
