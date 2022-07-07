@@ -67,3 +67,6 @@ jobs:
           echo "------------ Run Tests -------------"
           echo
           make test -C ${GITHUB_WORKSPACE}
+        env:
+          LLVM_VERSION: ${{ env.LLVM_VERSION }}
+          CHPL_VERSION: ${{ env.CHPL_VERSION }}
