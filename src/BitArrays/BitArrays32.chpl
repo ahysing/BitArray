@@ -707,7 +707,6 @@ module BitArrays32 {
     */
     operator +=(ref lhs : BitArray32, rhs : BitArray32) {
       lhs.values |= rhs.values;
-      lhs.bitSize = lhs.size();
     }
 
     /* Perform the minus operation on the values in this bit array with the values in another bit array.
@@ -721,7 +720,7 @@ module BitArrays32 {
     */
     operator -(lhs : BitArray32, rhs : BitArray32) {
       var D = lhs.values.domain;
-      var values : [D] lhs.values.eltType = lhs.values & !rhs.values;
+      var values : [D] lhs.values.eltType = lhs.values & ~rhs.values;
       return new BitArray32(values, lhs.size());
     }
 
@@ -732,7 +731,7 @@ module BitArrays32 {
       :arg rhs: bit array to perform minus with
     */
     operator -=(ref lhs : BitArray32, rhs : BitArray32) {
-      lhs.values = lhs.values & !rhs.values;
+      lhs.values &= ~rhs.values;
     }
   }
 }

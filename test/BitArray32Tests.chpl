@@ -959,17 +959,54 @@ proc BitArray32_minus_RightIsSmallerThanLeft(test: borrowed Test) throws {
   var bitArrayB = new BitArray32(32);
   bitArrayA.fill();
   bitArrayB.fill();
+
   var result = bitArrayA - bitArrayB;
-  test.assertTrue(result.all());
+
+  var expected = new BitArray32(33);
+  expected.values[0] = 0;
+  expected.values[1] = 1;
+  test.assertEqual(expected.values, result.values);
 }
+
+
+proc BitArray32_minus_RightIsSmallerThanLeft_sizeCopiedFromLeftHandSide(test: borrowed Test) throws {
+  var size = 33;
+  var bitArrayA = new BitArray32(size);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.fill();
+  bitArrayB.fill();
+
+  var result = bitArrayA - bitArrayB;
+
+  test.assertEqual(size, result.size());
+}
+
+
+proc BitArray32_minus(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.set(1, true);
+  bitArrayB.set(2, true);
+
+  var result = bitArrayA - bitArrayB;
+
+  var expected = new BitArray32(32);
+  expected.set(1, true);
+  test.assertEqual(expected.values, bitArrayA.values);
+}
+
 
 proc BitArray32_minusEquals(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);
   var bitArrayB = new BitArray32(32);
   bitArrayA.set(1, true);
   bitArrayB.set(2, true);
+
   bitArrayA -= bitArrayB;
-  test.assertTrue(bitArrayA.any());
+
+  var expected = new BitArray32(32);
+  expected.set(1, true);
+  test.assertEqual(expected.values, bitArrayA.values);
 }
 
 proc BitArray32_minusEquals_bitAtIndexOneIsTrue(test: borrowed Test) throws {
@@ -977,7 +1014,9 @@ proc BitArray32_minusEquals_bitAtIndexOneIsTrue(test: borrowed Test) throws {
   var bitArrayB = new BitArray32(32);
   bitArrayA.set(1, true);
   bitArrayB.set(1, true);
+
   bitArrayA -= bitArrayB;
+
   test.assertFalse(bitArrayA.any());
 }
 
