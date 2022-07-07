@@ -33,7 +33,7 @@ or
       :arg locales: What nodes to distibute the values over
       
 
-   .. method:: proc init(const ref values: [] uint(32), size: bit32Index)
+   .. method:: proc init(ref values: [] uint(32), size: bit32Index)
 
       Create a bit array from a given set of values.
       * The input values must be a rectangular 1-dimensional array.
