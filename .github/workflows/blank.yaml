@@ -43,7 +43,7 @@ jobs:
         if: ${{ steps.cache-llvm.outputs.cache-hit }}
       - name: Create chapel directory
         run: |
-          export PATH=$PATH:LLVM_PATH/bin
+          export PATH=$PATH:$LLVM_PATH/bin
           export CHPL_HOME=/opt/chapel/$CHPL_VERSION
 
           mkdir -p $CHPL_HOME
