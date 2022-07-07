@@ -36,13 +36,14 @@ jobs:
           version: ${{ env.LLVM_VERSION }}
           # Whether to accept unsupported LLVM and Clang versions.
           force-version: true
-        env:
-          LLVM_VERSION: LLVM_VERSION
         if: ${{ !steps.cache-llvm.outputs.cache-hit }}
+      - name: bind LLVM_PATH
+        run: |
+          export LLVM_PATH=/home/runner/work/BitArray/BitArray/llvm
+        if: ${{ cache-llvm.cache-hit }}
       - name: Create chapel directory
         run: |
-          export PATH=$PATH:${{ ENV.LLVM_PATH }}/bin
-          # export CHPL_VERSION=1.27.0
+          export PATH=$PATH:LLVM_PATH/bin
           export CHPL_HOME=/opt/chapel/$CHPL_VERSION
 
           mkdir -p $CHPL_HOME
