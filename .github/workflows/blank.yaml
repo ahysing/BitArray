@@ -9,7 +9,7 @@ on:
 
 env:
   LLVM_VERSION: 14
-  CHPL_VERSION: 1.27
+  CHPL_VERSION: 1.27.0
 
 jobs:
   build:
