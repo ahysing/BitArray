@@ -38,7 +38,7 @@ jobs:
           force-version: false
         env:
           LLVM_VERSION: LLVM_VERSION
-        if: ${{ ! jobs.build.steps.cache-llvm.cache-hit }}
+        if: ${{ ! cache-llvm.cache-hit }}
       - name: Create chapel directory
         run: |
           export PATH=$PATH:${{ ENV.LLVM_PATH }}/bin
