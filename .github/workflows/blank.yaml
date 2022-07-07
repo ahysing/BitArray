@@ -39,6 +39,7 @@ jobs:
         if: ${{ !steps.cache-llvm.outputs.cache-hit }}
       - name: Create chapel directory
         run: |
+          set -x
           if [[ -z "$LLVM_PATH" ]]
           then
             export LLVM_PATH=/home/runner/work/BitArray/BitArray/llvm
