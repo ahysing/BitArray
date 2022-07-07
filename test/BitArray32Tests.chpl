@@ -1041,16 +1041,33 @@ proc BitArray32_pluss_bitAtIndexOneIsTrue(test: borrowed Test) throws {
   var result = bitArrayA + bitArrayB;
   test.assertTrue(result.any());
 }
+proc BitArray32_pluss(test: borrowed Test) throws {
+  var bitArrayA = new BitArray32(32);
+  var bitArrayB = new BitArray32(32);
+  bitArrayA.set(1, true);
+  bitArrayB.set(2, true);
+
+  var result = bitArrayA + bitArrayB;
+
+  var expected = new BitArray32(32),
+  expected.set(1, true);
+  expected.set(2, true);
+  test.assertEqual(expected.values, result.values);
+}
 
 proc BitArray32_plussEquals(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);
   var bitArrayB = new BitArray32(32);
   bitArrayA.set(1, true);
   bitArrayB.set(2, true);
-  bitArrayA += bitArrayB;
-  test.assertTrue(bitArrayA.any());
-}
 
+  bitArrayA += bitArrayB;
+
+  var expected = new BitArray32(32),
+  expected.set(1, true);
+  expected.set(2, true);
+  test.assertEqual(expected.values, bitArrayA.values);
+}
 
 proc BitArray32_plussEquals_bitAtIndexOneIsTrue(test: borrowed Test) throws {
   var bitArrayA = new BitArray32(32);
