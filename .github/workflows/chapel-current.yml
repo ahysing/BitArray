@@ -26,7 +26,7 @@ jobs:
       - name: apt helper action
         uses: ryankurte/action-apt@v0.2.0
         with:
-          packages: build-essential clang-14
+          packages: build-essential clang-14 make file
       # https://github.community/t/installing-homebrew-on-linux/17994/3
       - name: Installing Homebrew
         run: |
