@@ -36,6 +36,7 @@ jobs:
         run: |
           brew install chapel
       - name: make test
+        run: |
           echo
           echo "------------ Compile Code -------------"
           echo
