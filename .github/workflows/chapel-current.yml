@@ -31,13 +31,14 @@ jobs:
       - name: Installing Homebrew
         run: |
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-          test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
-          test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-          echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
       - name: Install chapel
         run: |
-          export PATH="$path:/home/linuxbrew/.linuxbrew/bin"
+          set -x
+          
+          test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+          
           brew --version
+          
           brew install chapel
       - name: make test
         run: |
