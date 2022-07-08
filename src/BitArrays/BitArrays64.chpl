@@ -401,7 +401,7 @@ module BitArrays64 {
     */
     operator -(lhs : BitArray64, rhs : BitArray64) {
       var D = lhs.values.domain;
-      var values : [D] lhs.values.eltType = lhs.values & !rhs.values;
+      var values : [D] lhs.values.eltType = lhs.values & ~rhs.values;
       return new BitArray64(values, lhs.size());
     }
 
@@ -412,7 +412,7 @@ module BitArrays64 {
       :arg rhs: bit array to perform minus with
     */
     operator -=(ref lhs : BitArray64, rhs : BitArray64) {
-      lhs.values = lhs.values & !rhs.values;
+      lhs.values &= ~rhs.values;
     }
   }
 }
