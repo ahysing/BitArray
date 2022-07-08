@@ -17,12 +17,16 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      - name: apt helper action
+        uses: ryankurte/action-apt@v0.2.0
+        with:
+          packages: build-essential clang-14
       # https://github.community/t/installing-homebrew-on-linux/17994/3
       - name: Installing Homebrew
         run: |
@@ -30,11 +34,6 @@ jobs:
           test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
           test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
           echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
-      
-      - name: apt helper action
-        uses: ryankurte/action-apt@v0.2.0
-        with:
-          packages: build-essential clang-14
       - name: Install chapel
         run: |
           export PATH="$path:/home/linuxbrew/.linuxbrew/bin"
