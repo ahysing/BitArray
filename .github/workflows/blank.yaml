@@ -37,6 +37,11 @@ jobs:
           # Whether to accept unsupported LLVM and Clang versions.
           force-version: true
         if: ${{ !steps.cache-llvm.outputs.cache-hit }}
+      - name: Clone chapel ${{ env.CHPL_VERSION }}
+        uses: actions/checkout@v3
+        with:
+          repository: 'chapel-lang/chapel'
+          path: 'chapel/${{ env.CHPL_VERSION }}'
       - name: Create chapel directory
         run: |
           set -x
@@ -46,10 +51,11 @@ jobs:
           fi
 
           export PATH=$PATH:$LLVM_PATH/bin
-          export CHPL_HOME=/opt/chapel/$CHPL_VERSION
+          # export CHPL_HOME=/opt/chapel/$CHPL_VERSION
+          # mkdir -p $CHPL_HOME
+          # curl -L https://github.com/chapel-lang/chapel/releases/download/$CHPL_VERSION/chapel-$CHPL_VERSION.tar.gz | tar -xzC /opt/chapel --transform 's/chapel-//'
 
-          mkdir -p $CHPL_HOME
-          curl -L https://github.com/chapel-lang/chapel/releases/download/$CHPL_VERSION/chapel-$CHPL_VERSION.tar.gz | tar -xzC /opt/chapel --transform 's/chapel-//'
+          export CHPL_HOME=$GITHUB_WORKSPACE/chapel/$CHPL_VERSION
 
           export CHPL_GMP=system
           export CHPL_LLVM=system

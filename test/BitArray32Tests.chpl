@@ -1049,7 +1049,7 @@ proc BitArray32_pluss(test: borrowed Test) throws {
 
   var result = bitArrayA + bitArrayB;
 
-  var expected = new BitArray32(32),
+  var expected = new BitArray32(32);
   expected.set(1, true);
   expected.set(2, true);
   test.assertEqual(expected.values, result.values);
@@ -1063,7 +1063,7 @@ proc BitArray32_plussEquals(test: borrowed Test) throws {
 
   bitArrayA += bitArrayB;
 
-  var expected = new BitArray32(32),
+  var expected = new BitArray32(32);
   expected.set(1, true);
   expected.set(2, true);
   test.assertEqual(expected.values, bitArrayA.values);
