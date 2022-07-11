@@ -336,7 +336,7 @@ module BitArrays64 {
      */
     operator &(lhs : BitArray64, rhs : BitArray64) : BitArray64 {
       var result = lhs.values & rhs.values;
-      return new BitArray32(result, lhs.size());
+      return new BitArray64(result, lhs.size());
     }
 
     /* Perform the and operation on the values in this bit array with the values in another bit array.
