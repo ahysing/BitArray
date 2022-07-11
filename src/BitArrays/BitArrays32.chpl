@@ -601,7 +601,8 @@ module BitArrays32 {
       if shift > lhs.size() || shift < 0 then
         throw new ShiftRangeError();
 
-      var bitArray : BitArray32 = this;
+      var values = reshape(lhs.values, lhs.values.domain);
+      var bitArray : BitArray32 = new BitArray32(values, lhs.size());
       bitArray >>= shift;
       return bitArray;
     }
@@ -612,11 +613,11 @@ module BitArrays32 {
 
        :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
      */
-    operator >>=(shift : integral) throws {
-      if shift > this.size() || shift < 0 then
+    operator >>=(ref lhs : BitArray32, shift : integral) throws {
+      if shift > lhs.size() || shift < 0 then
         throw new ShiftRangeError();
 
-      this._bitshiftRight(shift);
+      lhs._bitshiftRight(shift);
     }
 
     /* Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.

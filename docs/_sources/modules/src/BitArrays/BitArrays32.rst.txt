@@ -222,7 +222,7 @@ or
       :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
       
 
-   .. method:: proc type >>=(shift: integral) throws
+   .. method:: proc type >>=(ref lhs: BitArray32, shift: integral) throws
 
       Shift all the values to the right. Left values are padded with `false` values.
       
