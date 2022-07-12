@@ -185,4 +185,45 @@ module Internal {
 
     return maxVal;
   }
+
+  pragma "no doc"
+  proc _generalBitshiftLeftWholeBlockSerial(ref values : [], D : domain) {
+    var DExceptLast = {(D.first)..(D.last - 1)};
+    for i in DExceptLast by -1 {
+      values[i + 1] = values[i];
+    }
+    values[D.first] = 0;
+  }
+
+  pragma "no doc"
+  proc _internalBitshiftRightNBits(ref values : [], shift : integral, packSize : integral) {
+    assert(shift > 0 && shift < packSize);
+
+    var D = values.domain;
+    var DExceptLast = {(D.first)..(D.last - 1)};
+    // Copy the value value into the value at index
+    // var destination : [D] this.values.eltType;
+    var reverseShift = packSize - shift;
+    for i in DExceptLast do
+      values[i] = (values[i] >> shift) | (values[i + 1] << reverseShift);
+    values[D.last] = (values[D.last] >> shift);
+    // forall i in D do
+    //  this.values[i] = destination[i];
+  }
+
+  pragma "no doc"
+  proc _internalBitshiftRightXBits(ref values : []) {
+    var D = values.domain;
+
+    var DExceptEdges : sparse subdomain(D) = D[(D.first)..(D.last - 1)];
+    var destination : [D] values.eltType;
+
+    for i in DExceptEdges do
+      destination[i] = values[i + 1];
+    destination[D.first] = values[D.first + 1]; //TODOs
+
+    values[D.last] = 0;
+    for i in DExceptEdges do
+      values[i] = destination[i];
+  }
 }

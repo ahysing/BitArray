@@ -58,7 +58,7 @@ module BitArrays64 {
        :arg values: The valuess in the bit array stored as 64 bit integers.  If the size does is not a multiple of 32 then one extra value must be added to contain the reminder bits.
        :arg size: The number of individual bits in the bit array.
     */
-    proc init(values : [] uint(64), size : bit64Index) {
+    proc init(ref values : [] uint(64), size : bit64Index) {
       this.complete();
       // Compare sizes from blocks of 64 bits and given size.
       // Make sure the the number of bits in a block fits size or size + 1
@@ -68,6 +68,59 @@ module BitArrays64 {
       this.bitSize = size;
       this.hasRemaining = hasRemaining;
       this.values = values;
+    }
+
+
+    pragma "no doc"
+    proc _bitshiftLeftNBits(shift : integral) {
+      assert(shift > 0 && shift < packSize);
+
+      var D = this.values.domain;
+      var DExceptFirst = {(D.first + 1)..(D.last)};
+      // var destination : [D] this.values.eltType;
+      var reverseShift = packSize - shift;
+      for i in DExceptFirst by -1 do
+        this.values[i] = (this.values[i] << shift) | (this.values[i - 1] >> reverseShift);
+      this.values[D.first] = (this.values[D.first] << shift);
+      // for i in D do
+      //  this.values[i] = destination[i];
+    }
+
+    pragma "no doc"
+    proc _bitshiftLeft(shift : integral) {
+      if (!this.values.isEmpty()) {
+        if shift > 0 && shift % packSize == 0 {
+          this._bitshiftLeftWholeBlock();
+          var nextShift = shift - packSize;
+          this._bitshiftLeft(nextShift);
+        } else if shift > 0 {
+          var shiftNow = shift % packSize;
+          this._bitshiftLeftNBits(shiftNow);
+          var nextShift = shift - shiftNow;
+          this._bitshiftLeft(nextShift);
+        }
+      }
+    }
+
+    pragma "no doc"
+    proc _bitshiftRight(shift : integral) {
+      if (!this.values.isEmpty()) {
+        if shift > 0 && shift % packSize == 0 {
+          _internalBitshiftRightXBits(this.values);
+          var nextShift = shift - packSize;
+          this._bitshiftRight(nextShift);
+        } else if shift > 0 {
+          var shiftNow = shift % packSize;
+          this._bitshiftRightNBits(shiftNow);
+          var nextShift = shift - shiftNow;
+          this._bitshiftRight(nextShift);
+        }
+      }
+    }
+
+    pragma "no doc"
+    proc _bitshiftLeftWholeBlock() {
+      _generalBitshiftLeftWholeBlockSerial(this.values, this.values.domain);
     }
 
     pragma "no doc"
@@ -98,7 +151,7 @@ module BitArrays64 {
       :rtype: `bool`
     */
     proc any() : bool {
-      unsignedAny(this.values);
+      return unsignedAny(this.values);
     }
 
     /* Look up value at index `idx`.
@@ -145,18 +198,7 @@ module BitArrays64 {
 
     pragma "no doc"
     proc _bitshiftRightNBits(shift : integral) {
-      assert(shift > 0 && shift < packSize);
-
-      var D = this.values.domain;
-      var DExceptLast = {(D.first)..(D.last - 1)};
-      // Copy the value value into the value at index
-      // var destination : [D] this.values.eltType;
-      var reverseShift = packSize - shift;
-      for i in DExceptLast do
-        this.values[i] = (this.values[i] >> shift) | (this.values[i + 1] << reverseShift);
-      this.values[D.last] = (this.values[D.last] >> shift);
-      // forall i in D do
-      //  this.values[i] = destination[i];
+      _internalBitshiftRightNBits(this.values, shift, packSize);
     }
 
     /* Reverse the ordering of the values. The last value becomes the first value. The second last value becomes the second first value. And so on.
@@ -223,7 +265,7 @@ module BitArrays64 {
       :yields: The index of a `true` value
       :yields type: `int`
     */
-    iter trueIndicies() {
+    iter trueIndices() {
       var D = this.values.domain;
       for i in D {
         var block = this.values[i];
@@ -280,6 +322,71 @@ module BitArrays64 {
       lhs.bitSize = rhs.bitSize;
       lhs.hasRemaining = rhs.hasRemaining;
       lhs.values = values;
+    }
+
+
+    /* Shift the values `shift` values to the right. Missing right values are padded with `false` values.
+
+      :arg shift: the number of values to shift.
+
+      :returns: A copy of the values shifted to the right.
+      :rtype: `BitArray64`
+
+      :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
+     */
+    operator <<(lhs : BitArray64, shift : integral) : BitArray64 throws {
+      if shift > lhs.size() || shift < 0 then
+        throw new ShiftRangeError();
+
+      var values = reshape(lhs.values, lhs.values.domain);
+      var bitArray : BitArray64 = new BitArray64(values, lhs.size());
+      bitArray <<= shift;
+      return bitArray;
+    }
+
+    /* Shift all the values to the right. Left values are padded with `false` values.
+
+      :arg shift: the number of values to shift.
+
+      :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
+     */
+    operator <<=(ref lhs : BitArray64, shift : integral) throws {
+      if shift > lhs.size() || shift < 0 then
+        throw new ShiftRangeError();
+
+      lhs._bitshiftLeft(shift);
+    }
+
+    /* Shift the values `shift` positions to the left. Missing left values are padded with `false` values.
+
+       :arg shift: the number of values to shift.
+
+       :returns: a copy of the values shifted `shift` positions to the left.
+       :rtype: `BitArray64`
+
+       :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
+     */
+    operator >>(lhs : BitArray64, shift : integral) : BitArray64 throws {
+      if shift > lhs.size() || shift < 0 then
+        throw new ShiftRangeError();
+
+      var values = reshape(lhs.values, lhs.values.domain);
+      var bitArray : BitArray64 = new BitArray64(values, lhs.size());
+      bitArray >>= shift;
+      return bitArray;
+    }
+
+    /* Shift all the values to the right. Left values are padded with `false` values.
+
+       :arg shift: the number of values to shift.
+
+       :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
+     */
+    operator >>=(ref lhs : BitArray64, shift : integral) throws {
+      if shift > lhs.size() || shift < 0 then
+        throw new ShiftRangeError();
+
+      lhs._bitshiftRight(shift);
     }
 
     /* Perform xor the values with the corresponding values in the input bit array. X[i] ^ Y[i] is performed for all indices i where X and Y are bit arrays.

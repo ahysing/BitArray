@@ -67,4 +67,105 @@ proc BitArray64_reverse_inputSizeIs63(test: borrowed Test) throws {
   test.assertEqual(expected.values, bitArray.values);
 }
 
+
+
+
+proc BitArray64_operatorShiftLeft_inputIs2(test: borrowed Test) throws {
+  var bitArray = new BitArray64(32);
+  bitArray.set(0, true);
+  var result = bitArray << 2;
+  test.assertEqual(0b00000000000000000000000000000100, result.values[0]);
+}
+
+proc BitArray64_operatorShiftLeft_inputIs31(test: borrowed Test) throws {
+  var bitArray = new BitArray64(32);
+  bitArray.set(0, true);
+  var result = bitArray << 31;
+  test.assertEqual(0b10000000000000000000000000000000, bitArray.values[0]);
+}
+
+proc BitArray64_operatorShiftLeft_inputIs32(test: borrowed Test) throws {
+  var bitArray = new BitArray64(32);
+  bitArray.set(0, true);
+  var result = bitArray << 32;
+  test.assertEqual(0, bitArray.values[0]);
+}
+
+proc BitArray64_operatorShiftLeft_inputIs32_sizeIs64(test: borrowed Test) throws {
+  var bitArray = new BitArray64(64);
+  bitArray.set(0, true);
+  var result = bitArray << 32;
+  test.assertEqual(result.values[0], 0b0000000000000000000000000000000100000000000000000000000000000000 : uint(64));
+}
+
+
+proc BitArray64_operatorShiftLeftEquals_inputIs2(test: borrowed Test) throws {
+  var bitArray = new BitArray64(32);
+  bitArray.set(0, true);
+  bitArray <<= 2;
+  test.assertEqual(0b00000000000000000000000000000100, bitArray.values[0]);
+}
+
+proc BitArray64_operatorShiftLeftEquals_inputIs32(test: borrowed Test) throws {
+  var bitArray = new BitArray64(32);
+  bitArray.set(0, true);
+  bitArray <<= 32;
+  test.assertFalse(bitArray.any());
+}
+
+proc BitArray64_operatorShiftLeftEquals_inputIs32_sizeIs64(test: borrowed Test) throws {
+  var bitArray = new BitArray64(64);
+  bitArray.set(0, true);
+  bitArray <<= 32;
+  test.assertEqual(bitArray.values[1], 0b00000000000000000000000000000001 : uint(32));
+}
+
+
+
+
+proc BitArray64_operatorShiftRight_inputIs2(test: borrowed Test) throws {
+  var bitArray = new BitArray64(32);
+  bitArray.set(2, true);
+  var result = bitArray >> 2;
+  test.assertEqual(0b00000000000000000000000000000001, result.values[0]);
+}
+
+
+proc BitArray64_operatorShiftRight_inputIs32(test: borrowed Test) throws {
+  var bitArray = new BitArray64(32);
+  bitArray.set(31, true);
+  var result = bitArray >> 32;
+  test.assertFalse(result.any());
+}
+
+
+proc BitArray64_operatorShiftRight_inputIs32_sizeIs64(test: borrowed Test) throws {
+  var bitArray = new BitArray64(64);
+  bitArray.set(32, true);
+  var result = bitArray >> 32;
+  test.assertEqual(result.values[0], 0b00000000000000000000000000000001 : uint(32));
+}
+
+
+proc BitArray64_operatorShiftRightEquals_inputIs2(test: borrowed Test) throws {
+  var bitArray = new BitArray64(32);
+  bitArray.set(4, true);
+  bitArray >>= 2;
+  test.assertEqual(0b00000000000000000000000000000100, bitArray.values[0]);
+}
+
+proc BitArray64_operatorShiftRightEquals_inputIs32(test: borrowed Test) throws {
+  var bitArray = new BitArray64(32);
+  bitArray.set(31, true);
+  bitArray >>= 32;
+  test.assertFalse(bitArray.any());
+}
+
+proc BitArray64_operatorShiftRightEquals_inputIs32_sizeIs64(test: borrowed Test) throws {
+  var bitArray = new BitArray64(64);
+  bitArray.set(32, true);
+  bitArray >>= 32;
+  test.assertEqual(bitArray.values[0], 0b00000000000000000000000000000001 : uint(32));
+}
+
 UnitTest.main();

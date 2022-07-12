@@ -138,7 +138,7 @@ or
       :yields type: bool
       
 
-   .. itermethod:: iter trueIndicies()
+   .. itermethod:: iter trueIndices()
 
       Iterate  over the index of all the values that are `true`.
       

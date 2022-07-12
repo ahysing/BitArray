@@ -134,7 +134,7 @@ module BitArrays32 {
     proc _bitshiftRight(shift : integral) {
       if (!this.values.isEmpty()) {
         if shift > 0 && shift % packSize == 0 {
-          this._bitshiftRight32Bits();
+          _internalBitshiftRightXBits(this.values);
           var nextShift = shift - packSize;
           this._bitshiftRight(nextShift);
         } else if shift > 0 {
@@ -144,6 +144,10 @@ module BitArrays32 {
           this._bitshiftRight(nextShift);
         }
       }
+    }
+    pragma "no doc"
+    proc _bitshiftLeftWholeBlock() {
+      _generalBitshiftLeftWholeBlockSerial(this.values, this.values.domain);
     }
 
     pragma "no doc"
@@ -254,51 +258,6 @@ module BitArrays32 {
     }
 
     pragma "no doc"
-    proc _bitshiftLeftWholeBlockSerial() {
-      this._generalBitshiftLeftWholeBlockSerial(this.values, this.values.domain);
-    }
-
-//     pragma "no doc"
-//     proc _bitshiftLeftWholeBlockParallell() {
-//       var D = this.values.domain;
-//       var localesSize = this.values.targetLocales().size;
-//       var F : domain(2) = {1..localesSize, 0..countSubdomains(values)};
-//       var storedValue : [F] this.values.eltType;
-//       for loc in D.targetLocales() {
-//         var i = 0;
-//         for sub in D.localSubdomains(loc) {
-//           /* TODO
-//           /Users/andreas.dreyer.hysing/code/BitArray/src/BitArrays/BitArrays32.chpl:254: error: halt reached - array index out of bounds
-//           note: index was (0, 0) but array bounds are (1..1, 0..1)
-//           note: out of bounds in dimension 0 because index 0 is not in 1..1
-//           BitArray32Tests was compiled with optimization - stepping may behave oddly; variables may not be available.
-//           */
-//           storedValue[(loc.id, i)] = if D.contains(sub.first - 1) then this.values[sub.first - 1] else 0 : this.values.eltType;
-//           i += 1;
-//         }
-//       }
-//
-//       // example got from https://chapel-lang.org/docs/users-guide/locality/onClauses.html
-//       coforall loc in D.targetLocales() do
-//         on loc do
-//           for sub in D.localSubdomains(loc) do
-//             this._generalBitshiftLeftWholeBlockSerial(this.values, sub);
-//
-//       for loc in D.targetLocales() {
-//         var i = 0;
-//         for sub in D.localSubdomains(loc) {
-//           this.values[sub.first] = storedValue[(loc.id, i)];
-//           i += 1;
-//         }
-//       }
-//     }
-
-    pragma "no doc"
-    proc _bitshiftLeftWholeBlock() {
-      this._bitshiftLeftWholeBlockSerial();
-    }
-
-    pragma "no doc"
     proc _rotateRightWholeBlock() {
       var D = this.values.domain;
       var DExceptLast = {(D.first)..(D.last - 1)};
@@ -383,35 +342,8 @@ module BitArrays32 {
     }
 
     pragma "no doc"
-    proc _bitshiftRight32Bits() {
-      var D = this.values.domain;
-
-      var DExceptEdges : sparse subdomain(D) = D[(D.first)..(D.last - 1)];
-      var destination : [D] this.values.eltType;
-
-      for i in DExceptEdges do
-        destination[i] = this.values[i + 1];
-      destination[D.first] = this.values[D.first + 1]; //TODOs
-
-      this.values[D.last] = 0;
-      for i in DExceptEdges do
-        this.values[i] = destination[i];
-    }
-
-    pragma "no doc"
     proc _bitshiftRightNBits(shift : integral) {
-      assert(shift > 0 && shift < packSize);
-
-      var D = this.values.domain;
-      var DExceptLast = {(D.first)..(D.last - 1)};
-      // Copy the value value into the value at index
-      // var destination : [D] this.values.eltType;
-      var reverseShift = packSize - shift;
-      for i in DExceptLast do
-        this.values[i] = (this.values[i] >> shift) | (this.values[i + 1] << reverseShift);
-      this.values[D.last] = (this.values[D.last] >> shift);
-      // forall i in D do
-      //  this.values[i] = destination[i];
+      _internalBitshiftRightNBits(this.values, shift, packSize);
     }
 
     /* Rotate all the values to the right. Values wrap around to the other side.
@@ -485,7 +417,7 @@ module BitArrays32 {
       :yields: The index of a `true` value
       :yields type: `int`
     */
-    iter trueIndicies() {
+    iter trueIndices() {
       for i in this.values.domain {
         var block = this.values[i];
         while block != 0 {

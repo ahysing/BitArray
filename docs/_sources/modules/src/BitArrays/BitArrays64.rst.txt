@@ -32,7 +32,7 @@ or
       :arg locales: What nodes to distibute the values over
       
 
-   .. method:: proc init(values: [] uint(64), size: bit64Index)
+   .. method:: proc init(ref values: [] uint(64), size: bit64Index)
 
       Create a bit array from a given set of values.
       * The input values must be a rectangular 1-dimensional array.
@@ -123,7 +123,7 @@ or
       :yields type: bool
       
 
-   .. itermethod:: iter trueIndicies()
+   .. itermethod:: iter trueIndices()
 
       Iterate  over the index of all the values that are `true`.
       
@@ -164,6 +164,48 @@ or
       
       :arg lhs: the left hand bit array to assign
       :arg rhs: The right hand array to copy
+      
+
+   .. method:: proc type <<(lhs: BitArray64, shift: integral): BitArray64 throws
+
+      Shift the values `shift` values to the right. Missing right values are padded with `false` values.
+      
+      :arg shift: the number of values to shift.
+      
+      :returns: A copy of the values shifted to the right.
+      :rtype: `BitArray64`
+      
+      :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
+      
+
+   .. method:: proc type <<=(ref lhs: BitArray64, shift: integral) throws
+
+      Shift all the values to the right. Left values are padded with `false` values.
+      
+      :arg shift: the number of values to shift.
+      
+      :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
+      
+
+   .. method:: proc type >>(lhs: BitArray64, shift: integral): BitArray64 throws
+
+      Shift the values `shift` positions to the left. Missing left values are padded with `false` values.
+      
+      :arg shift: the number of values to shift.
+      
+      :returns: a copy of the values shifted `shift` positions to the left.
+      :rtype: `BitArray64`
+      
+      :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
+      
+
+   .. method:: proc type >>=(ref lhs: BitArray64, shift: integral) throws
+
+      Shift all the values to the right. Left values are padded with `false` values.
+      
+      :arg shift: the number of values to shift.
+      
+      :throws ShiftRangeError: If `shift` is less than zero or bigger than the size of the bit array.
       
 
    .. method:: proc type ^(lhs: BitArray64, rhs: BitArray64)

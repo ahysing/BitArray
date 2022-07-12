@@ -114,7 +114,7 @@
 
 <dl class="chpl method">
 <dt class="sig sig-object chpl">
-<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">values:</span> <span class="pre">[]</span> <span class="pre">uint(64)</span></em>, <em class="sig-param"><span class="pre">size:</span> <span class="pre">bit64Index</span></em><span class="sig-paren">)</span></dt>
+<em class="property"><span class="pre">proc</span> </em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ref</span> <span class="pre">values:</span> <span class="pre">[]</span> <span class="pre">uint(64)</span></em>, <em class="sig-param"><span class="pre">size:</span> <span class="pre">bit64Index</span></em><span class="sig-paren">)</span></dt>
 <dd><p>Create a bit array from a given set of values.
 * The input values must be a rectangular 1-dimensional array.
 * The input values must not be a sparse array.
@@ -263,8 +263,8 @@
 </dd></dl>
 
 <dl class="chpl itermethod">
-<dt class="sig sig-object chpl" id="BitArrays64.BitArray64.trueIndicies">
-<em class="property"><span class="pre">iter</span> </em><span class="sig-name descname"><span class="pre">trueIndicies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays64.BitArray64.trueIndicies" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object chpl" id="BitArrays64.BitArray64.trueIndices">
+<em class="property"><span class="pre">iter</span> </em><span class="sig-name descname"><span class="pre">trueIndices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BitArrays64.BitArray64.trueIndices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate  over the index of all the values that are <cite>true</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Yields</dt>
@@ -332,6 +332,74 @@
 <li><p><strong>lhs</strong> – the left hand bit array to assign</p></li>
 <li><p><strong>rhs</strong> – The right hand array to copy</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArrays64.BitArray64.&lt;&lt;">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">&lt;&lt;</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lhs:</span> <span class="pre">BitArray64</span></em>, <em class="sig-param"><span class="pre">shift:</span> <span class="pre">integral</span></em><span class="sig-paren">)</span><span class="pre">:</span> <span class="pre">BitArray64</span> <span class="pre">throws</span><a class="headerlink" href="#BitArrays64.BitArray64.<<" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shift the values <cite>shift</cite> values to the right. Missing right values are padded with <cite>false</cite> values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><p><strong>shift</strong> – the number of values to shift.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A copy of the values shifted to the right.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>BitArray64</cite></p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>ShiftRangeError</strong> – If <cite>shift</cite> is less than zero or bigger than the size of the bit array.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArrays64.BitArray64.&lt;&lt;=">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">&lt;&lt;=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray64</span></em>, <em class="sig-param"><span class="pre">shift:</span> <span class="pre">integral</span></em><span class="sig-paren">)</span> <span class="pre">throws</span><a class="headerlink" href="#BitArrays64.BitArray64.<<=" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shift all the values to the right. Left values are padded with <cite>false</cite> values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><p><strong>shift</strong> – the number of values to shift.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>ShiftRangeError</strong> – If <cite>shift</cite> is less than zero or bigger than the size of the bit array.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArrays64.BitArray64.&gt;&gt;">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">&gt;&gt;</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lhs:</span> <span class="pre">BitArray64</span></em>, <em class="sig-param"><span class="pre">shift:</span> <span class="pre">integral</span></em><span class="sig-paren">)</span><span class="pre">:</span> <span class="pre">BitArray64</span> <span class="pre">throws</span><a class="headerlink" href="#BitArrays64.BitArray64.>>" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shift the values <cite>shift</cite> positions to the left. Missing left values are padded with <cite>false</cite> values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><p><strong>shift</strong> – the number of values to shift.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a copy of the values shifted <cite>shift</cite> positions to the left.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>BitArray64</cite></p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>ShiftRangeError</strong> – If <cite>shift</cite> is less than zero or bigger than the size of the bit array.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="chpl method">
+<dt class="sig sig-object chpl" id="BitArrays64.BitArray64.&gt;&gt;=">
+<em class="property"><span class="pre">proc</span> <span class="pre">type</span> </em><span class="sig-name descname"><span class="pre">&gt;&gt;=</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ref</span> <span class="pre">lhs:</span> <span class="pre">BitArray64</span></em>, <em class="sig-param"><span class="pre">shift:</span> <span class="pre">integral</span></em><span class="sig-paren">)</span> <span class="pre">throws</span><a class="headerlink" href="#BitArrays64.BitArray64.>>=" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shift all the values to the right. Left values are padded with <cite>false</cite> values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><p><strong>shift</strong> – the number of values to shift.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>ShiftRangeError</strong> – If <cite>shift</cite> is less than zero or bigger than the size of the bit array.</p>
 </dd>
 </dl>
 </dd></dl>
